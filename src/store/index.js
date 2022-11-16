@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
-
+import http from "@/api/http.js";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  
   state: {
     loginUser: null,
     saveId: null,
@@ -45,6 +46,13 @@ export default new Vuex.Store({
         state.dongs.push({ value: dong.code, text: dong.name.split(" ")[2] });
       });
     },
+    SET_MAP_LIST(state, lists) {
+      console.log(lists);
+      console.log("A")
+      lists.forEach((apt) => {
+        state.mapList.push(apt);
+      });
+    },
     CLEAR_SIDO_LIST(state) {
       state.sidos = [{ value: null, text: "선택하세요" }];
     },
@@ -53,6 +61,9 @@ export default new Vuex.Store({
     },
     CLEAR_DONG_LIST(state) {
       state.dongs = [{ value: null, text: "선택하세요" }];
+    },
+    CLEAR_MAP_LIST(state) {
+      state.mapList = [];
     },
     CLEAR_SAVE_ID: function (state) {
       state.saveId = null;
@@ -94,6 +105,15 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+    homeSearch: function({commit}, data){
+      const url = "/map/search/" + data.dong + "/" + data.year + "/" + data.month
+      console.log(url);
+      http.get(url).then(({data}) => 
+        commit("SET_MAP_LIST", data)
+      ).catch((error) => {
+        console.log(error);
+      })
+    }
   },
   modules: {},
   plugins: [

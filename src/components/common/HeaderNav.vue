@@ -8,11 +8,11 @@
         <div class="logined-info me-3 align-middle">
           <strong>{{ loginUser.userName }}</strong> 님 안녕하세요.
         </div>
-        <router-link to="/hospital"
+        <router-link to="/map/hospital"
           ><button class="hospital-btn btn me-3" id="btn-hospital">Hospital</button></router-link
         >
-        <router-link to="/corona"><button class="corona-btn btn me-3" id="btn-corona">Corona</button></router-link>
-        <router-link to="/map"
+        <router-link to="/map/corona"><button class="corona-btn btn me-3" id="btn-corona">Corona</button></router-link>
+        <router-link to="/map/search"
           ><button class="mvsearch-btn btn me-3" id="btn-homesearch">HomeSearch</button></router-link
         >
         <router-link to="/notice"><button class="notice-btn btn me-3" id="btn-notice">Notice</button></router-link>
