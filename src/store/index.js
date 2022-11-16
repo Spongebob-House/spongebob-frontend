@@ -14,6 +14,12 @@ export default new Vuex.Store({
     loginChk: function (state) {
       return state.loginUser ? true : false;
     },
+    adminChk: function (state) {
+      if (state.loginUser) {
+        return state.loginUser.userId === "admin" ? true : false;
+      }
+      return false;
+    },
   },
   mutations: {
     SET_LOGIN_USER: function (state, user) {
