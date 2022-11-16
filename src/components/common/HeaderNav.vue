@@ -15,7 +15,6 @@
       </div>
       <div class="nav justify-content-end">
         <button id="btn-mv-join" class="join-btn btn me-3">Join</button>
-
         <div class="login-area me-3">
           <div class="dropdown login-pop">
             <button
