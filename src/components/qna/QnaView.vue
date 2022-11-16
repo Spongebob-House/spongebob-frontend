@@ -10,44 +10,48 @@
         <b-button variant="outline-primary" @click="moveList">목록</b-button>
       </b-col>
       <b-col class="text-right">
-        <b-button variant="outline-info" size="sm" @click="moveModifyArticle" class="mr-2" v-if="`loginUser.userId === ${article.userid}`? true : false">글수정</b-button>
+        <b-button
+          variant="outline-info"
+          size="sm"
+          @click="moveModifyArticle"
+          class="mr-2"
+          v-if="`loginUser.userId === ${article.userid}` ? true : false"
+          >글수정</b-button
+        >
         <b-button variant="outline-danger" size="sm" @click="deleteArticle">글삭제</b-button>
       </b-col>
     </b-row>
     <b-row class="mb-1">
       <b-col style="text-align: left">
         <b-form>
-          <b-form-group id="userid-group"  style="height:auto;" label="작성자:" label-for="userid" >
+          <b-form-group id="userid-group" style="height: auto" label="작성자:" label-for="userid">
             <b-form-input
               id="user"
               v-model="article.userid"
               type="text"
               required
               placeholder="작성자 입력..."
-              readonly
-            ></b-form-input>
+              readonly></b-form-input>
           </b-form-group>
 
-          <b-form-group id="subject-group" style="height:auto;" label="제목:" label-for="subject" >
+          <b-form-group id="subject-group" style="height: auto" label="제목:" label-for="subject">
             <b-form-input
               id="subject"
               v-model="article.subject"
               type="text"
               required
               placeholder="제목 입력..."
-              readonly
-            ></b-form-input>
+              readonly></b-form-input>
           </b-form-group>
 
-          <b-form-group id="content-group" style="height:auto;" label="내용:" label-for="content">
+          <b-form-group id="content-group" style="height: auto" label="내용:" label-for="content">
             <b-form-textarea
               id="content"
               v-model="article.content"
               placeholder="내용 입력..."
               rows="10"
               max-rows="15"
-              readonly
-            ></b-form-textarea>
+              readonly></b-form-textarea>
           </b-form-group>
         </b-form>
       </b-col>
@@ -58,8 +62,7 @@
           :header-html="`<span><h6>${memo.userid}</h6></span><span><h6>${memo.memotime}</h6></span>`"
           class="mb-2"
           border-variant="dark"
-          no-body
-        >
+          no-body>
           <b-card-body class="text-left">
             <textarea v-model="memo.comment"></textarea>
           </b-card-body>
@@ -93,66 +96,79 @@ export default {
   computed: {
     ...mapState(["loginUser"]),
     ...mapGetters(["adminChk"]),
-    
   },
   created() {
-    http.get(`/qna/${this.$route.params.articleno}`).then(({ data }) => {
-      this.article = data;
-      return null;
-    }).then(() => {
-      http.get(`/memo/${this.$route.params.articleno}`).then(({ data }) => {
-        if (data.length != 0) {
-          this.memo = data;
-        }
+    http
+      .get(`/qna/${this.$route.params.articleno}`)
+      .then(({ data }) => {
+        this.article = data;
+        return null;
       })
-    }).catch(() => {
-      alert("글 불러오기 중 문제 발생");
-    })
+      .then(() => {
+        http.get(`/memo/${this.$route.params.articleno}`).then(({ data }) => {
+          if (data.length != 0) {
+            this.memo = data;
+          }
+        });
+      })
+      .catch(() => {
+        alert("글 불러오기 중 문제 발생");
+      });
   },
   methods: {
+    refreshAll() {
+      // 새로고침
+      this.$router.go();
+    },
     writeMemo() {
-      http.post("/memo", {
-        articleno: this.article.articleno,
-        comment: this.memo.comment,
-        userid: "admin",
-
-      }).then(({ data }) => {
+      http
+        .post("/memo", {
+          articleno: this.article.articleno,
+          comment: this.memo.comment,
+          userid: "admin",
+        })
+        .then(({ data }) => {
           let msg = "답글 등록 처리시 문제가 발생했습니다.";
           if (data === "success") {
             msg = "답글 등록이 완료되었습니다.";
+            this.refreshAll();
           }
           alert(msg);
         });
     },
     modifyMemo() {
-      http.put("/memo", {
-        articleno: this.articleno,
-        comment: this.memo.comment,
-        userid: "admin",
-        memono: this.memo.memono,
-
-      }).then(({ data }) => {
+      http
+        .put("/memo", {
+          articleno: this.articleno,
+          comment: this.memo.comment,
+          userid: "admin",
+          memono: this.memo.memono,
+        })
+        .then(({ data }) => {
           let msg = "답글 수정 처리시 문제가 발생했습니다.";
           if (data === "success") {
             msg = "답글 수정이 완료되었습니다.";
+            this.refreshAll();
           }
           alert(msg);
         });
     },
     deleteMemo() {
       http.delete("/memo", { params: { memono: this.memo.memono } }).then(({ data }) => {
-          let msg = "답글 삭제 처리시 문제가 발생했습니다.";
-          if (data === "success") {
-            msg = "답글 삭제가 완료되었습니다.";
-          }
-          alert(msg);
-        });
+        let msg = "답글 삭제 처리시 문제가 발생했습니다.";
+        if (data === "success") {
+          msg = "답글 삭제가 완료되었습니다.";
+          this.refreshAll();
+        }
+        alert(msg);
+      });
     },
     moveModifyArticle() {
       this.$router.replace({
         name: "qnamodify",
         params: { articleno: this.article.articleno },
       });
+      this.refreshAll();
       //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
     },
     deleteArticle() {
@@ -161,6 +177,7 @@ export default {
           name: "qnadelete",
           params: { articleno: this.article.articleno },
         });
+        this.refreshAll();
       }
     },
     moveList() {

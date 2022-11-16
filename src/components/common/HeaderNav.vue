@@ -20,8 +20,8 @@
         <router-link to="/mypage"><button class="mypage-btn btn me-3" id="btn-mypage">MyPage</button></router-link>
         <button class="logout-btn btn me-3" id="btn-logout" @click="LOGOUT">Logout</button>
       </div>
-      <div class="nav justify-content-end">
-        <button id="btn-mv-join" class="join-btn btn me-3">Join</button>
+      <div class="nav justify-content-end" v-else>
+        <router-link to="/join"><button id="btn-mv-join" class="join-btn btn me-3">Join</button></router-link>
 
         <div class="login-area me-3">
           <b-dropdown
@@ -74,6 +74,8 @@
 </template>
 
 <script>
+import { mapMutations, mapState, mapGetters } from "vuex";
+import http from "@/api/http";
 export default {
   name: "HeaderNav",
   data() {
@@ -84,8 +86,11 @@ export default {
     };
   },
   methods: {
-    // eslint-disable-next-line no-undef
     ...mapMutations(["LOGOUT", "SET_SAVE_ID", "SET_LOGIN_USER", "CLEAR_SAVE_ID"]),
+    refreshAll() {
+      // 새로고침
+      this.$router.go();
+    },
     chkVal() {
       if (this.userId.length === 0) {
         alert("아이디를 적어주세요!");
@@ -101,7 +106,6 @@ export default {
       } else {
         this.CLEAR_SAVE_ID();
       }
-      // eslint-disable-next-line no-undef
       http
         .post("/user/login", {
           userId: this.userId,
@@ -110,6 +114,7 @@ export default {
         .then(({ data }) => {
           if (data != "") {
             this.SET_LOGIN_USER(data);
+            this.refreshAll;
           } else {
             alert("로그인 실패");
           }
@@ -126,9 +131,7 @@ export default {
     },
   },
   computed: {
-    // eslint-disable-next-line no-undef
     ...mapState(["loginUser", "saveId", "idSave"]),
-    // eslint-disable-next-line no-undef
     ...mapGetters(["loginChk"]),
   },
   created() {
