@@ -8,7 +8,9 @@ export default new Vuex.Store({
   state: {
     loginUser: null,
     saveId: null,
-    sido: [],
+    sidos: [{ value: null, text: "선택하세요" }],
+    guguns: [{ value: null, text: "선택하세요" }],
+    dongs: [{ value: null, text: "선택하세요" }],
   },
   getters: {
     loginChk: function (state) {
@@ -28,8 +30,29 @@ export default new Vuex.Store({
     SET_SAVE_ID: function (state, saveId) {
       state.saveId = saveId;
     },
-    SET_SIDO: function (state, sido) {
-      state.sido = sido;
+    SET_SIDO_LIST: function (state, sidos) {
+      sidos.forEach((sido) => {
+        state.sidos.push({ value: sido.code, text: sido.name });
+      });
+    },
+    SET_GUGUN_LIST(state, guguns) {
+      guguns.forEach((gugun) => {
+        state.guguns.push({ value: gugun.code, text: gugun.name.split(" ")[1] });
+      });
+    },
+    SET_DONG_LIST(state, dongs) {
+      dongs.forEach((dong) => {
+        state.dongs.push({ value: dong.code, text: dong.name.split(" ")[2] });
+      });
+    },
+    CLEAR_SIDO_LIST(state) {
+      state.sidos = [{ value: null, text: "선택하세요" }];
+    },
+    CLEAR_GUGUN_LIST(state) {
+      state.guguns = [{ value: null, text: "선택하세요" }];
+    },
+    CLEAR_DONG_LIST(state) {
+      state.dongs = [{ value: null, text: "선택하세요" }];
     },
     CLEAR_SAVE_ID: function (state) {
       state.saveId = null;
@@ -39,12 +62,37 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    sendRequest: function ({ commit }, regcode) {
+    getSido: function ({ commit }) {
       const url = "https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes";
-      let params = "regcode_pattern=" + regcode + "&is_ignore_zero=true";
+      let params = "regcode_pattern=" + "*00000000" + "&is_ignore_zero=true";
       fetch(`${url}?${params}`)
         .then((response) => response.json())
-        .then((data) => commit("SET_SIDO", data.regcodes));
+        .then((data) => {
+          commit("SET_SIDO_LIST", data.regcodes);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getGugun: function ({ commit }, sidoCode) {
+      const url = "https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes";
+      let params = "regcode_pattern=" + sidoCode.substr(0, 2) + "*00000" + "&is_ignore_zero=true";
+      fetch(`${url}?${params}`)
+        .then((response) => response.json())
+        .then((data) => commit("SET_GUGUN_LIST", data.regcodes))
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getDong: function ({ commit }, gugunCode) {
+      const url = "https://grpc-proxy-server-mkvo6j4wsq-du.a.run.app/v1/regcodes";
+      let params = "regcode_pattern=" + gugunCode.substr(0, 5) + "*" + "&is_ignore_zero=true";
+      fetch(`${url}?${params}`)
+        .then((response) => response.json())
+        .then((data) => commit("SET_DONG_LIST", data.regcodes))
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
   modules: {},
