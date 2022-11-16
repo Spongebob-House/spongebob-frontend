@@ -10,6 +10,7 @@
         <router-link to="/corona"><button class="corona-btn btn me-3" id="btn-corona">Corona</button></router-link>
         <router-link to="/map"><button class="mvsearch-btn btn me-3" id="btn-homesearch">HomeSearch</button></router-link>
         <router-link to="/notice"><button class="notice-btn btn me-3" id="btn-notice">Notice</button></router-link>
+        <router-link to="/qna"><button class="qna-btn btn me-3" id="btn-qna">Q&A</button></router-link>
         <router-link to="/mypage"><button class="mypage-btn btn me-3" id="btn-mypage">MyPage</button></router-link>
         <button class="logout-btn btn me-3" id="btn-logout" @click="LOGOUT">Logout</button>
       </div>

@@ -47,8 +47,22 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "AppMain",
+  mounted() {
+    let date = new Date();
+    let yearEl = document.querySelector("#year");
+    let yearOpt = `<option value="">매매년도선택</option>`;
+    let year = date.getFullYear();
+    for (let i = year; i > year - 20; i--) {
+      yearOpt += `<option value="${i}">${i}년</option>`;
+    }
+    yearEl.innerHTML = yearOpt;
+  },
+  computed: {
+    ...mapState(["sido"]),
+  }
 };
 </script>
 
