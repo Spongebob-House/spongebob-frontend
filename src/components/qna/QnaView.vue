@@ -58,19 +58,51 @@
     </b-row>
     <b-row class="mb-1">
       <b-col>
-        <b-card
+        <!-- <b-card
           :header-html="`<span><h6>${memo.userid}</h6></span><span><h6>${memo.memotime}</h6></span>`"
           class="mb-2"
           border-variant="dark"
-          no-body>
-          <b-card-body class="text-left">
-            <textarea v-model="memo.comment"></textarea>
-          </b-card-body>
-        </b-card>
+          no-body> -->
+        <b-form-textarea
+          id="textarea-no-resize"
+          rows="3"
+          no-resize
+          placeholder="댓글을 입력해주세요"
+          v-model="memo.comment"></b-form-textarea>
+        <!-- <b-card-body class="text-left">
+          <textarea v-model="memo.comment"></textarea>
+        </b-card-body> -->
+        <!-- </b-card> -->
       </b-col>
-      <b-button variant="outline-primary" size="sm" @click="writeMemo" v-if="adminChk">댓글 작성</b-button>
-      <b-button variant="outline-danger" size="sm" @click="modifyMemo" v-if="adminChk">댓글 수정</b-button>
-      <b-button variant="outline-danger" size="sm" @click="deleteMemo" v-if="adminChk">댓글 삭제</b-button>
+      <div>
+        <b-button
+          variant="outline-success"
+          size="sm"
+          class="m-2"
+          style="float: right"
+          @click="writeMemo"
+          v-if="adminChk && memo.memotime.length == 0"
+          >댓글 작성</b-button
+        >
+        <b-button
+          variant="outline-primary"
+          class="m-2"
+          style="float: right"
+          size="sm"
+          @click="modifyMemo"
+          v-if="adminChk && memo.memotime.length != 0"
+          >댓글 수정</b-button
+        >
+        <b-button
+          variant="outline-danger"
+          class="m-2"
+          style="float: right"
+          size="sm"
+          @click="deleteMemo"
+          v-if="adminChk && memo.memotime.length != 0"
+          >댓글 삭제</b-button
+        >
+      </div>
     </b-row>
   </b-container>
 </template>
@@ -172,7 +204,7 @@ export default {
       //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
     },
     deleteArticle() {
-      if (confirm("정말로 삭제?")) {
+      if (confirm("정말로 삭제하시겠습니까?")) {
         this.$router.replace({
           name: "qnadelete",
           params: { articleno: this.article.articleno },
