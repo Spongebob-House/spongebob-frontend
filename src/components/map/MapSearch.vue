@@ -25,23 +25,20 @@
                     <a>{{ apt.apartmentName }}</a>
                   </div>
                   <div>
-                    <span v-if="apt.coffee" style="font-size: 12px" class="text-success"
-                      ><image
-                        src="@/assets/img/coffee.png"
-                        width="20"
-                        height="20"
-                        class="icon"
-                        v-text="`${apt.coffee.name} ${apt.coffee.dist}m`"></image
-                    ></span>
-                    <span v-if="apt.metro" style="font-size: 12px"
-                      ><image
-                        src="@/assets/img/metro.png"
-                        width="20"
-                        height="20"
-                        class="icon"
-                        v-text="`${apt.metro.name} ${apt.metro.dist}m`"></image
-                    ></span>
+                    <b-img src="http://localhost/assets/img/coffee.png" width="20" height="20" class="icon"></b-img
+                    ><span
+                      v-if="apt.coffee"
+                      style="font-size: 12px"
+                      class="text-success"
+                      v-text="`${apt.coffee.name} ${apt.coffee.dist}m`"></span>
+                    <b-img src="http://localhost/assets/img/metro.png" width="20" height="20" class="icon"></b-img
+                    ><span
+                      v-if="apt.metro"
+                      style="font-size: 12px"
+                      v-text="`${apt.metro.name} ${apt.metro.dist}m`"></span>
                   </div>
+                  <div class="apt-space" v-text="`면적 : ${apt.area}`"></div>
+                  <div class="apt-price" v-text="`거래금액 : ${apt.dealAmount}만원`"></div>
                   <div class="apt-space" v-text="`면적 : ${apt.area}`"></div>
                   <div class="apt-price" v-text="`거래금액 : ${apt.dealAmount}만원`"></div>
                   <div class="apt-date text-end">
