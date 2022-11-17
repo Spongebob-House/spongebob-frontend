@@ -5,13 +5,13 @@ import http from "@/api/http.js";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  
   state: {
     loginUser: null,
     saveId: null,
     sidos: [{ value: null, text: "선택하세요" }],
     guguns: [{ value: null, text: "선택하세요" }],
     dongs: [{ value: null, text: "선택하세요" }],
+    mapList: [],
   },
   getters: {
     loginChk: function (state) {
@@ -48,7 +48,7 @@ export default new Vuex.Store({
     },
     SET_MAP_LIST(state, lists) {
       console.log(lists);
-      console.log("A")
+      console.log("A");
       lists.forEach((apt) => {
         state.mapList.push(apt);
       });
@@ -105,15 +105,16 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
-    homeSearch: function({commit}, data){
-      const url = "/map/search/" + data.dong + "/" + data.year + "/" + data.month
+    homeSearch: function ({ commit }, data) {
+      const url = "/map/search/" + data.dong + "/" + data.year + "/" + data.month;
       console.log(url);
-      http.get(url).then(({data}) => 
-        commit("SET_MAP_LIST", data)
-      ).catch((error) => {
-        console.log(error);
-      })
-    }
+      http
+        .get(url)
+        .then(({ data }) => commit("SET_MAP_LIST", data))
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   modules: {},
   plugins: [
