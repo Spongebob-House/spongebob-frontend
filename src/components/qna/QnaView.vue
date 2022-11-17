@@ -9,13 +9,12 @@
       <b-col class="text-left">
         <b-button variant="outline-primary" @click="moveList">목록</b-button>
       </b-col>
-      <b-col class="text-right">
+      <b-col class="text-right" v-if="userInfo.userId === `${article.userid}`">
         <b-button
           variant="outline-info"
           size="sm"
           @click="moveModifyArticle"
           class="mr-2"
-          v-if="`loginUser.userId === ${article.userid}` ? true : false"
           >글수정</b-button
         >
         <b-button variant="outline-danger" size="sm" @click="deleteArticle">글삭제</b-button>
@@ -68,20 +67,21 @@
           rows="3"
           no-resize
           placeholder="댓글을 입력해주세요"
-          v-model="memo.comment"></b-form-textarea>
+          v-model="memo.comment"
+          ></b-form-textarea>
         <!-- <b-card-body class="text-left">
           <textarea v-model="memo.comment"></textarea>
         </b-card-body> -->
         <!-- </b-card> -->
       </b-col>
-      <div>
+      <div v-if="adminChk">
         <b-button
           variant="outline-success"
           size="sm"
           class="m-2"
           style="float: right"
           @click="writeMemo"
-          v-if="adminChk && memo.memotime.length == 0"
+          v-if="!isMemo"
           >댓글 작성</b-button
         >
         <b-button
@@ -90,7 +90,7 @@
           style="float: right"
           size="sm"
           @click="modifyMemo"
-          v-if="adminChk && memo.memotime.length != 0"
+          v-if="isMemo"
           >댓글 수정</b-button
         >
         <b-button
@@ -99,7 +99,7 @@
           style="float: right"
           size="sm"
           @click="deleteMemo"
-          v-if="adminChk && memo.memotime.length != 0"
+          v-if="isMemo"
           >댓글 삭제</b-button
         >
       </div>
@@ -111,11 +111,13 @@
 // import moment from "moment";
 import http from "@/api/http";
 import { mapState, mapGetters } from "vuex";
+const memberStore = "memberStore";
 export default {
   name: "QnaDetail",
 
   data() {
     return {
+      isMemo: false,
       article: {},
       memo: {
         memono: "",
@@ -126,8 +128,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(["loginUser"]),
-    ...mapGetters(["adminChk"]),
+    ...mapState(memberStore, ["userInfo"]),
+    ...mapGetters(memberStore, ["adminChk"]),
   },
   created() {
     http
@@ -140,6 +142,7 @@ export default {
         http.get(`/memo/${this.$route.params.articleno}`).then(({ data }) => {
           if (data.length != 0) {
             this.memo = data;
+            this.isMemo = true;
           }
         });
       })
@@ -153,6 +156,10 @@ export default {
       this.$router.go();
     },
     writeMemo() {
+      if(this.memo.comment.length < 1){
+        alert("댓글을 작성해주세요!");
+        return;
+      }
       http
         .post("/memo", {
           articleno: this.article.articleno,
@@ -163,12 +170,16 @@ export default {
           let msg = "답글 등록 처리시 문제가 발생했습니다.";
           if (data === "success") {
             msg = "답글 등록이 완료되었습니다.";
-            this.refreshAll();
+            this.isMemo = true;
           }
           alert(msg);
         });
     },
     modifyMemo() {
+      if(this.memo.comment.length < 1){
+        alert("댓글을 작성해주세요!");
+        return;
+      }
       http
         .put("/memo", {
           articleno: this.articleno,
@@ -180,7 +191,6 @@ export default {
           let msg = "답글 수정 처리시 문제가 발생했습니다.";
           if (data === "success") {
             msg = "답글 수정이 완료되었습니다.";
-            this.refreshAll();
           }
           alert(msg);
         });
@@ -190,7 +200,8 @@ export default {
         let msg = "답글 삭제 처리시 문제가 발생했습니다.";
         if (data === "success") {
           msg = "답글 삭제가 완료되었습니다.";
-          this.refreshAll();
+          this.isMemo = false;
+          this.memo.comment = ""; 
         }
         alert(msg);
       });
@@ -200,7 +211,6 @@ export default {
         name: "qnamodify",
         params: { articleno: this.article.articleno },
       });
-      this.refreshAll();
       //   this.$router.push({ path: `/board/modify/${this.article.articleno}` });
     },
     deleteArticle() {
@@ -209,7 +219,6 @@ export default {
           name: "qnadelete",
           params: { articleno: this.article.articleno },
         });
-        this.refreshAll();
       }
     },
     moveList() {

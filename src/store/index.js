@@ -1,36 +1,25 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
+import memberStore from "@/store/modules/memberStore";
 import http from "@/api/http.js";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  modules: {
+    memberStore,
+  },
   state: {
-    loginUser: null,
-    saveId: null,
+    
     sidos: [{ value: null, text: "선택하세요" }],
     guguns: [{ value: null, text: "선택하세요" }],
     dongs: [{ value: null, text: "선택하세요" }],
     mapList: [],
   },
   getters: {
-    loginChk: function (state) {
-      return state.loginUser ? true : false;
-    },
-    adminChk: function (state) {
-      if (state.loginUser) {
-        return state.loginUser.userId === "admin" ? true : false;
-      }
-      return false;
-    },
+    
   },
   mutations: {
-    SET_LOGIN_USER: function (state, user) {
-      state.loginUser = user;
-    },
-    SET_SAVE_ID: function (state, saveId) {
-      state.saveId = saveId;
-    },
     SET_SIDO_LIST: function (state, sidos) {
       sidos.forEach((sido) => {
         state.sidos.push({ value: sido.code, text: sido.name });
@@ -64,12 +53,6 @@ export default new Vuex.Store({
     },
     CLEAR_MAP_LIST(state) {
       state.mapList = [];
-    },
-    CLEAR_SAVE_ID: function (state) {
-      state.saveId = null;
-    },
-    LOGOUT: function (state) {
-      state.loginUser = null;
     },
   },
   actions: {
@@ -116,7 +99,6 @@ export default new Vuex.Store({
         });
     },
   },
-  modules: {},
   plugins: [
     createPersistedState({
       storage: sessionStorage,
