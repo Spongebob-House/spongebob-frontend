@@ -5,9 +5,15 @@
     <!-- </section> -->
     <!-- <map-inter></map-inter> -->
     <section class="home-result-box">
+      <div>
+        <!-- <div class="mt-2">Value: {{ text }}</div> -->
+      </div>
       <div class="search-result">
         <div class="table-box col-sm-12 col-md-3 overflow-auto">
-          <table class="table table-hover text-center col-sm-12">
+          <b-input-group size="sm" prepend="">
+            <b-form-input v-model="text" placeholder="Enter your place"></b-form-input>
+          </b-input-group>
+          <!-- <table class="table table-hover text-center col-sm-12">
             <thead>
               <tr>
                 <th>거래내역</th>
@@ -53,7 +59,7 @@
                 </td>
               </tr>
             </tbody>
-          </table>
+          </table> -->
         </div>
         <div id="home-map" class="col-sm-12 col-md-9"><ka-kao-map></ka-kao-map></div>
       </div>
@@ -73,7 +79,9 @@ export default {
     // MapInter,
   },
   data() {
-    return {};
+    return {
+      text: "",
+    };
   },
   computed: {
     ...mapState(["mapList"]),
