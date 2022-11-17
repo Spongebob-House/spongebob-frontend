@@ -1,10 +1,14 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
+import memberStore from "@/store/modules/memberStore";
 import http from "@/api/http.js";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  modules: {
+    memberStore,
+  },
   state: {
     loginUser: null,
     saveId: null,

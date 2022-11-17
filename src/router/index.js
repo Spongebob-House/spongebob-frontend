@@ -1,7 +1,23 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
+import store from "@/store";
 Vue.use(VueRouter);
+
+const onlyAuthUser = async (to, from, next) => {
+  const checkUserInfo = store.getters["memberStore/checkUserInfo"];
+  const checkToken = store.getters["memberStore/checkToken"];
+  let token = sessionStorage.getItem("access-token");
+
+  if (checkUserInfo != null && token) {
+    await store.dispatch("memberStore/getUserInfo", token);
+  }
+  if (!checkToken || checkUserInfo === null) {
+    alert("로그인이 필요한 페이지입니다..");
+    router.push({ name: "login" });
+  } else {
+    next();
+  }
+};
 
 const routes = [
   {
@@ -13,23 +29,23 @@ const routes = [
     path: "/map",
     name: "map",
     component: () => import("@/views/AppMap.vue"),
-    children:[
+    children: [
       {
         path: "corona",
         name: "mapCorona",
-        component: () => import("@/components/map/MapCorona")
+        component: () => import("@/components/map/MapCorona"),
       },
       {
         path: "hospital",
         name: "mapHospital",
-        component: () => import("@/components/map/MapHospital")
+        component: () => import("@/components/map/MapHospital"),
       },
       {
         path: "search",
         name: "mapSearch",
-        component: () => import("@/components/map/MapSearch")
+        component: () => import("@/components/map/MapSearch"),
       },
-    ]
+    ],
   },
   {
     path: "/qna",
@@ -45,21 +61,25 @@ const routes = [
       {
         path: "write",
         name: "qnawrite",
+        beforeEnter: onlyAuthUser,
         component: () => import("@/components/qna/QnaWrite"),
       },
       {
         path: "view/:articleno",
         name: "qnaview",
+        beforeEnter: onlyAuthUser,
         component: () => import("@/components/qna/QnaView"),
       },
       {
         path: "modify",
         name: "qnamodify",
+        beforeEnter: onlyAuthUser,
         component: () => import("@/components/qna/QnaModify"),
       },
       {
         path: "delete/:articleno",
         name: "qnadelete",
+        beforeEnter: onlyAuthUser,
         component: () => import("@/components/qna/QnaDelete"),
       },
     ],

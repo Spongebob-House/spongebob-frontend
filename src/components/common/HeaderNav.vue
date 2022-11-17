@@ -4,9 +4,9 @@
       <div class="logo justify-content-start ms-5">
         <router-link class="text-decoration-none ddisplay-5 font-weight-bold" to="/">FIND HOME</router-link>
       </div>
-      <div class="nav justify-content-end logined" v-if="loginChk">
+      <div class="nav justify-content-end logined" v-if="userInfo">
         <div class="logined-info me-3 align-middle">
-          <strong>{{ loginUser.userName }}</strong> 님 안녕하세요.
+          <strong>{{ userInfo.username }}</strong> 님 안녕하세요.
         </div>
         <router-link to="/map/hospital"
           ><button class="hospital-btn btn me-3" id="btn-hospital">Hospital</button></router-link
@@ -18,7 +18,7 @@
         <router-link to="/notice"><button class="notice-btn btn me-3" id="btn-notice">Notice</button></router-link>
         <router-link to="/qna"><button class="qna-btn btn me-3" id="btn-qna">Q&A</button></router-link>
         <router-link to="/mypage"><button class="mypage-btn btn me-3" id="btn-mypage">MyPage</button></router-link>
-        <button class="logout-btn btn me-3" id="btn-logout" @click="LOGOUT">Logout</button>
+        <button class="logout-btn btn me-3" id="btn-logout" @click="onClickLogout">Logout</button>
       </div>
       <div class="nav justify-content-end" v-else>
         <router-link to="/join"><button id="btn-mv-join" class="join-btn btn me-3">Join</button></router-link>
@@ -45,7 +45,8 @@
                   id="userid"
                   name="userid"
                   placeholder="ID..."
-                  v-model="userId" />
+                  v-model="user.userid"
+                  @keyup.enter="confirm" />
               </div>
               <div class="mb-3">
                 <label for="userpwd" class="form-label">PW</label>
@@ -55,10 +56,11 @@
                   id="userpwd"
                   name="userpwd"
                   placeholder="PW..."
-                  v-model="userPwd" />
+                  v-model="user.userpwd"
+                  @keyup.enter="confirm" />
               </div>
               <div class="col-auto text-center">
-                <button type="button" id="btn-login" class="btn btn-outline-primary mb-3" @click="chkVal">Login</button>
+                <button type="button" id="btn-login" class="btn btn-outline-primary mb-3" @click="confirm">Login</button>
                 <router-link to="/findpwd"
                   ><button type="button" id="btn-findpw" class="btn btn-primary mb-3">
                     비밀번호 찾기
@@ -74,19 +76,35 @@
 </template>
 
 <script>
-import { mapMutations, mapState, mapGetters } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import http from "@/api/http";
+
+const memberStore = "memberStore";
 export default {
   name: "HeaderNav",
   data() {
     return {
-      userId: "",
-      userPwd: "",
+      user: {
+        userid: "",
+        userpwd: "",
+      },
       save: false,
     };
   },
   methods: {
-    ...mapMutations(["LOGOUT", "SET_SAVE_ID", "SET_LOGIN_USER", "CLEAR_SAVE_ID"]),
+    ...mapActions(memberStore, ["userLogout", "userConfirm", "getUserInfo"]),
+    async confirm() {
+      await this.userConfirm(this.user);
+      let token = sessionStorage.getItem("access-token");
+      if (this.isLogin) {
+        await this.getUserInfo(token);
+      }
+    },
+    onClickLogout() {
+      this.userLogout(this.userInfo.userid);
+      sessionStorage.removeItem("access-token");
+      sessionStorage.removeItem("refresh-token");
+    },
     refreshAll() {
       // 새로고침
       this.$router.go();
@@ -131,8 +149,8 @@ export default {
     },
   },
   computed: {
-    ...mapState(["loginUser", "saveId", "idSave"]),
-    ...mapGetters(["loginChk"]),
+    ...mapState(memberStore, ["userInfo", "isLogin", "isLoginError"]),
+    ...mapGetters(["checkUserInfo"]),
   },
   created() {
     this.userId = this.saveId;
