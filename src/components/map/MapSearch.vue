@@ -1,9 +1,9 @@
 <template>
   <main>
-    <section class="container-fluid bg-black justify-content-center text-center">
-      <map-search-bar></map-search-bar>
-    </section>
-    <map-inter></map-inter>
+    <!-- <section class="container-fluid bg-black justify-content-center text-center"> -->
+    <!-- <map-search-bar></map-search-bar> -->
+    <!-- </section> -->
+    <!-- <map-inter></map-inter> -->
     <section class="home-result-box">
       <div class="search-result">
         <div class="table-box col-sm-12 col-md-3 overflow-auto">
@@ -55,20 +55,22 @@
             </tbody>
           </table>
         </div>
-        <div id="home-map" class="col-sm-12 col-md-9" style="min-height: 700px"></div>
+        <div id="home-map" class="col-sm-12 col-md-9"><ka-kao-map></ka-kao-map></div>
       </div>
     </section>
   </main>
 </template>
 
 <script>
-import MapSearchBar from "@/components/map/item/MapSearchBar.vue";
-import MapInter from "@/components/map/item/MapInter.vue";
+// import MapSearchBar from "@/components/map/item/MapSearchBar.vue";
+// import MapInter from "@/components/map/item/MapInter.vue";
 import { mapState } from "vuex";
+import KaKaoMap from "./KakaoMap.vue";
 export default {
   components: {
-    MapSearchBar,
-    MapInter,
+    KaKaoMap,
+    // MapSearchBar,
+    // MapInter,
   },
   data() {
     return {};

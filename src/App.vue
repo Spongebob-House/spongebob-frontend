@@ -38,7 +38,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 700px;
+  /* height: 700px; */
 }
 .search-box {
   align-self: flex-end;
@@ -78,7 +78,7 @@ footer > * {
 .search-result {
   display: flex;
   flex-wrap: wrap;
-  height: 700px;
+  /* height: 700px; */
 }
 .table-box {
   overflow: auto;
