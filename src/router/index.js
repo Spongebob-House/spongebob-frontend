@@ -13,7 +13,7 @@ const onlyAuthUser = async (to, from, next) => {
   }
   if (!checkToken || checkUserInfo === null) {
     alert("로그인이 필요한 페이지입니다..");
-    router.push({ name: "login" });
+    router.push({ name: "main" });
   } else {
     next();
   }

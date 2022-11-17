@@ -5,6 +5,7 @@ import { login, findById, tokenRegeneration, logout } from "@/api/member";
 const memberStore = {
   namespaced: true,
   state: {
+    saveId: null,
     isLogin: false,
     isLoginError: false,
     userInfo: null,
@@ -16,6 +17,12 @@ const memberStore = {
     },
     checkToken: function (state) {
       return state.isValidToken;
+    },
+    adminChk: function (state) {
+      if (state.userInfo) {
+        return state.userInfo.userId === "admin" ? true : false;
+      }
+      return false;
     },
   },
   mutations: {
@@ -32,6 +39,13 @@ const memberStore = {
       state.isLogin = true;
       state.userInfo = userInfo;
     },
+    SET_SAVE_ID: (state, saveId) => {
+      state.saveId = saveId;
+    },
+    CLEAR_SAVE_ID: (state) => {
+      state.saveId = null;
+    },
+
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -51,6 +65,7 @@ const memberStore = {
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);
             commit("SET_IS_VALID_TOKEN", false);
+            alert("로그인 실패!")
           }
         },
         (error) => {
@@ -96,7 +111,7 @@ const memberStore = {
             console.log("갱신 실패");
             // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
             await logout(
-              state.userInfo.userid,
+              state.userInfo.userId,
               ({ data }) => {
                 if (data.message === "success") {
                   console.log("리프레시 토큰 제거 성공");
@@ -107,7 +122,7 @@ const memberStore = {
                 commit("SET_IS_LOGIN", false);
                 commit("SET_USER_INFO", null);
                 commit("SET_IS_VALID_TOKEN", false);
-                router.push({ name: "login" });
+                router.push({ name: "main" });
               },
               (error) => {
                 console.log(error);
@@ -127,6 +142,7 @@ const memberStore = {
             commit("SET_IS_LOGIN", false);
             commit("SET_USER_INFO", null);
             commit("SET_IS_VALID_TOKEN", false);
+            router.push("/");
           } else {
             console.log("유저 정보 없음!!!!");
           }
