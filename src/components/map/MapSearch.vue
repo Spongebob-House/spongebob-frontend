@@ -9,10 +9,15 @@
         <!-- <div class="mt-2">Value: {{ text }}</div> -->
       </div>
       <div class="search-result">
-        <div class="table-box col-sm-12 col-md-3 overflow-auto">
+        <div class="col-sm-12 col-md-3">
           <b-input-group size="sm" prepend="">
-            <b-form-input v-model="text" placeholder="Enter your place"></b-form-input>
+            <b-form-input autocomplete="off" :value="text" placeholder="Enter your place" ref="serachinput" @keydown.down="onArrowDown()" @keydown.up="onArrowUp()" @keyup.enter="onEnterUp()" @input="searchStart($event)"></b-form-input>
+
+            <b-card style="position:absolute;  width:295px; left:1px; top:30px;" v-if="searchList.length && text.length != 0">
+              <li class="mb-2 px-2" :class="{ 'is-active': index === arrownum}" v-for="(result,index) in searchList" :dongCode="result.dongCode" :key=index v-text="result.name"></li>
+            </b-card>
           </b-input-group>
+         
           <!-- <table class="table table-hover text-center col-sm-12">
             <thead>
               <tr>
@@ -72,6 +77,7 @@
 // import MapInter from "@/components/map/item/MapInter.vue";
 import { mapState } from "vuex";
 import KaKaoMap from "./KakaoMap.vue";
+import http from "@/api/http";
 export default {
   components: {
     KaKaoMap,
@@ -81,12 +87,54 @@ export default {
   data() {
     return {
       text: "",
+      searchList:[],
+      arrownum: 0,
     };
   },
   computed: {
     ...mapState(["mapList"]),
   },
+  methods:{
+    // dropboxDown(){
+    //   this.$refs['searchdrop'].show();
+    // },
+    onArrowDown(){
+      if(this.searchList.length === 0) return;
+      this.arrownum++;
+      this.arrownum %= this.searchList.length;
+      // this.text = this.searchList[this.arrownum].name; 
+    },
+    onArrowUp(){
+      if(this.searchList.length === 0) return;
+      this.arrownum = (this.arrownum + this.searchList.length -1);
+      this.arrownum %= this.searchList.length;
+      // this.text = this.searchList[this.arrownum].name; 
+    },
+    onEnterUp(){
+      this.text = this.searchList[this.arrownum].name;
+      http.get(`/map/search/${this.searchList[this.arrownum].dongCode}/null/null`).then(({data}) => {
+        console.log(data);
+        this.searchList = [];
+      })
+    },
+    searchStart(e){
+      this.text = e;
+      if(this.text.length == 0) return;
+      http.get(`/map/${this.text}`).then(({data}) => {
+        this.searchList = data;
+      }).catch((e) => {
+        console.log(e);
+      })
+    },
+  }
 };
 </script>
 
-<style></style>
+<style>
+li{
+  cursor: pointer;
+}
+.is-active{
+  background-color: #dedede;
+}
+</style>

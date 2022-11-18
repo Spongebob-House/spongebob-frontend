@@ -12,7 +12,7 @@
       </b-col>
       <b-col cols="2" class="nav justify-content-end">
         <b-navbar-nav class="ml-auto" v-if="userInfo">
-          <b-nav-item-dropdown right >
+          <b-nav-item-dropdown right menu-class="w-100" >
             <template #button-content>
               <b-avatar variant="info"></b-avatar>
             </template>
@@ -24,6 +24,7 @@
             </b-dropdown-item>
           </b-nav-item-dropdown>
           <b-modal  id="mypage" ref="mypage" centered hide-footer hide-header>
+            <div>마이페이지</div>
           </b-modal>
         </b-navbar-nav>
 
