@@ -10,6 +10,7 @@ const memberStore = {
     isLoginError: false,
     userInfo: null,
     isValidToken: false,
+    modalview: "login",
   },
   getters: {
     checkUserInfo: function (state) {
@@ -41,6 +42,9 @@ const memberStore = {
     },
     SET_SAVE_ID: (state, saveId) => {
       state.saveId = saveId;
+    },
+    SET_MODAL_VIEW: (state, modalview) => {
+      state.modalview = modalview;
     },
     CLEAR_SAVE_ID: (state) => {
       state.saveId = null;
