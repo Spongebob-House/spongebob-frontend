@@ -14,7 +14,7 @@
             <b-form-input autocomplete="off" :value="text" placeholder="Enter your place" ref="serachinput" @keydown.down="onArrowDown()" @keydown.up="onArrowUp()" @keyup.enter="onEnterUp()" @input="searchStart($event)"></b-form-input>
 
             <b-card style="position:absolute;  width:295px; left:1px; top:30px;" v-if="searchList.length && text.length != 0">
-              <li class="mb-2 px-2" :class="{ 'is-active': index === arrownum}" v-for="(result,index) in searchList" :dongCode="result.dongCode" :key=index v-text="result.name"></li>
+              <li class="mb-2 px-2" :class="{ 'is-active': index === arrownum}" v-for="(result,index) in searchList" :dongCode="result.dongCode" :key=index v-text="result.name" @click="onClickEvent(index)"></li>
             </b-card>
           </b-input-group>
          
@@ -116,6 +116,10 @@ export default {
         console.log(data);
         this.searchList = [];
       })
+    },
+    onClickEvent(i){
+      this.arrownum = i;
+      this.onEnterUp();
     },
     searchStart(e){
       this.text = e;
