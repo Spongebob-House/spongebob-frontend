@@ -76,7 +76,7 @@
 <script>
 // import MapSearchBar from "@/components/map/item/MapSearchBar.vue";
 // import MapInter from "@/components/map/item/MapInter.vue";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 import KaKaoMap from "./KakaoMap.vue";
 import http from "@/api/http";
 const mapStore = "mapStore";
@@ -98,6 +98,7 @@ export default {
   },
   methods:{
     ...mapActions(mapStore, ["homeSearch"]),
+    ...mapMutations(mapStore, ["CLEAR_MARKER_POSITIONS"]),
     // dropboxDown(){
     //   this.$refs['searchdrop'].show();
     // },
@@ -114,6 +115,7 @@ export default {
       // this.text = this.searchList[this.arrownum].name; 
     },
     onEnterUp(){
+      this.CLEAR_MARKER_POSITIONS();
       this.text = this.searchList[this.arrownum].name;
       const param = {
         dong: this.searchList[this.arrownum].dongCode,

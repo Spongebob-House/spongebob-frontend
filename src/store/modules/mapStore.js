@@ -7,6 +7,7 @@ const mapStore = {
         guguns: [{ value: null, text: "선택하세요" }],
         dongs: [{ value: null, text: "선택하세요" }],
         mapList: [],
+        markerPositions: [],
     },
     getters: {
     },
@@ -32,6 +33,17 @@ const mapStore = {
         lists.forEach((apt) => {
             state.mapList.push(apt);
         });
+        },
+        SET_MARKER_POSITIONS(state, lists){
+            lists.forEach((apt) => {
+                const arr = [];
+                arr[0] = apt.lat;
+                arr[1] = apt.lng;
+                state.markerPositions.push(arr);
+            })
+        },
+        CLEAR_MARKER_POSITIONS(state){
+            state.markerPositions = [];
         },
         CLEAR_SIDO_LIST(state) {
         state.sidos = [{ value: null, text: "선택하세요" }];
@@ -82,9 +94,12 @@ const mapStore = {
         homeSearch: function ({ commit }, data) {
         const url = "/map/search/" + data.dong + "/" + data.year + "/" + data.month;
         console.log(url);
+        // commit("CLEAR_MARKER_POSITIONS");
         http
             .get(url)
-            .then(({ data }) => commit("SET_MAP_LIST", data))
+            .then(({ data }) => {
+                commit("SET_MAP_LIST", data)
+                commit("SET_MARKER_POSITIONS", data)})
             .catch((error) => {
             console.log(error);
             });

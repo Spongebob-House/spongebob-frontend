@@ -6,31 +6,19 @@
       <button @click="changeSize(400)">show</button>
       <button @click="displayMarker(markerPositions1)">marker set 1</button>
       <button @click="displayMarker(markerPositions2)">marker set 2</button>
-      <button @click="displayMarker([])">marker set 3 (empty)</button>
+      <button @click="displayMarker([[37.5013068, 127.0396597]])">marker set 3 (empty)</button>
       <button @click="displayInfoWindow">infowindow</button>
     </div> -->
   </div>
 </template>
 
 <script>
+import {mapState} from "vuex";
+const mapStore = "mapStore";
 export default {
   name: "KakaoMap",
   data() {
     return {
-      markerPositions1: [
-        [33.452278, 126.567803],
-        [33.452671, 126.574792],
-        [33.451744, 126.572441],
-      ],
-      markerPositions2: [
-        [37.499590490909185, 127.0263723554437],
-        [37.499427948430814, 127.02794423197847],
-        [37.498553760499505, 127.02882598822454],
-        [37.497625593121384, 127.02935713582038],
-        [37.49629291770947, 127.02587362608637],
-        [37.49754540521486, 127.02546694890695],
-        [37.49646391248451, 127.02675574250912],
-      ],
       markers: [],
       infowindow: null,
     };
@@ -46,11 +34,56 @@ export default {
       document.head.appendChild(script);
     }
   },
+  watch:{
+   markerPositions(val){
+    if (this.markers.length > 0) {
+        this.markers.forEach((marker) => marker.setMap(null));
+      }
+      // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+    var content = '<div class="customoverlay">' +
+        '  <a href="https://map.kakao.com/link/map/11394059" target="_blank">' +
+        '    <span class="title">구의야구공원</span>' +
+        '  </a>' +
+        '</div>';
+
+  
+    const imageSrc = "http://localhost/assets/img/home.png";
+    const imageSize = new kakao.maps.Size(64,69);
+    
+
+    const positions = val.map((position) => new kakao.maps.LatLng(...position));
+    if (positions.length > 0) {
+        this.markers = positions.map(
+          (position) =>
+            {new kakao.maps.Marker({
+              map: this.map,
+              position,
+              image: new kakao.maps.MarkerImage(imageSrc, imageSize),
+            })
+            new kakao.maps.CustomOverlay({
+        map: this.map,
+        position: position,
+        content: content,
+        yAnchor: 1 
+    });
+          
+          }
+        );
+
+        const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new kakao.maps.LatLngBounds());
+
+        this.map.setBounds(bounds);
+      }
+    }, 
+  },
+  computed:{
+    ...mapState(mapStore, ["markerPositions","mapList"]),
+  },
   methods: {
     initMap() {
       const container = document.getElementById("map");
       const options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        center: new kakao.maps.LatLng(37.5013068, 127.0396597),
         level: 3,
       };
 
@@ -58,19 +91,13 @@ export default {
       //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options);
     },
-    changeSize(size) {
-      const container = document.getElementById("map");
-      container.style.width = `${size}px`;
-      container.style.height = `${size}px`;
-      this.map.relayout();
-    },
+
     displayMarker(markerPositions) {
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null));
       }
-
+      
       const positions = markerPositions.map((position) => new kakao.maps.LatLng(...position));
-      console.log(positions);
       if (positions.length > 0) {
         this.markers = positions.map(
           (position) =>
@@ -106,7 +133,7 @@ export default {
       this.map.setCenter(iwPosition);
     },
   },
-};
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -123,4 +150,9 @@ export default {
 button {
   margin: 0 3px;
 }
+.customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+.customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+.customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
+.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
+.customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
 </style>
