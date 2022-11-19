@@ -2,7 +2,9 @@
   <header>
     <b-nav class="nav d-flex justify-content-between align-items-center mt-2 mb-2">
       <b-col class="logo justify-content-start ms-5">
-        <router-link class="text-decoration-none display-5 font-weight-bold" to="/">FIND HOME</router-link>
+        <h1>
+          <router-link id="logo"  to="/" ><span style="position: absolute; clip: rect(0 0 0 0)">FIND HOME</span></router-link>
+        </h1>
       </b-col>
       <b-col cols="6" class="text-right">
         <router-link to="/map/search"><button class="search-btn btn me-3" id="btn-homesearch">HomeSearch</button></router-link>
@@ -90,6 +92,16 @@ export default {
 <style scoped>
 .b-avatar:hover{
   box-shadow: 1px 1px 10px 5px rgba(0, 0, 255, .2); 
+}
+#logo::before{
+  display:inline-block;
+  width: 52px;
+  height: 52px;
+  vertical-align: top;
+  content: '';
+  background-image: url("@/assets/lokasi-logo-25379.png");
+  background-size: 52px 52px;
+  /* background-position: 0 -158px; */
 }
 
 
