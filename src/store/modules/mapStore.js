@@ -8,6 +8,7 @@ const mapStore = {
         dongs: [{ value: null, text: "선택하세요" }],
         mapList: [],
         markerPositions: [],
+        interList: [],
     },
     getters: {
     },
@@ -41,6 +42,9 @@ const mapStore = {
                 arr[1] = apt.lng;
                 state.markerPositions.push(arr);
             })
+        },
+        APPEND_INTER_LIST(state, data){
+            state.interList.push(data);
         },
         CLEAR_MARKER_POSITIONS(state){
             state.markerPositions = [];

@@ -1,6 +1,68 @@
 <template>
   <div>
-    <div id="map"></div>
+    <div id="map">
+      
+      
+    </div>
+    <b-sidebar  id="sidebar-1"  :title="text" shadow backdrop width="33%">
+      <div id="roadview" style="height:400px">
+      </div>
+      <div>
+  <b-card 
+    class="mb-3"
+    
+  >
+  <b-card-title class="d-flex justify-content-between">
+    <span>
+      {{detailapt.apartmentName}}
+    </span>
+    <span v-if="!isInter" @click="onInterClick">
+      <b-avatar icon="star-fill" variant="secondary"></b-avatar>
+    </span>
+    <span v-else @click="onInterClick">
+      <b-avatar icon="star-fill" style="color:yellow" variant="secondary"></b-avatar>
+    </span>
+  </b-card-title>
+  <b-card-text class="px-3">
+    <b-row class="mb-1">
+      면적: {{detailapt.area}}
+    </b-row>
+    <b-row class="mb-1">
+      건축연도 : {{detailapt.buildYear}}년
+    </b-row>
+    <b-row class="mb-1">
+      최근 거래: {{detailapt.dealYear}}년 {{detailapt.dealMonth}}월
+    </b-row>
+    <b-row class="mb-1">
+      거래가: {{detailapt.dealAmount}}만원
+    </b-row>
+    <b-row class="mb-1">
+      주변 정보
+    </b-row>
+    <b-row class="mb-1 text-left" >
+      <b-col id="coffee"><img src="@/assets/coffee.png" style="width:30px;  height:30px"/>{{detailapt.coffee.name}} {{detailapt.coffee.dist}}m</b-col>
+      <b-col id="metro"><img src="@/assets/metro.png" style="width:30px; height:30px"/>{{detailapt.metro.name}} {{detailapt.metro.dist}}m</b-col>
+    </b-row>
+  </b-card-text>
+</b-card>
+
+<b-card
+    title="관련 뉴스"
+    
+  >
+    <b-card-text>
+      This is a wider card with supporting text below as a natural lead-in to additional content.
+      This content is a little bit longer.
+    </b-card-text>
+  </b-card>
+
+
+</div>
+    </b-sidebar>
+    <div>
+      <b-button v-b-toggle.sidebar-1 :id="`sidebarToggle${index}`" v-for="(result,index) in mapList" :key=index  style="display:none" @click="setData(index)"></b-button>
+      
+    </div>
     <!-- <div class="button-group">
       <button @click="changeSize(0)">Hide</button>
       <button @click="changeSize(400)">show</button>
@@ -13,14 +75,29 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapState, mapMutations} from "vuex";
 const mapStore = "mapStore";
+
 export default {
   name: "KakaoMap",
+  props:{
+    text:String,
+  },
   data() {
     return {
       markers: [],
       infowindow: null,
+      detailapt: {
+        coffee:{
+          name:"",
+          dist:0,
+        },
+        metro:{
+          name:"",
+          dist:0,
+        },
+      },
+      isInter:false,
     };
   },
   mounted() {
@@ -34,17 +111,13 @@ export default {
       document.head.appendChild(script);
     }
   },
+    
   watch:{
    markerPositions(val){
     if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null));
       }
-      // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-    var content = '<div class="customoverlay">' +
-        '  <a href="https://map.kakao.com/link/map/11394059" target="_blank">' +
-        '    <span class="title">구의야구공원</span>' +
-        '  </a>' +
-        '</div>';
+    
 
   
     const imageSrc = "http://localhost/assets/img/home.png";
@@ -53,22 +126,25 @@ export default {
 
     const positions = val.map((position) => new kakao.maps.LatLng(...position));
     if (positions.length > 0) {
-        this.markers = positions.map(
-          (position) =>
-            {new kakao.maps.Marker({
-              map: this.map,
-              position,
-              image: new kakao.maps.MarkerImage(imageSrc, imageSize),
-            })
-            new kakao.maps.CustomOverlay({
-        map: this.map,
-        position: position,
-        content: content,
-        yAnchor: 1 
-    });
-          
-          }
-        );
+        positions.map((position, index) =>
+            {var marker = new kakao.maps.Marker({
+                map: this.map,
+                position,
+                image: new kakao.maps.MarkerImage(imageSrc, imageSize),
+                clickable: true,
+              });
+            
+            kakao.maps.event.addListener(marker, 'click', function() {
+                // 마커 위에 인포윈도우를 표시합니다
+                console.log("abc");
+                console.log(index);
+                const el = "#sidebarToggle" + index;
+                document.querySelector(el).click();
+      
+
+              });
+              this.markers.push(marker);
+            });
 
         const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new kakao.maps.LatLngBounds());
 
@@ -77,9 +153,49 @@ export default {
     }, 
   },
   computed:{
-    ...mapState(mapStore, ["markerPositions","mapList"]),
+    ...mapState(mapStore, ["markerPositions","mapList", "interList"]),
   },
   methods: {
+    ...mapMutations(mapStore, ["APPEND_INTER_LIST"]),
+    onInterClick(){
+      for (let index = 0; index < this.interList.length; index++) {
+        if(this.interList[index] === this.detailapt.aptCode){
+          this.isInter = false;
+          this.interList[index] = "";
+          return;
+        }
+      }
+      this.APPEND_INTER_LIST(this.detailapt.aptCode);
+      this.isInter = true;
+    },
+    setData(k){
+      this.detailapt = this.mapList[k];
+      for (let index = 0; index < this.interList.length; index++) {
+        if(this.interList[index] === this.detailapt.aptCode){
+          this.isInter = true;
+          return;
+        }
+      }
+      this.isInter = false;
+      var roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
+      var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+      var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+      var position = new kakao.maps.LatLng(Number(this.detailapt.lat), Number(this.detailapt.lng));
+      // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+      roadviewClient.getNearestPanoId(position, 50, function(panoId) {
+        roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+      });
+      // const coffee = document.createElement("span");
+      // const coffeeText = document.createTextNode(` ${this.detailapt.coffee.name}점 ${this.detailapt.coffee.dist}m`);
+      // coffee.appendChild(coffeeText);
+      // const metro = document.createElement("span");
+      // const metroText = document.createTextNode(`${this.detailapt.metro.name} ${this.detailapt.metro.dist}m`);
+      // metro.appendChild(metroText);
+      // document.getElementById('coffee').appendChild(coffee);
+      // document.getElementById('metro').appendChild(metro);
+
+
+    },
     initMap() {
       const container = document.getElementById("map");
       const options = {
@@ -150,9 +266,5 @@ export default {
 button {
   margin: 0 3px;
 }
-.customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
-.customoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-.customoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;font-weight:bold;overflow:hidden;background: #d95050;background: #d95050 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 14px center;}
-.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
-.customoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+
 </style>

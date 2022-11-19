@@ -9,7 +9,7 @@
         <!-- <div>
           <div class="mt-2">Value: {{ text }}</div>
         </div> -->
-        <div id="home-map" class="col-sm-12 p-0"><ka-kao-map></ka-kao-map>
+        <div id="home-map" class="col-sm-12 p-0"><ka-kao-map :text="text"></ka-kao-map>
           <div class="col-sm-12 col-md-3" style="position:absolute; top: 3vh; left: 3vw; z-index: 2" >
             <b-input-group size="sm" prepend="">
               <b-form-input  style="width:100%; z-index: 3" autocomplete="off" :value="text" placeholder="Enter your place" ref="serachinput" @keydown.down="onArrowDown()" @keydown.up="onArrowUp()" @keyup.enter="onEnterUp()" @input="searchStart($event)"></b-form-input>
@@ -98,7 +98,7 @@ export default {
   },
   methods:{
     ...mapActions(mapStore, ["homeSearch"]),
-    ...mapMutations(mapStore, ["CLEAR_MARKER_POSITIONS"]),
+    ...mapMutations(mapStore, ["CLEAR_MARKER_POSITIONS", "CLEAR_MAP_LIST"]),
     // dropboxDown(){
     //   this.$refs['searchdrop'].show();
     // },
@@ -116,6 +116,7 @@ export default {
     },
     onEnterUp(){
       this.CLEAR_MARKER_POSITIONS();
+      this.CLEAR_MAP_LIST();
       this.text = this.searchList[this.arrownum].name;
       const param = {
         dong: this.searchList[this.arrownum].dongCode,
