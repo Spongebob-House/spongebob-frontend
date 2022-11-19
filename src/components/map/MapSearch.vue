@@ -5,18 +5,22 @@
     <!-- </section> -->
     <!-- <map-inter></map-inter> -->
     <section class="home-result-box">
-      <div>
-        <!-- <div class="mt-2">Value: {{ text }}</div> -->
-      </div>
       <div class="search-result">
-        <div class="col-sm-12 col-md-3">
-          <b-input-group size="sm" prepend="">
-            <b-form-input autocomplete="off" :value="text" placeholder="Enter your place" ref="serachinput" @keydown.down="onArrowDown()" @keydown.up="onArrowUp()" @keyup.enter="onEnterUp()" @input="searchStart($event)"></b-form-input>
-
-            <b-card style="position:absolute;  width:295px; left:1px; top:30px;" v-if="searchList.length && text.length != 0">
-              <li class="mb-2 px-2" :class="{ 'is-active': index === arrownum}" v-for="(result,index) in searchList" :dongCode="result.dongCode" :key=index v-text="result.name" @click="onClickEvent(index)"></li>
-            </b-card>
-          </b-input-group>
+        <!-- <div>
+          <div class="mt-2">Value: {{ text }}</div>
+        </div> -->
+        <div id="home-map" class="col-sm-12 p-0"><ka-kao-map></ka-kao-map>
+          <div class="col-sm-12 col-md-3" style="position:absolute; top: 3vh; left: 3vw; z-index: 2" >
+            <b-input-group size="sm" prepend="">
+              <b-form-input  style="width:100%; z-index: 3" autocomplete="off" :value="text" placeholder="Enter your place" ref="serachinput" @keydown.down="onArrowDown()" @keydown.up="onArrowUp()" @keyup.enter="onEnterUp()" @input="searchStart($event)"></b-form-input>
+  
+              <b-card style="position:absolute;  z-index: 2; width:100%; top:3vh;" v-if="searchList.length && text.length != 0">
+                <li class="mb-2 px-2" :class="{ 'is-active': index === arrownum}" v-for="(result,index) in searchList" :dongCode="result.dongCode" :key=index v-text="result.name" @click="onClickEvent(index)"></li>
+              </b-card>
+            </b-input-group>
+          </div>
+        </div>
+      </div>
          
           <!-- <table class="table table-hover text-center col-sm-12">
             <thead>
@@ -65,9 +69,6 @@
               </tr>
             </tbody>
           </table> -->
-        </div>
-        <div id="home-map" class="col-sm-12 col-md-9"><ka-kao-map></ka-kao-map></div>
-      </div>
     </section>
   </main>
 </template>
@@ -75,9 +76,10 @@
 <script>
 // import MapSearchBar from "@/components/map/item/MapSearchBar.vue";
 // import MapInter from "@/components/map/item/MapInter.vue";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import KaKaoMap from "./KakaoMap.vue";
 import http from "@/api/http";
+const mapStore = "mapStore";
 export default {
   components: {
     KaKaoMap,
@@ -95,6 +97,7 @@ export default {
     ...mapState(["mapList"]),
   },
   methods:{
+    ...mapActions(mapStore, ["homeSearch"]),
     // dropboxDown(){
     //   this.$refs['searchdrop'].show();
     // },
@@ -112,10 +115,13 @@ export default {
     },
     onEnterUp(){
       this.text = this.searchList[this.arrownum].name;
-      http.get(`/map/search/${this.searchList[this.arrownum].dongCode}/null/null`).then(({data}) => {
-        console.log(data);
-        this.searchList = [];
-      })
+      const param = {
+        dong: this.searchList[this.arrownum].dongCode,
+        year: null,
+        month: null,
+      }
+      this.homeSearch(param);
+      this.searchList = [];
     },
     onClickEvent(i){
       this.arrownum = i;
