@@ -1,14 +1,14 @@
 <template>
   <div>
     <div id="map"></div>
-    <div class="button-group">
+    <!-- <div class="button-group">
       <button @click="changeSize(0)">Hide</button>
       <button @click="changeSize(400)">show</button>
       <button @click="displayMarker(markerPositions1)">marker set 1</button>
       <button @click="displayMarker(markerPositions2)">marker set 2</button>
       <button @click="displayMarker([])">marker set 3 (empty)</button>
       <button @click="displayInfoWindow">infowindow</button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -51,7 +51,7 @@ export default {
       const container = document.getElementById("map");
       const options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 5,
+        level: 3,
       };
 
       //지도 객체를 등록합니다.
@@ -70,7 +70,7 @@ export default {
       }
 
       const positions = markerPositions.map((position) => new kakao.maps.LatLng(...position));
-
+      console.log(positions);
       if (positions.length > 0) {
         this.markers = positions.map(
           (position) =>
@@ -112,8 +112,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #map {
-  width: 1000px;
-  height: 1000px;
+  width: 100vw;
+  height: 100vh;
 }
 
 .button-group {
