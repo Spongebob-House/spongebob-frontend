@@ -26,10 +26,16 @@
             <template #button-content>
               <b-avatar variant="info"></b-avatar>
             </template>
-            <b-dropdown-item v-b-modal.mypage> 마이페이지 </b-dropdown-item>
+            <b-dropdown-item @click="myPage" v-b-modal.mypage> 마이페이지 </b-dropdown-item>
             <b-dropdown-item @click="onClickLogout"> 로그아웃 </b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-modal id="mypage" ref="mypage" centered hide-footer hide-header> </b-modal>
+          <b-modal id="mypage" ref="mypage" centered hide-footer hide-header>
+            <user-my-page v-on:close="close" v-if="modalview === 'myPage'"></user-my-page>
+            <user-modify-mypage
+              v-on:close="close"
+              v-else-if="modalview === 'mypageModify'"
+            ></user-modify-mypage>
+          </b-modal>
         </b-navbar-nav>
 
         <b-navbar-nav @click="loginForm()" v-else>
@@ -50,17 +56,22 @@ import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
 import UserLogin from '@/components/user/UserLogin.vue';
 import UserFindPwd from '@/components/user/UserFindPwd.vue';
 import UserRegister from '@/components/user/UserRegister.vue';
+import UserMyPage from '@/components/user/UserMyPage.vue';
+import UserModifyMypage from '@/components/user/UserModifyMypage.vue';
 const memberStore = 'memberStore';
 export default {
   components: {
     UserLogin,
     UserFindPwd,
     UserRegister,
+    UserMyPage,
+    UserModifyMypage,
   },
   name: 'HeaderNav',
   data() {
     return {};
   },
+
   methods: {
     ...mapActions(memberStore, ['userLogout']),
     ...mapMutations(memberStore, ['SET_MODAL_VIEW']),
@@ -77,6 +88,10 @@ export default {
       console.log('a');
       this.SET_MODAL_VIEW('login');
       this.$refs['my-modal'].show();
+    },
+    myPage() {
+      this.SET_MODAL_VIEW('myPage');
+      console.log('here');
     },
   },
   computed: {
