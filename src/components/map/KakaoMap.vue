@@ -1,66 +1,75 @@
 <template>
   <div>
-    <div id="map">
-      
-      
-    </div>
-    <b-sidebar  id="sidebar-1"  :title="text" shadow backdrop width="33%">
-      <div id="roadview" style="height:400px">
+    <div id="map"></div>
+    <b-sidebar  aria-labelledby="sidebar-no-header-title" id="sidebar-1"  :title="text" shadow width="33%" @shown="isdisabled = true" @hidden="isdisabled = false">
+      <template #header="{ hide }">
+        <button style="border:0; background-color: transparent;" @click="isList = true">
+          <b-icon-chevron-left></b-icon-chevron-left>
+        </button>
+          <strong>{{text}}</strong>
+          <button class="close text-dark">
+            <b-icon-x-lg @click="hide()"></b-icon-x-lg>
+          </button>
+      </template>
+      <div v-if="!isList">
+
+        <div id="roadview" style="height:400px"></div>
+        <div>
+          <b-card class="mb-3">
+            <b-card-title class="d-flex justify-content-between">
+              <span>
+                {{detailapt.apartmentName}}
+              </span>
+              <span v-if="!isInter" @click="onInterClick">
+                <b-avatar icon="star-fill" variant="secondary"></b-avatar>
+              </span>
+              <span v-else @click="onInterClick">
+                <b-avatar icon="star-fill" style="color:yellow" variant="secondary"></b-avatar>
+              </span>
+            </b-card-title>
+            <b-card-text class="px-3">
+              <b-row class="mb-1">
+                면적: {{detailapt.area}}
+              </b-row>
+              <b-row class="mb-1">
+                건축연도 : {{detailapt.buildYear}}년
+              </b-row>
+              <b-row class="mb-1">
+                최근 거래: {{detailapt.dealYear}}년 {{detailapt.dealMonth}}월
+              </b-row>
+              <b-row class="mb-1">
+                거래가: {{detailapt.dealAmount}}만원
+              </b-row>
+              <b-row class="mb-1">
+                주변 정보
+              </b-row>
+              <b-row class="mb-1 text-left" >
+                <b-col id="coffee"><img src="@/assets/coffee.png" style="width:30px;  height:30px"/>{{detailapt.coffee.name}} {{detailapt.coffee.dist}}m</b-col>
+                <b-col id="metro"><img src="@/assets/metro.png" style="width:30px; height:30px"/>{{detailapt.metro.name}} {{detailapt.metro.dist}}m</b-col>
+              </b-row>
+            </b-card-text>
+          </b-card>
+  
+          <b-card title="관련 뉴스">
+              <b-card-text>
+                This is a wider card with supporting text below as a natural lead-in to additional content.
+                This content is a little bit longer.
+              </b-card-text>
+            </b-card>
       </div>
-      <div>
-  <b-card 
-    class="mb-3"
-    
-  >
-  <b-card-title class="d-flex justify-content-between">
-    <span>
-      {{detailapt.apartmentName}}
-    </span>
-    <span v-if="!isInter" @click="onInterClick">
-      <b-avatar icon="star-fill" variant="secondary"></b-avatar>
-    </span>
-    <span v-else @click="onInterClick">
-      <b-avatar icon="star-fill" style="color:yellow" variant="secondary"></b-avatar>
-    </span>
-  </b-card-title>
-  <b-card-text class="px-3">
-    <b-row class="mb-1">
-      면적: {{detailapt.area}}
-    </b-row>
-    <b-row class="mb-1">
-      건축연도 : {{detailapt.buildYear}}년
-    </b-row>
-    <b-row class="mb-1">
-      최근 거래: {{detailapt.dealYear}}년 {{detailapt.dealMonth}}월
-    </b-row>
-    <b-row class="mb-1">
-      거래가: {{detailapt.dealAmount}}만원
-    </b-row>
-    <b-row class="mb-1">
-      주변 정보
-    </b-row>
-    <b-row class="mb-1 text-left" >
-      <b-col id="coffee"><img src="@/assets/coffee.png" style="width:30px;  height:30px"/>{{detailapt.coffee.name}} {{detailapt.coffee.dist}}m</b-col>
-      <b-col id="metro"><img src="@/assets/metro.png" style="width:30px; height:30px"/>{{detailapt.metro.name}} {{detailapt.metro.dist}}m</b-col>
-    </b-row>
-  </b-card-text>
-</b-card>
-
-<b-card
-    title="관련 뉴스"
-    
-  >
-    <b-card-text>
-      This is a wider card with supporting text below as a natural lead-in to additional content.
-      This content is a little bit longer.
-    </b-card-text>
-  </b-card>
-
-
-</div>
-    </b-sidebar>
+      
+      
+    </div> 
+    <div v-else>
+      <b-card>
+        아아아
+      </b-card>
+    </div>
+  </b-sidebar>
     <div>
-      <b-button v-b-toggle.sidebar-1 :id="`sidebarToggle${index}`" v-for="(result,index) in mapList" :key=index  style="display:none" @click="setData(index)"></b-button>
+      <b-button v-b-toggle.sidebar-1 :id="`sidebarToggle${index}`" v-for="(result,index) in mapList" :key=index  :disabled="isdisabled" style="display:none"></b-button>
+      <b-button :id="`mvsidebarToggle${index}`" v-for="(result,index) in mapList" :key=index+100 style="display:none" @click="setData(index)"></b-button>
+
       
     </div>
     <!-- <div class="button-group">
@@ -87,6 +96,7 @@ export default {
     return {
       markers: [],
       infowindow: null,
+      isdisabled: false,
       detailapt: {
         coffee:{
           name:"",
@@ -98,6 +108,7 @@ export default {
         },
       },
       isInter:false,
+      isList:false,
     };
   },
   mounted() {
@@ -138,7 +149,7 @@ export default {
                 // 마커 위에 인포윈도우를 표시합니다
                 console.log("abc");
                 console.log(index);
-                const el = "#sidebarToggle" + index;
+                const el = "#mvsidebarToggle" + index;
                 document.querySelector(el).click();
       
 
@@ -185,14 +196,8 @@ export default {
       roadviewClient.getNearestPanoId(position, 50, function(panoId) {
         roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
       });
-      // const coffee = document.createElement("span");
-      // const coffeeText = document.createTextNode(` ${this.detailapt.coffee.name}점 ${this.detailapt.coffee.dist}m`);
-      // coffee.appendChild(coffeeText);
-      // const metro = document.createElement("span");
-      // const metroText = document.createTextNode(`${this.detailapt.metro.name} ${this.detailapt.metro.dist}m`);
-      // metro.appendChild(metroText);
-      // document.getElementById('coffee').appendChild(coffee);
-      // document.getElementById('metro').appendChild(metro);
+      const el = "#sidebarToggle" + k;
+      document.querySelector(el).click();
 
 
     },
