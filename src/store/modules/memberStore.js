@@ -1,21 +1,6 @@
-<<<<<<< HEAD
-import jwtDecode from 'jwt-decode';
-import router from '@/router';
-import {
-  login,
-  findById,
-  tokenRegeneration,
-  logout,
-  modifyMypage,
-  register,
-  deleteUser,
-  findPwd,
-} from '@/api/member';
-=======
 import jwtDecode from "jwt-decode";
 import router from "@/router";
-import { login, findById, tokenRegeneration, logout } from "@/api/member";
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
+import { login, findById, tokenRegeneration, logout, modifyMypage, register, deleteUser, findPwd } from "@/api/member";
 
 const memberStore = {
   namespaced: true,
@@ -25,19 +10,14 @@ const memberStore = {
     isLoginError: false,
     userInfo: null,
     isValidToken: false,
-<<<<<<< HEAD
-    modalview: 'login',
+    modalview: "login",
     email: null,
   },
   getters: {
     getEmail: function (state) {
       return state.email;
     },
-=======
-    modalview: "login",
-  },
-  getters: {
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
+
     checkUserInfo: function (state) {
       return state.userInfo;
     },
@@ -46,11 +26,7 @@ const memberStore = {
     },
     adminChk: function (state) {
       if (state.userInfo) {
-<<<<<<< HEAD
-        return state.userInfo.userId === 'admin' ? true : false;
-=======
         return state.userInfo.userId === "admin" ? true : false;
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
       }
       return false;
     },
@@ -72,67 +48,22 @@ const memberStore = {
     SET_SAVE_ID: (state, saveId) => {
       state.saveId = saveId;
     },
-<<<<<<< HEAD
-
     SET_MODAL_VIEW: (state, modalview) => {
       state.modalview = modalview;
     },
 
-    CLEAR_SAVE_ID: state => {
+    CLEAR_SAVE_ID: (state) => {
       state.saveId = null;
     },
     SET_EMAIL: (state, userInfo) => {
       state.email = userInfo.emailId + userInfo.emailDomain;
     },
-=======
-    SET_MODAL_VIEW: (state, modalview) => {
-      state.modalview = modalview;
-    },
-    CLEAR_SAVE_ID: (state) => {
-      state.saveId = null;
-    },
-
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
   },
   actions: {
     async userConfirm({ commit }, user) {
       await login(
         user,
         ({ data }) => {
-<<<<<<< HEAD
-          if (data.message === 'success') {
-            let accessToken = data['access-token'];
-            let refreshToken = data['refresh-token'];
-            // console.log("login success token created!!!! >> ", accessToken, refreshToken);
-            commit('SET_IS_LOGIN', true);
-            commit('SET_IS_LOGIN_ERROR', false);
-            commit('SET_IS_VALID_TOKEN', true);
-            sessionStorage.setItem('access-token', accessToken);
-            sessionStorage.setItem('refresh-token', refreshToken);
-          } else {
-            commit('SET_IS_LOGIN', false);
-            commit('SET_IS_LOGIN_ERROR', true);
-            commit('SET_IS_VALID_TOKEN', false);
-            alert('로그인 실패!');
-          }
-        },
-        error => {
-          console.log(error);
-        },
-      );
-    },
-    async findPassword({ commit }, user) {
-      await findPwd(
-        user,
-        ({ data }) => {
-          if (data.message === 'success') {
-            commit('SET_USER_INFO', data.userInfo);
-          }
-        },
-        error => {
-          console.log(error);
-        },
-=======
           if (data.message === "success") {
             let accessToken = data["access-token"];
             let refreshToken = data["refresh-token"];
@@ -146,13 +77,25 @@ const memberStore = {
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);
             commit("SET_IS_VALID_TOKEN", false);
-            alert("로그인 실패!")
+            alert("로그인 실패!");
           }
         },
         (error) => {
           console.log(error);
         }
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
+      );
+    },
+    async findPassword({ commit }, user) {
+      await findPwd(
+        user,
+        ({ data }) => {
+          if (data.message === "success") {
+            commit("SET_USER_INFO", data.userInfo);
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
       );
     },
     async getUserInfo({ commit, dispatch }, token) {
@@ -161,45 +104,10 @@ const memberStore = {
       await findById(
         decodeToken.userid,
         ({ data }) => {
-<<<<<<< HEAD
-          if (data.message === 'success') {
-            commit('SET_USER_INFO', data.userInfo);
-            commit('SET_EMAIL', data.userInfo);
-            console.log('3. getUserInfo data >> ', data);
-          } else {
-            console.log('유저 정보 없음!!!!');
-          }
-        },
-        async error => {
-          console.log(
-            'getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ',
-            error.response.status,
-          );
-          commit('SET_IS_VALID_TOKEN', false);
-          await dispatch('tokenRegeneration');
-        },
-      );
-    },
-    async tokenRegeneration({ commit, state }) {
-      console.log('토큰 재발급 >> 기존 토큰 정보 : {}', sessionStorage.getItem('access-token'));
-      await tokenRegeneration(
-        JSON.stringify(state.userInfo),
-        ({ data }) => {
-          if (data.message === 'success') {
-            let accessToken = data['access-token'];
-            console.log('재발급 완료 >> 새로운 토큰 : {}', accessToken);
-            sessionStorage.setItem('access-token', accessToken);
-            commit('SET_IS_VALID_TOKEN', true);
-          }
-        },
-        async error => {
-          // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
-          if (error.response.status === 401) {
-            console.log('갱신 실패');
-=======
           if (data.message === "success") {
             commit("SET_USER_INFO", data.userInfo);
-            // console.log("3. getUserInfo data >> ", data);
+            commit("SET_EMAIL", data.userInfo);
+            console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
           }
@@ -227,32 +135,10 @@ const memberStore = {
           // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
           if (error.response.status === 401) {
             console.log("갱신 실패");
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
             // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
             await logout(
               state.userInfo.userId,
               ({ data }) => {
-<<<<<<< HEAD
-                if (data.message === 'success') {
-                  console.log('리프레시 토큰 제거 성공');
-                } else {
-                  console.log('리프레시 토큰 제거 실패');
-                }
-                alert('RefreshToken 기간 만료!!! 다시 로그인해 주세요.');
-                commit('SET_IS_LOGIN', false);
-                commit('SET_USER_INFO', null);
-                commit('SET_IS_VALID_TOKEN', false);
-                router.push({ name: 'main' });
-              },
-              error => {
-                console.log(error);
-                commit('SET_IS_LOGIN', false);
-                commit('SET_USER_INFO', null);
-              },
-            );
-          }
-        },
-=======
                 if (data.message === "success") {
                   console.log("리프레시 토큰 제거 성공");
                 } else {
@@ -272,88 +158,68 @@ const memberStore = {
             );
           }
         }
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
       );
     },
     async userLogout({ commit }, userid) {
       await logout(
         userid,
         ({ data }) => {
-<<<<<<< HEAD
-          if (data.message === 'success') {
-            commit('SET_IS_LOGIN', false);
-            commit('SET_USER_INFO', null);
-            commit('SET_IS_VALID_TOKEN', false);
-            router.push('/');
+          if (data.message === "success") {
+            commit("SET_IS_LOGIN", false);
+            commit("SET_USER_INFO", null);
+            commit("SET_IS_VALID_TOKEN", false);
+            router.push("/");
           }
         },
-        error => {
+        (error) => {
           console.log(error);
-        },
+        }
       );
     },
     async userDelete({ commit }, userid) {
       await deleteUser(
         userid,
         ({ data }) => {
-          if (data.message === 'success') {
-            commit('SET_IS_LOGIN', false);
-            commit('SET_USER_INFO', null);
-            commit('SET_IS_VALID_TOKEN', false);
-            router.push('/');
+          if (data.message === "success") {
+            commit("SET_IS_LOGIN", false);
+            commit("SET_USER_INFO", null);
+            commit("SET_IS_VALID_TOKEN", false);
+            router.push("/");
           }
         },
-        error => {
+        (error) => {
           console.log(error);
-        },
+        }
       );
     },
     async userModify({ commit }, user) {
       await modifyMypage(
         user,
         ({ data }) => {
-          if (data.message === 'success') {
-            commit('SET_USER_INFO', data.userInfo);
-            console.log('회원 정보 수정 !!!!');
+          if (data.message === "success") {
+            commit("SET_USER_INFO", data.userInfo);
+            console.log("회원 정보 수정 !!!!");
           }
         },
-        error => {
+        (error) => {
           console.log(error);
-        },
+        }
       );
     },
     async userJoin({ commit }, user) {
       await register(
         user,
         ({ data }) => {
-          if (data.message === 'success') {
-            console.log('user join', data);
-            commit('SET_USER_INFO', data.userInfo);
-          }
-        },
-        error => {
-          console.log(error);
-        },
-=======
           if (data.message === "success") {
-            commit("SET_IS_LOGIN", false);
-            commit("SET_USER_INFO", null);
-            commit("SET_IS_VALID_TOKEN", false);
-            router.push("/");
-          } else {
-            console.log("유저 정보 없음!!!!");
+            console.log("user join", data);
+            commit("SET_USER_INFO", data.userInfo);
           }
         },
         (error) => {
           console.log(error);
         }
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
       );
     },
   },
 };
-<<<<<<< HEAD
-=======
-
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
 export default memberStore;

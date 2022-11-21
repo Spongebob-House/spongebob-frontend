@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <h2>회원가입</h2>
     <b-container id="mypage" style="height: 500px" class="mt -5 px -5">
       <b-form-group id="input-group-2" label="아이디" label-for="input-2">
