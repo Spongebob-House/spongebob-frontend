@@ -9,6 +9,20 @@ const mapStore = {
     mapList: [],
     markerPositions: [],
     interList: [],
+    searchFlag: false,
+    detailapt: {
+      apartmentName: "",
+      coffee:{
+        name:"",
+        dist:0,
+      },
+      metro:{
+        name:"",
+        dist:0,
+      },
+    },
+
+    dealList: [],
   },
   getters: {},
   mutations: {
@@ -43,6 +57,20 @@ const mapStore = {
         state.markerPositions.push(arr);
       });
     },
+    SET_SEARCH_FLAG_FALSE(state){
+      state.searchFlag = false;
+    },
+    SET_SEARCH_FLAG_TRUE(state){
+      state.searchFlag = true;
+    },
+    SET_DETAIL_APT(state, data){
+      state.detailApt = data;
+    },
+    SET_DEAL_LIST(state, list){
+      list.forEach((deal) => {
+        state.dealList.push(deal);
+      })
+    },
     APPEND_INTER_LIST(state, data) {
       state.interList.push(data);
     },
@@ -60,6 +88,9 @@ const mapStore = {
     },
     CLEAR_MAP_LIST(state) {
       state.mapList = [];
+    },
+    CLEAR_DEAL_LIST(state) {
+      state.dealList = [];
     },
   },
   actions: {
@@ -106,6 +137,30 @@ const mapStore = {
             alert("해당지역에 거래내역이 없습니다!");
             return;
           }
+          commit("SET_MAP_LIST", data);
+          commit("SET_MARKER_POSITIONS", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    aptDetail: function({commit}, apt){
+      http.post("/map/detail", apt).then(({data}) => {
+        commit("SET_DETAIL_APT", data.mapDto);
+        commit("CLEAR_DEAL_LIST");
+        commit("SET_DEAL_LIST", data.dealList);
+      }).catch((e) => {
+        console.log(e);
+      })
+    },
+    aptSearch: function ({ commit }, latLng) {
+      commit("CLEAR_MAP_LIST");
+      commit("CLEAR_MARKER_POSITIONS");
+      http
+        .post("/map/aptsearch", 
+        latLng)
+        .then(({ data }) => {
+          
           commit("SET_MAP_LIST", data);
           commit("SET_MARKER_POSITIONS", data);
         })
