@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 const memberStore = "memberStore";
 export default {
   name: "findPwd",
@@ -37,7 +37,6 @@ export default {
   },
   methods: {
     ...mapActions(memberStore, ["findPassword"]),
-    ...mapMutations(memberStore, ["SET_USER_INFO"]),
     async findpwd() {
       if (
         this.user.userId === this.checkUserInfo.userId &&
