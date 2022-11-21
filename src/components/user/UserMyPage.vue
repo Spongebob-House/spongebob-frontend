@@ -40,7 +40,7 @@ export default {
 
   methods: {
     ...mapActions(memberStore, ["userLogout", "userConfirm", "getUserInfo", "userDelete", "userLogout"]),
-    ...mapMutations(memberStore, ["SET_SAVE_ID", "CLEAR_SAVE_ID", "SET_MODAL_VIEW", "SET_EMAIL"]),
+    ...mapMutations(memberStore, ["SET_MODAL_VIEW"]),
     async confirm() {
       let token = sessionStorage.getItem("access-token");
       await this.getUserInfo(token);
