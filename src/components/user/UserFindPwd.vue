@@ -32,10 +32,12 @@
       >
     </b-container>
     <b-container v-else-if="isFound === true"></b-container>
+
   </div>
 </template>
 
 <script>
+
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
 const memberStore = 'memberStore';
 export default {
@@ -80,3 +82,4 @@ h2 {
   margin-top: 30px;
 }
 </style>
+

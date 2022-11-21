@@ -2,12 +2,17 @@ import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
 import memberStore from "@/store/modules/memberStore";
+<<<<<<< HEAD
 import http from "@/api/http.js";
+=======
+import mapStore from "@/store/modules/mapStore";
+>>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
     memberStore,
+<<<<<<< HEAD
   },
   state: {
     
@@ -15,11 +20,18 @@ export default new Vuex.Store({
     guguns: [{ value: null, text: "선택하세요" }],
     dongs: [{ value: null, text: "선택하세요" }],
     mapList: [],
+=======
+    mapStore,
+  },
+  state: {   
+    
+>>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
   },
   getters: {
     
   },
   mutations: {
+<<<<<<< HEAD
     SET_SIDO_LIST: function (state, sidos) {
       sidos.forEach((sido) => {
         state.sidos.push({ value: sido.code, text: sido.name });
@@ -98,6 +110,12 @@ export default new Vuex.Store({
           console.log(error);
         });
     },
+=======
+
+  },
+  actions: {
+    
+>>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
   },
   plugins: [
     createPersistedState({

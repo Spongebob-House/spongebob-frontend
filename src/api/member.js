@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 import api from './http.js';
+=======
+import api from "./http.js";
+>>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
 
 async function login(user, success, fail) {
   await api.post(`/user/login`, user).then(success).catch(fail);
 }
+<<<<<<< HEAD
 // 회원 인증
 async function findById(userid, success, fail) {
   api.defaults.headers['access-token'] = sessionStorage.getItem('access-token');
@@ -11,6 +16,16 @@ async function findById(userid, success, fail) {
 // access token 재 발급
 async function tokenRegeneration(user, success, fail) {
   api.defaults.headers['refresh-token'] = sessionStorage.getItem('refresh-token'); //axios header에 refresh-token 셋팅
+=======
+
+async function findById(userid, success, fail) {
+  api.defaults.headers["access-token"] = sessionStorage.getItem("access-token");
+  await api.get(`/user/info/${userid}`).then(success).catch(fail);
+}
+
+async function tokenRegeneration(user, success, fail) {
+  api.defaults.headers["refresh-token"] = sessionStorage.getItem("refresh-token"); //axios header에 refresh-token 셋팅
+>>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
   await api.post(`/user/refresh`, user).then(success).catch(fail);
 }
 
@@ -18,6 +33,7 @@ async function logout(userid, success, fail) {
   await api.get(`/user/logout/${userid}`).then(success).catch(fail);
 }
 
+<<<<<<< HEAD
 // 회원정보 수정
 async function modifyMypage(user, success, fail) {
   await api.put(`/user/`, user).then(success).catch(fail);
@@ -53,3 +69,6 @@ export {
   deleteUser,
   findPwd,
 };
+=======
+export { login, findById, tokenRegeneration, logout };
+>>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
