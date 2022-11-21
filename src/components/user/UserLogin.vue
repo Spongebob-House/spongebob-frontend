@@ -31,10 +31,10 @@
             <button type="button" id="btn-login" class="btn btn-primary mb-3 " @click="chkVal">Login</button>
         </b-row>
         <b-row class="mb-3 text-center" >
-            <b-col class="text-left" @click="join" >
+            <b-col class="text-left" @click="join" style="cursor:pointer">
                 회원가입
             </b-col>
-            <b-col class="text-right" @click="findPwd">
+            <b-col class="text-right" @click="findPwd" style="cursor:pointer">
                 비밀번호 찾기
             </b-col>
         </b-row>
