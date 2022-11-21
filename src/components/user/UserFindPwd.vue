@@ -36,8 +36,9 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 const memberStore = 'memberStore';
+
 export default {
   name: 'findPwd',
   data() {
@@ -52,7 +53,6 @@ export default {
   },
   methods: {
     ...mapActions(memberStore, ['findPassword']),
-    ...mapMutations(memberStore, ['SET_USER_INFO']),
 
     async findpwd() {
       if (

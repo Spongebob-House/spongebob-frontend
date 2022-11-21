@@ -65,7 +65,7 @@ const memberStore = {
       state.saveId = null;
     },
     SET_EMAIL: (state, userInfo) => {
-      state.email = userInfo.emailId + userInfo.emailDomain;
+      state.email = userInfo.emailId + '@' + userInfo.emailDomain;
     },
   },
   actions: {
@@ -196,25 +196,37 @@ const memberStore = {
             commit('SET_IS_LOGIN', false);
             commit('SET_USER_INFO', null);
             commit('SET_IS_VALID_TOKEN', false);
+            alert('회원탈퇴 완료');
             router.push('/');
           }
         },
         error => {
           console.log(error);
+
+          alert('회원탈퇴 실패');
         },
       );
     },
-    async userModify({ commit }, user) {
+    async userModify({ commit, state }, user) {
+      const param = {
+        userId: state.userInfo.userId,
+        userName: user.userName,
+        emailId: user.emailId,
+        emailDomain: user.emailDomain,
+      };
       await modifyMypage(
-        user,
+        param,
         ({ data }) => {
           if (data.message === 'success') {
             commit('SET_USER_INFO', data.userInfo);
-            console.log('회원 정보 수정 !!!!');
+            commit('SET_EMAIL', data.userInfo);
+            console.log('회원 정보 수정 완료!!!!');
           }
         },
         error => {
           console.log(error);
+
+          alert('회원 정보 수정 실패 !!!');
         },
       );
     },
@@ -225,10 +237,14 @@ const memberStore = {
           if (data.message === 'success') {
             console.log('user join', data);
             commit('SET_USER_INFO', data.userInfo);
+            commit('SET_EMAIL', data.userInfo);
+            alert('회원가입 완료!');
           }
         },
         error => {
           console.log(error);
+
+          alert('회원가입 실패');
         },
       );
     },

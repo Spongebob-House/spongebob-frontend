@@ -3,7 +3,7 @@
     <h2>회원 정보 수정</h2>
     <b-container id="mypage" style="height: 450px" class="mt -5 px -5">
       <b-form-group id="input-group-2" label="아이디" label-for="input-2">
-        <b-form-input id="userid" v-model="user.userId"></b-form-input>
+        <b-form-input id="userid" v-model="user.userId" readonly></b-form-input>
       </b-form-group>
       <br />
       <b-form-group id="input-group-2" label="이름" label-for="input-2">
@@ -16,7 +16,7 @@
           ><span>@</span>
           <b-form-input
             id="emailDomain"
-            v-model="user.enmailDomain"
+            v-model="user.emailDomain"
             style="width: 220px"
           ></b-form-input>
         </div>
@@ -45,27 +45,15 @@ const memberStore = 'memberStore';
 export default {
   data() {
     return {
-      user: {
-        userId: '',
-        userName: '',
-        userEmail: '',
-        emailId: '',
-        emailDomain: '',
-        joinDate: '',
-      },
+      user: {},
+
       show: true,
     };
   },
 
   methods: {
     ...mapActions(memberStore, ['userLogout', 'userConfirm', 'getUserInfo', 'userModify']),
-    ...mapMutations(memberStore, [
-      'SET_SAVE_ID',
-      'CLEAR_SAVE_ID',
-      'SET_MODAL_VIEW',
-      'SET_EMAIL',
-      'SET_USER_INFO',
-    ]),
+    ...mapMutations(memberStore, ['SET_SAVE_ID', 'CLEAR_SAVE_ID', 'SET_MODAL_VIEW']),
     async mypageModify() {
       await this.userModify(this.user)
         .then(() => console.log('회원 정보 수정 완료'))
@@ -73,9 +61,6 @@ export default {
       this.$swal('회원 정보 수정 완료하였습니다.', { icon: 'success' }).then(() =>
         this.$emit('close'),
       );
-
-      this.SET_USER_INFO(this.user);
-      this.SET_EMAIL(this.user);
     },
   },
   computed: {
@@ -83,8 +68,7 @@ export default {
     ...mapGetters(memberStore, ['checkUserInfo', 'getEmail']),
   },
   created() {
-    this.user.userId = this.userInfo.userId;
-    this.user.joinDate = this.userInfo.joinDate;
+    this.user = this.userInfo;
   },
 };
 </script>

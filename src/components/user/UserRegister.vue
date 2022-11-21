@@ -43,8 +43,9 @@
 </template>
 <script src="components/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 const memberStore = 'memberStore';
+
 export default {
   name: 'userJoin',
   data() {
@@ -65,17 +66,9 @@ export default {
 
   methods: {
     ...mapActions(memberStore, ['userLogout', 'userConfirm', 'getUserInfo', 'userJoin']),
-    ...mapMutations(memberStore, [
-      'SET_SAVE_ID',
-      'CLEAR_SAVE_ID',
-      'SET_MODAL_VIEW',
-      'SET_EMAIL',
-      'SET_USER_INFO',
-    ]),
     async confirm() {
       await this.userJoin(this.user);
       console.log('회원가입 완료');
-      this.SET_EMAIL(this.user);
       this.$swal('회원가입 완료하였습니다.', { icon: 'success' }).then(() => this.$emit('close'));
     },
     chkVal() {
