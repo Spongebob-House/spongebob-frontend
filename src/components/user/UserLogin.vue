@@ -58,6 +58,7 @@ export default {
   methods: {
     ...mapActions(memberStore, ["userLogout", "userConfirm", "getUserInfo"]),
     ...mapMutations(memberStore, ["SET_SAVE_ID", "CLEAR_SAVE_ID", "SET_MODAL_VIEW"]),
+
     async confirm() {
       if(this.save){
         this.SET_SAVE_ID(this.user.userId);

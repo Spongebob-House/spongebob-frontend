@@ -75,10 +75,16 @@
       
     </div>
     <!-- <div class="button-group">
+>>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
       <button @click="changeSize(0)">Hide</button>
       <button @click="changeSize(400)">show</button>
       <button @click="displayMarker(markerPositions1)">marker set 1</button>
       <button @click="displayMarker(markerPositions2)">marker set 2</button>
+<<<<<<< HEAD
+      <button @click="displayMarker([])">marker set 3 (empty)</button>
+      <button @click="displayInfoWindow">infowindow</button>
+    </div>
+=======
       <button @click="displayMarker([[37.5013068, 127.0396597]])">marker set 3 (empty)</button>
       <button @click="displayInfoWindow">infowindow</button>
     </div> -->
@@ -124,7 +130,6 @@ export default {
       document.head.appendChild(script);
     }
   },
-    
   watch:{
    markerPositions(val){
     if (this.markers.length > 0) {
@@ -215,12 +220,15 @@ export default {
       this.map = new kakao.maps.Map(container, options);
     },
 
+
     displayMarker(markerPositions) {
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null));
       }
+
       
       const positions = markerPositions.map((position) => new kakao.maps.LatLng(...position));
+
       if (positions.length > 0) {
         this.markers = positions.map(
           (position) =>
@@ -256,14 +264,18 @@ export default {
       this.map.setCenter(iwPosition);
     },
   },
+
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #map {
+
   width: 100vw;
   height: 100vh;
+
 }
 
 .button-group {

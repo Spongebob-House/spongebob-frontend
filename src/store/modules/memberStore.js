@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
-import { login, findById, tokenRegeneration, logout } from "@/api/member";
+import { login, findById, tokenRegeneration, logout, modifyMypage, register, deleteUser, findPwd } from "@/api/member";
 
 const memberStore = {
   namespaced: true,
@@ -11,8 +11,13 @@ const memberStore = {
     userInfo: null,
     isValidToken: false,
     modalview: "login",
+    email: null,
   },
   getters: {
+    getEmail: function (state) {
+      return state.email;
+    },
+
     checkUserInfo: function (state) {
       return state.userInfo;
     },
@@ -46,10 +51,13 @@ const memberStore = {
     SET_MODAL_VIEW: (state, modalview) => {
       state.modalview = modalview;
     },
+
     CLEAR_SAVE_ID: (state) => {
       state.saveId = null;
     },
-
+    SET_EMAIL: (state, userInfo) => {
+      state.email = userInfo.emailId + userInfo.emailDomain;
+    },
   },
   actions: {
     async userConfirm({ commit }, user) {
@@ -69,7 +77,20 @@ const memberStore = {
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);
             commit("SET_IS_VALID_TOKEN", false);
-            alert("로그인 실패!")
+            alert("로그인 실패!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async findPassword({ commit }, user) {
+      await findPwd(
+        user,
+        ({ data }) => {
+          if (data.message === "success") {
+            commit("SET_USER_INFO", data.userInfo);
           }
         },
         (error) => {
@@ -85,7 +106,8 @@ const memberStore = {
         ({ data }) => {
           if (data.message === "success") {
             commit("SET_USER_INFO", data.userInfo);
-            // console.log("3. getUserInfo data >> ", data);
+            commit("SET_EMAIL", data.userInfo);
+            console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
           }
@@ -147,8 +169,50 @@ const memberStore = {
             commit("SET_USER_INFO", null);
             commit("SET_IS_VALID_TOKEN", false);
             router.push("/");
-          } else {
-            console.log("유저 정보 없음!!!!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async userDelete({ commit }, userid) {
+      await deleteUser(
+        userid,
+        ({ data }) => {
+          if (data.message === "success") {
+            commit("SET_IS_LOGIN", false);
+            commit("SET_USER_INFO", null);
+            commit("SET_IS_VALID_TOKEN", false);
+            router.push("/");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async userModify({ commit }, user) {
+      await modifyMypage(
+        user,
+        ({ data }) => {
+          if (data.message === "success") {
+            commit("SET_USER_INFO", data.userInfo);
+            console.log("회원 정보 수정 !!!!");
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async userJoin({ commit }, user) {
+      await register(
+        user,
+        ({ data }) => {
+          if (data.message === "success") {
+            console.log("user join", data);
+            commit("SET_USER_INFO", data.userInfo);
           }
         },
         (error) => {
@@ -158,5 +222,4 @@ const memberStore = {
     },
   },
 };
-
 export default memberStore;

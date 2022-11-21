@@ -10,18 +10,10 @@ export default new Vuex.Store({
     memberStore,
     mapStore,
   },
-  state: {   
-    
-  },
-  getters: {
-    
-  },
-  mutations: {
-
-  },
-  actions: {
-    
-  },
+  state: {},
+  getters: {},
+  mutations: {},
+  actions: {},
   plugins: [
     createPersistedState({
       storage: sessionStorage,

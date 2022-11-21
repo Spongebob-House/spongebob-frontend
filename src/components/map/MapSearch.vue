@@ -5,6 +5,7 @@
     <!-- </section> -->
     <!-- <map-inter></map-inter> -->
     <section class="home-result-box">
+
       <div class="search-result">
         <!-- <div>
           <div class="mt-2">Value: {{ text }}</div>
@@ -21,7 +22,7 @@
           </div>
         </div>
       </div>
-         
+
           <!-- <table class="table table-hover text-center col-sm-12">
             <thead>
               <tr>
@@ -69,6 +70,8 @@
               </tr>
             </tbody>
           </table> -->
+
+
     </section>
   </main>
 </template>
@@ -76,10 +79,12 @@
 <script>
 // import MapSearchBar from "@/components/map/item/MapSearchBar.vue";
 // import MapInter from "@/components/map/item/MapInter.vue";
+
 import { mapState, mapActions, mapMutations } from "vuex";
 import KaKaoMap from "./KakaoMap.vue";
 import http from "@/api/http";
 const mapStore = "mapStore";
+
 export default {
   components: {
     KaKaoMap,
@@ -89,13 +94,16 @@ export default {
   data() {
     return {
       text: "",
+
       searchList:[],
       arrownum: 0,
+
     };
   },
   computed: {
     ...mapState(["mapList"]),
   },
+
   methods:{
     ...mapActions(mapStore, ["homeSearch"]),
     ...mapMutations(mapStore, ["CLEAR_MARKER_POSITIONS", "CLEAR_MAP_LIST"]),
@@ -151,3 +159,4 @@ li{
   background-color: #dedede;
 }
 </style>
+
