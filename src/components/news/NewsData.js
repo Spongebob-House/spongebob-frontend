@@ -17,8 +17,7 @@ const newsData = [
     org_link: 'https://www.khan.co.kr/economy/finance/article/202211172145005',
     pDate: '2022-11-17 21:46:00',
     title: '주담대 연 5%대는 ‘그림의 떡’ 되나',
-    thumbnail:
-      'https://landthumb-phinf.pstatic.net/20130320_178/hscp_img_1363764552271D2bBb_JPEG/photoinfra_1363764552053.jpg',
+    src: 'http://imgnews.naver.net/image/421/2018/09/04/0003572149_001_20180904155727695.jpg',
   },
   {
     cnt: 3,
@@ -37,8 +36,7 @@ const newsData = [
     link: 'https://news.kbs.co.kr/news/view.do?ncd=5604173&amp;ref=A',
     org_link: 'https://news.kbs.co.kr/news/view.do?ncd=5604173&amp;ref=A',
     pDate: '2022-11-17 21:40:00',
-    thumbnail:
-      'https://search.pstatic.net/sunny/?src=https://d2v80xjmx68n4w.cloudfront.net/members/portfolios/NkbE81652775587.png&type=b150',
+    src: 'https://i.pinimg.com/736x/20/2e/c3/202ec3cddf103328040a279f85d56cf4--osaka-japan-skylines.jpg',
     title: '“청년 발달장애인 자립 돕자”…성남시, 내년부터 대폭 지원',
   },
   {
@@ -49,7 +47,7 @@ const newsData = [
     org_link: 'https://www.khan.co.kr/local/Seoul/article/202211172135025',
     pDate: '2022-11-17 21:37:00',
     title: '목재가 약하다고? 성능·환경 다 잡은 ‘고성능 건축 자재’',
-    src: 'http://modo.phinf.naver.net/20160821_21/1471763649620AFfAu_JPEG/mosaX5SPzD.jpeg',
+    src: 'https://cdn.eyeem.com/thumb/49da8dcfd3fe17971f853811e467a1facc2c96d0-1397557629/3900/3900',
   },
   {
     cnt: 6,
@@ -59,8 +57,7 @@ const newsData = [
     org_link: 'https://www.idaegu.co.kr/news/articleView.html?idxno=401476',
     pDate: '2022-11-17 21:34:00',
     title: '전국 아파트 실거래가격 지수 낙폭 &apos;역대 최대&apos;',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=http://shop1.phinf.naver.net/20221016_138/1665896951098dgrCq_JPEG/67032839809176737_735230439.jpg&type=b150',
+    src: 'https://modo-phinf.pstatic.net/20210111_106/1610305536262siUOt_PNG/mosaQUiheY.png',
   },
   {
     cnt: 7,
@@ -82,6 +79,7 @@ const newsData = [
     title: '&quot;시장 침체, 복합위기 막아야&quot;',
     thumbnail:
       'https://search.pstatic.net/common/?src=http://post.phinf.naver.net/MjAyMjA5MDZfMTkw/MDAxNjYyNDQ3MDM3MzUw.EmxGLQDiuY6O7fubjC2OM7AudXBVL67EMDFXi2V3mBkg.D-42kcFrF_oARG6Qe0oAvn-DC-vNAzIl28h2xurpaDkg.JPEG/ImUsnYwnFciCVxk-iN7XWEWjDnYk.jpg&type=b150',
+    src: 'https://modo-phinf.pstatic.net/20221021_44/16663331222880sWp3_JPEG/mosaHKEiLm.jpeg',
   },
   {
     cnt: 9,
@@ -103,6 +101,7 @@ const newsData = [
     title: '&apos;5호선 김포연장&apos; 예타 면제 가능성 있을까',
     thumbnail:
       'https://search.pstatic.net/sunny/?src=https://images.adsttc.com/media/images/631f/a20a/115d/8a20/684e/b051/large_jpg/casa-ea-sebastian-arquitectos_5.jpg?1663017495&type=b150',
+    src: 'https://d2v80xjmx68n4w.cloudfront.net/members/portfolios/NkbE81652775587.png',
   },
   {
     cnt: 11,
@@ -124,6 +123,7 @@ const newsData = [
     title: '동탄 재도약 신호탄?…&apos;동탄 파크릭스&apos; 청약 모집가구 수 달성',
     thumbnail:
       'https://search.pstatic.net/common/?src=http://imgnews.naver.net/image/016/2022/07/07/20220707000574_0_20220707135702340.jpg&type=b150',
+    src: 'http://shop1.phinf.naver.net/20221016_138/1665896951098dgrCq_JPEG/67032839809176737_735230439.jpg',
   },
   {
     cnt: 13,
@@ -133,7 +133,7 @@ const newsData = [
     org_link: 'https://www.dkilbo.com/news/articleView.html?idxno=382531',
     pDate: '2022-11-17 21:27:00',
     title: '예천군, 농촌관광 교육 치유 농업 활성화 앞장',
-    src: 'https://cdn.ppomppu.co.kr/zboard/data3/2021/0330/20210330112042_wzzcgnwf.png',
+    src: 'https://images.adsttc.com/media/images/631f/a20a/115d/8a20/684e/b051/large_jpg/casa-ea-sebastian-arquitectos_5.jpg?1663017495',
   },
   {
     cnt: 14,
@@ -145,6 +145,7 @@ const newsData = [
     title: '포스코건설, 동반성장지원단 우수 협력사 선정',
     thumbnail:
       'https://search.pstatic.net/common/?src=http://imgnews.naver.net/image/5239/2022/10/03/792666_image_1_20221003070802545.jpg&type=b150',
+    src: 'http://post.phinf.naver.net/MjAyMjA2MjRfMjY3/MDAxNjU2MDMxNTU4ODUw.QIZnVK1EGc6ZjID2JZMe7T-q-N08ApZcgSy4D0ZlE5Mg.w1RUSfD48RmZdi7oTgzAJmlMJpJz3QbinPihZX11OuUg.JPEG/Ios-E_mS516BIjvV2mKZgf___hZI.jpg',
   },
   {
     cnt: 15,
@@ -166,6 +167,7 @@ const newsData = [
     title: '내년 상반기 <b>주택</b>시장 하락 전망 &apos;역대급&apos;',
     thumbnail:
       'https://search.pstatic.net/common/?src=http://post.phinf.naver.net/MjAyMjA1MDlfMTU0/MDAxNjUyMDc3MzM3NjYx.eGtIdPMgkTqMnbKmfAhe8B812wTJGr48JXQkVoB2IKog.tFp7wTPkC9ujLLX9pHmBSM5MNxJBEgZdlTYJuIsoHx0g.PNG/IxiC162RgEv7OFeDJruwjgbnj8XA.jpg&type=b150',
+    src: 'http://post.phinf.naver.net/MjAyMjA2MjRfMjY3/MDAxNjU2MDMxNTU4ODUw.QIZnVK1EGc6ZjID2JZMe7T-q-N08ApZcgSy4D0ZlE5Mg.w1RUSfD48RmZdi7oTgzAJmlMJpJz3QbinPihZX11OuUg.JPEG/Ios-E_mS516BIjvV2mKZgf___hZI.jpg',
   },
   {
     cnt: 17,
@@ -187,6 +189,7 @@ const newsData = [
     title: '경기도-국무조정실, 수도권정비계획법 개정 등 규제혁신 과제 해법 논의',
     thumbnail:
       'https://search.pstatic.net/common/?src=http://post.phinf.naver.net/MjAyMjA4MTNfMTAy/MDAxNjYwMzcxOTI1MDQ1.suIZl1uwpMMDUHOV7zoisRFEStYLLcXstA62uIsKqDQg.662X76MKpiNaqpxrWtwZajZzoxqQCSDlvnkLJ_16r6sg.JPEG/ICkr8ql7FTZTQRUNvfHi0BK3wTPA.jpg&type=b150',
+    src: 'https://image.ohou.se/i/bucketplace-v2-development/uploads/projects/cover_images/156864919341731741.jpg?w=960&h=640&c=c',
   },
   {
     cnt: 19,
@@ -196,7 +199,7 @@ const newsData = [
     org_link: 'http://www.kihoilbo.co.kr/news/articleView.html?idxno=1004347',
     pDate: '2022-11-17 21:20:00',
     title: '경기북부자치경찰위원회, 현장 목소리 듣고자 권역별 순회 간담회 마무리',
-    src: 'https://img.theqoo.net/img/jBuOu.jpg',
+    src: 'http://post.phinf.naver.net/MjAyMjA4MTFfMTc2/MDAxNjYwMjAxMTMwMzg4.aleksWUwLcsWvbLW-t625AjdC4-8vFTVOxPO9r22Zi8g.OmfL6kgS4c1G99_Z9_b8It2eiMcXSaoY5E5M7PqdT3gg.JPEG/IvQ_Fp7cJ4A9ZTUROdMxRaISJk14.jpg',
   },
   {
     cnt: 20,
@@ -208,6 +211,7 @@ const newsData = [
     title: '맘 급한 道 청문 요청서 불쑥… 도의회 국힘 &apos;보이콧&apos; 응수',
     thumbnail:
       'https://search.pstatic.net/common/?src=https://dbscthumb-phinf.pstatic.net/2765_000_8/20180614183450818_UV6YOS02E.jpg/327180.jpg?type=m4500_4500_fst&type=b150',
+    src: 'http://post.phinf.naver.net/MjAyMTExMjJfMTAg/MDAxNjM3NTc3NTkyODk0.-lL1eWEK5i1t4sYSCyb1NIYCkuckWozslUtmdfAxvbMg.Sv6bFXnSSkjwPTlZP0AQCQXJ1k2dcWkHbXiRnFhlQDAg.JPEG/I1YCuJMosqhc60AB4xpmTktWpzqM.jpg',
   },
   {
     cnt: 21,
@@ -219,161 +223,7 @@ const newsData = [
     title: '공공<b>주택</b> 세대·지역별 맞춰 공급을',
     thumbnail:
       'https://search.pstatic.net/sunny/?src=https://img.peterpanz.com/photo/20220706/13166663/62c500e35110d_origin.jpg&type=b150',
-  },
-  {
-    cnt: 22,
-    description:
-      '기호일보 - 아침을 여는 신문, KIHOILBO 한국토지<b>주택</b>공사(LH) 경기지역본부 17일 성남시와 성남시청 회의실에서 발달장애 청년들의 안정적인 지역사회 정착을 지원하고자 &apos;발달장애청년 자립지원<b>주택</b>&apos; 사업을 위한... ',
-    link: 'http://www.kihoilbo.co.kr/news/articleView.html?idxno=1004329',
-    org_link: 'http://www.kihoilbo.co.kr/news/articleView.html?idxno=1004329',
-    pDate: '2022-11-17 21:20:00',
-    title: 'LH 경기본부-성남시, 발달장애 청년 자립지원 <b>주택</b> 사업 추진',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=https://landthumb-phinf.pstatic.net/20130320_178/hscp_img_1363764552271D2bBb_JPEG/photoinfra_1363764552053.jpg&type=b150',
-  },
-  {
-    cnt: 23,
-    description:
-      '기호일보 - 아침을 여는 신문, KIHOILBO 임병택 시흥시장과 이한준 LH(한국토지<b>주택</b>공사) 사장이 장현 공공<b>주택</b>지구 A-12블록(신혼희망)에서 현장 간담회를 열었다고 17일 알렸다. 이번 간담회는 이한준 LH 사장 취임 후... ',
-    link: 'http://www.kihoilbo.co.kr/news/articleView.html?idxno=1004334',
-    org_link: 'http://www.kihoilbo.co.kr/news/articleView.html?idxno=1004334',
-    pDate: '2022-11-17 21:20:00',
-    title: '임병택 시흥시장, LH 사장과 장현<b>주택</b>지구 현장 간담',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=https://landthumb-phinf.pstatic.net/20111025_224/hscp_img_1319522241884TgPJU_JPEG/GW70833_1319522240021.jpg&type=b150',
-  },
-  {
-    cnt: 24,
-    description:
-      '사망 장소는 노후 다가구<b>주택</b>이나 임대아파트가 많았으며, 여관이나 창고와 같은 비적정주거 공간에서도... 이들의 사망 장소는 다가구<b>주택</b>이 56%로 가장 많았다. 이어 임대아파트 18.4%, 고시원 11.1%로 나타났다. 그 외... ',
-    link: 'https://www.khan.co.kr/national/national-general/article/202211172116035',
-    org_link: 'https://www.khan.co.kr/national/national-general/article/202211172116035',
-    pDate: '2022-11-17 21:17:00',
-    title: '노후<b>주택</b>·창고·쪽방에서…서울지역 고독사 20% 껑충',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=https://landthumb-phinf.pstatic.net/20130624_212/hscp_img_1372055704417KmX1a_JPEG/photoinfra_1372055704076.jpg&type=b150',
-  },
-  {
-    cnt: 25,
-    description:
-      '1천여개 협력사가 참여한 동방성장지원단 활동 결과 우수 협력사 △공동기술개발 분야에서 공동<b>주택</b> 리모델링 프로젝트 환기장치를 개발한 &apos;아이디에이이엔씨&apos;와 초저온 LNG 배관 서포트 국산화 제품을 개발한 &apos;유니스... ',
-    link: 'http://www.kyongbuk.co.kr/news/articleView.html?idxno=2117303',
-    org_link: 'http://www.kyongbuk.co.kr/news/articleView.html?idxno=2117303',
-    pDate: '2022-11-17 21:16:00',
-    title: '포스코건설, 동반성장지원단 활동 우수 협력사 포상',
-    thumbnail:
-      'https://search.pstatic.net/sunny/?src=https://image.r114.co.kr/photo_img/L/2022/05/13/DAB4BF7211774294BF7E95A5DE4689C3.jpg&type=b150',
-  },
-  {
-    cnt: 26,
-    description:
-      '또 정책 안건 제시 및 종합 자유토론에는 김천권 인하대 명예교수, 전찬기 인천대 명예교수, 최도수 인천시 국장, 이요한 <b>주택</b>도시보증공사(HUG) 팀장, 박형균 iH 본부장, 김경배 인하대 교수 등이 참여한다. 일반인도... ',
-    link: 'https://news.kmib.co.kr/article/view.asp?arcid=0017684287&code=61121111&cp=nv',
-    org_link: 'https://news.kmib.co.kr/article/view.asp?arcid=0017684287&code=61121111&cp=nv',
-    pDate: '2022-11-17 21:15:00',
-    title: '인천도시재생포럼, 29일 인하대 60주년 기념관서 개최',
-    thumbnail:
-      'https://search.pstatic.net/sunny/?src=http://cfile238.uf.daum.net/image/2215503558CF803C050419&type=b150',
-  },
-  {
-    cnt: 27,
-    description:
-      '두 건물 사이에 인공숲과 강을 조성하고, 학교·직장·<b>주택</b> 등을 잇는 에어택시와 고속철도도 들어선다. 거대한 인공 달이 도시를 밝히고 그린수소 등 친환경 전력을 이용해 1년 내내 도시의 기온을 안정적으로... ',
-    link: 'https://www.khan.co.kr/economy/industry-trade/article/202211172103025',
-    org_link: 'https://www.khan.co.kr/economy/industry-trade/article/202211172103025',
-    pDate: '2022-11-17 21:14:00',
-    title: '건설비 668조원·서울 면적 44배 규모…사막 위 미래도시',
-    thumbnail:
-      'https://search.pstatic.net/sunny/?src=https://img.peterpanz.com/photo/20220329/12783999/41a998614fdbb9f273a7eb3c72651d35_origin.jpg&type=b150',
-  },
-  {
-    cnt: 28,
-    description:
-      '9월 착공식 이후 본궤도 올라, 2024년 12월 준공목표로 공사 추진 광교 경기융합타운내 연면적 2만 7775㎡, 지하 4층~지상 5층 규모 아주경제=(수원)강대웅 기자 cwy@ajunews.com 경기도서관 조감도[사진=GH] 경기<b>주택</b>도시공... ',
-    link: 'https://www.ajunews.com/view/20221117204705026',
-    org_link: 'https://www.ajunews.com/view/20221117204705026',
-    pDate: '2022-11-17 21:12:00',
-    title: '경기<b>주택</b>도시공사, 경기도 대표도서관 &apos;경기도서관&apos; 공사 본격 착수',
-    thumbnail:
-      'https://search.pstatic.net/sunny/?src=https://img.peterpanz.com/photo/20220324/12767113/623c5432bd4be_origin.jpg&type=b150',
-  },
-  {
-    cnt: 29,
-    description:
-      '최근 <b>주택</b>시장의 매매·전세 가격이 동반 약세를 보이고 있지만 전세가격보다 매매가격이 더 많이 떨어지면서 상대적으로 전세가율은 오르고 있다. 전세가율은 매매가 대비 전세가의 비율로, 이 비율이 높아... ',
-    link: 'http://www.knnews.co.kr/news/articleView.php?idxno=1390392',
-    org_link: 'http://www.knnews.co.kr/news/articleView.php?idxno=1390392',
-    pDate: '2022-11-17 21:12:00',
-    thumbnail:
-      'https://search.pstatic.net/sunny/?src=https://image.r114.co.kr/support/2020/11/8A7E92A7B3B749C99877EC8560C35CAE.jpg&type=b150',
-    title: '못 돌려받은 전세금 10월 1526억 ‘역대 최대’',
-  },
-  {
-    cnt: 30,
-    description:
-      '삼성물산은 <b>주택</b> 1만 가구를 건설하기로 했고 현대로템은 고속철 수출을 위한 양해각서를 체결했습니다. 국내 8개 그룹 총수들은 빈살만을 만나 사업 협력을 논의했습니다. 빈살만 왕세자는 이재용 삼성전자 회장과... ',
-    link: 'http://news.tvchosun.com/site/data/html_dir/2022/11/17/2022111790141.html',
-    org_link: 'http://news.tvchosun.com/site/data/html_dir/2022/11/17/2022111790141.html',
-    pDate: '2022-11-17 21:04:00',
-    title: '&apos;돈보따리&apos; 안고 온 빈살만…40조 규모 투자협약 맺었다',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=http://post.phinf.naver.net/MjAxNzA4MzFfNTUg/MDAxNTA0MTM5NTk5NzA2.lyotm1kpGkXFzik0X-ka59zsW26awvNfU-_4OGFewU0g.4h2woChewdUbGROCf2LIQQLpj1XbRe6p0-c3Kq07iAcg.JPEG/I9VQL8Q4ssqrl-J01MzlcJvNkDSY.jpg&type=b150',
-  },
-  {
-    cnt: 31,
-    description:
-      '원자재 가격 인상은 물론 고금리 기조도 내년까지 이어질 것으로 예상되는 가운데, 부동산 PF(프로젝트 파이낸싱) 문까지 좁아지면서 건설사들의 국내 <b>주택</b> 사업이 더 어려울 것으로 관측되고 있다. 특히 업계에서는... ',
-    link: 'http://www.insightkorea.co.kr/news/articleView.html?idxno=100353',
-    org_link: 'http://www.insightkorea.co.kr/news/articleView.html?idxno=100353',
-    pDate: '2022-11-17 21:02:00',
-    title: '포스코건설, 한성희 사장 &apos;마의 3년&apos; 넘길 수 있을까',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=http://post.phinf.naver.net/MjAyMjEwMjhfMTMz/MDAxNjY2OTM3MTgxMjEx.BR12bZqAuVN1N9Avgu4xEm2S840QEVo-7UCZv-jJc50g.fX4m8av-XoxweaJ0TKih9DR9uIdXjmQCHIyRpaLMBIkg.JPEG/IJ5ELY6wfJrawQawM0FW_HFTmX2Y.jpg&type=b150',
-  },
-  {
-    cnt: 32,
-    description:
-      '전남경찰청 마약수사대는 영암군의 한 <b>주택</b>에서 필로폰 합성 신종 마약 &apos;야바&apos;를 상습적으로 투약한 혐의로 태국국적 40대 남성을 검거했습니다. 이 남성은 자신의 범행을 부인하고 있지만, 경찰은 마약류 관리법 위반... ',
-    link: 'https://mpmbc.co.kr/article/2ZTZwOve1E',
-    org_link: 'https://mpmbc.co.kr/article/2ZTZwOve1E',
-    pDate: '2022-11-17 21:02:00',
-    title: '신종 마약 &apos;야바&apos; 상습투약 혐의 40대 태국인 검거',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=http://imgnews.naver.net/image/5232/2022/09/16/0000186631_001_20220916094201616.png&type=b150',
-  },
-  {
-    cnt: 33,
-    description:
-      '◀ＡＮＣ▶ MBC가 고발한 LH 공공임대<b>주택</b> 석면 불법 철거와 관련해, LH가 해당 단지 주민들과 철거 노동자를 대상으로 건강영향조사에 나섭니다. 잠복기가 긴 석면 질환 특성상 정작 과학적인 노출 평가가 빠져 있어... ',
-    link: 'http://news.mbccb.co.kr/home/sub.php?menukey=61&mod=view&RECEIVE_DATE=20221117&SEQUENCE=0030',
-    org_link:
-      'http://news.mbccb.co.kr/home/sub.php?menukey=61&mod=view&RECEIVE_DATE=20221117&SEQUENCE=0030',
-    pDate: '2022-11-17 21:00:00',
-    title: 'LH 석면 불법 철거 단지 건강영향조사 착수',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=http://imgnews.naver.net/image/5268/2022/01/13/0001585624_001_20220113163802561.jpg&type=b150',
-  },
-  {
-    cnt: 34,
-    description:
-      '공공임대<b>주택</b>도 연간 2천 호를 우선 공급합니다. 관련 단체들은 경제적 지원도 중요하지만 정서적 도움도 못지않게 중요하다고 말합니다. [김진아/아름다운재단 사무총장 직무대행 : 이런 지원체계를 구축할 때는 좀... ',
-    link: 'https://news.sbs.co.kr/news/endPage.do?news_id=N1006975152&plink=ORI&cooper=NAVER',
-    org_link: 'https://news.sbs.co.kr/news/endPage.do?news_id=N1006975152&plink=ORI&cooper=NAVER',
-    pDate: '2022-11-17 20:58:00',
-    title: '자립 지원 늘린다지만…&quot;그래도 어른의 조언 필요해&quot;',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=http://imgnews.naver.net/image/5003/2021/08/24/20210824202617_1658668_937_953_20210824203202748.png&type=b150',
-  },
-  {
-    cnt: 35,
-    description:
-      '경기<b>주택</b>도시공사(GH)가 17일 경기도가 건립하는 대표도서관인 이 지난 9월 착공식 행사 이후 행정절차를... 경기<b>주택</b>도시공사 경기도서관 조감도 사진제공=GH 9월 착공식 이후 본궤도 올라, 2024년 12월 준공목표로... ',
-    link: 'https://www.ekn.kr/web/view.php?key=20221117010003428',
-    org_link: 'https://www.ekn.kr/web/view.php?key=20221117010003428',
-    pDate: '2022-11-17 20:56:00',
-    title: '경기<b>주택</b>도시공사, 경기도 대표도서관 &lt;경기도서관&gt; 본격 공사 착수',
-    thumbnail:
-      'https://search.pstatic.net/common/?src=https://modo-phinf.pstatic.net/20180706_186/15308705303593Goi1_JPEG/mosaQ89LPd.jpeg&type=b150',
+    src: 'http://post.phinf.naver.net/MjAyMjA5MjBfMTMw/MDAxNjYzNjU1MjM5Mjk3.h14LAOVCsceAVHr02a3nIxlapv5j9_RTkqh2DdpfU_Qg.BNAzPdE468Hh2M6KO9oVg7r9eO1v0mjVBRJK6xrVg24g.JPEG/I3ESjvCwH1t_ID8KFfmGLm1BvFnA.jpg',
   },
 ];
 
