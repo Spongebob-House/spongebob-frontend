@@ -38,6 +38,7 @@ const routes = [
       },
     ],
   },
+  { path: "/news", name: "news", component: () => import("@/views/AppNews") },
   {
     path: "/qna",
     name: "qna",
