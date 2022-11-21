@@ -11,7 +11,7 @@
           <div class="mt-2">Value: {{ text }}</div>
         </div> -->
         <div id="home-map" class="col-sm-12 p-0"><ka-kao-map :text="text"></ka-kao-map>
-          <div class="col-sm-12 col-md-3" style="position:absolute; top: 3vh; left: 3vw; z-index: 2" >
+          <div class="col-sm-12 col-md-2" style="position:absolute; top: 3vh; left: 3vw; z-index: 2" >
             <b-input-group size="sm" prepend="">
               <b-form-input  style="width:100%; z-index: 3" autocomplete="off" :value="text" placeholder="Enter your place" ref="serachinput" @keydown.down="onArrowDown()" @keydown.up="onArrowUp()" @keyup.enter="onEnterUp()" @input="searchStart($event)"></b-form-input>
   
