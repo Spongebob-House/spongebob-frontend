@@ -74,6 +74,8 @@ export default {
     chkPassword() {
       if (this.user.userPwd === this.user.userRePwd) {
         this.isPwdSame = true;
+      } else {
+        this.isPwdSame = false;
       }
     },
   },
