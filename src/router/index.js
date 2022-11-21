@@ -24,6 +24,7 @@ const routes = [
     path: "/",
     name: "main",
     component: () => import("@/views/AppMain.vue"),
+    redirect: "/map/search",
   },
   {
     path: "/map",
@@ -31,22 +32,13 @@ const routes = [
     component: () => import("@/views/AppMap.vue"),
     children: [
       {
-        path: "corona",
-        name: "mapCorona",
-        component: () => import("@/components/map/MapCorona"),
-      },
-      {
-        path: "hospital",
-        name: "mapHospital",
-        component: () => import("@/components/map/MapHospital"),
-      },
-      {
         path: "search",
         name: "mapSearch",
         component: () => import("@/components/map/MapSearch"),
       },
     ],
   },
+  { path: "/news", name: "news", component: () => import("@/views/AppNews") },
   {
     path: "/qna",
     name: "qna",

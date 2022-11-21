@@ -40,6 +40,7 @@
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
 import http from '@/api/http';
 const memberStore = 'memberStore';
+
 export default {
   data() {
     return {
@@ -58,12 +59,14 @@ export default {
     ...mapMutations(memberStore, ['SET_SAVE_ID', 'CLEAR_SAVE_ID', 'SET_MODAL_VIEW', 'SET_EMAIL']),
     async confirm() {
       let token = sessionStorage.getItem('access-token');
+
       await this.getUserInfo(token);
       // console.log(userInfo);
     },
 
     logout() {
       this.userLogout(this.userInfo.userId);
+
       sessionStorage.removeItem('access-token');
       sessionStorage.removeItem('refresh-token');
     },

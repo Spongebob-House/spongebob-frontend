@@ -3,7 +3,7 @@
     <h2>회원 정보 수정</h2>
     <b-container id="mypage" style="height: 450px" class="mt -5 px -5">
       <b-form-group id="input-group-2" label="아이디" label-for="input-2">
-        <b-form-input id="userid" v-model="this.checkUserInfo.userId" readonly></b-form-input>
+        <b-form-input id="userid" v-model="user.userId"></b-form-input>
       </b-form-group>
       <br />
       <b-form-group id="input-group-2" label="이름" label-for="input-2">
@@ -24,7 +24,7 @@
       </b-form-group>
       <br />
       <b-form-group id="input-group-2" label="가입 일자" label-for="input-2">
-        <b-form-input id="userid" v-model="this.checkUserInfo.joinDate" readonly></b-form-input>
+        <b-form-input id="userid" v-model="user.joinDate" readonly></b-form-input>
       </b-form-group>
       <br />
       <div class="bnt-group">
@@ -41,6 +41,7 @@
 import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
 import http from '@/api/http';
 const memberStore = 'memberStore';
+
 export default {
   data() {
     return {
@@ -50,6 +51,7 @@ export default {
         userEmail: '',
         emailId: '',
         emailDomain: '',
+        joinDate: '',
       },
       show: true,
     };
@@ -71,6 +73,7 @@ export default {
       this.$swal('회원 정보 수정 완료하였습니다.', { icon: 'success' }).then(() =>
         this.$emit('close'),
       );
+
       this.SET_USER_INFO(this.user);
       this.SET_EMAIL(this.user);
     },
@@ -78,6 +81,10 @@ export default {
   computed: {
     ...mapState(memberStore, ['saveId', 'userInfo', 'isLogin', 'isLoginError', 'email']),
     ...mapGetters(memberStore, ['checkUserInfo', 'getEmail']),
+  },
+  created() {
+    this.user.userId = this.userInfo.userId;
+    this.user.joinDate = this.userInfo.joinDate;
   },
 };
 </script>

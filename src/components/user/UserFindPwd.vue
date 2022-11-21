@@ -53,6 +53,7 @@ export default {
   methods: {
     ...mapActions(memberStore, ['findPassword']),
     ...mapMutations(memberStore, ['SET_USER_INFO']),
+
     async findpwd() {
       if (
         this.user.userId === this.checkUserInfo.userId &&

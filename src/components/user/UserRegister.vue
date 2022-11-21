@@ -52,11 +52,11 @@ export default {
       user: {
         userId: '',
         userName: '',
-        userPwd: ' ',
-        userRePwd: ' ',
+        userPwd: '',
+        userRePwd: '',
         userEmail: '',
-        emailId: ' ',
-        emailDomain: ' ',
+        emailId: '',
+        emailDomain: '',
       },
       isPwdSame: false,
       show: true,
@@ -90,6 +90,8 @@ export default {
     chkPassword() {
       if (this.user.userPwd === this.user.userRePwd) {
         this.isPwdSame = true;
+      } else {
+        this.isPwdSame = false;
       }
     },
   },

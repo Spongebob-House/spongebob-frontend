@@ -5,14 +5,24 @@
     <!-- </section> -->
     <!-- <map-inter></map-inter> -->
     <section class="home-result-box">
-      <div>
-        <!-- <div class="mt-2">Value: {{ text }}</div> -->
-      </div>
+
       <div class="search-result">
-        <div class="table-box col-sm-12 col-md-3 overflow-auto">
-          <b-input-group size="sm" prepend="">
-            <b-form-input v-model="text" placeholder="Enter your place"></b-form-input>
-          </b-input-group>
+        <!-- <div>
+          <div class="mt-2">Value: {{ text }}</div>
+        </div> -->
+        <div id="home-map" class="col-sm-12 p-0"><ka-kao-map :text="text"></ka-kao-map>
+          <div class="col-sm-12 col-md-2" style="position:absolute; top: 3vh; left: 3vw; z-index: 2" >
+            <b-input-group size="sm" prepend="">
+              <b-form-input  style="width:100%; z-index: 3" autocomplete="off" :value="text" placeholder="Enter your place" ref="serachinput" @keydown.down="onArrowDown()" @keydown.up="onArrowUp()" @keyup.enter="onEnterUp()" @input="searchStart($event)"></b-form-input>
+  
+              <b-card style="position:absolute;  z-index: 2; width:100%; top:3vh;" v-if="searchList.length && text.length != 0">
+                <li class="mb-2 px-2" :class="{ 'is-active': index === arrownum}" v-for="(result,index) in searchList" :dongCode="result.dongCode" :key=index v-text="result.name" @click="onClickEvent(index)"></li>
+              </b-card>
+            </b-input-group>
+          </div>
+        </div>
+      </div>
+
           <!-- <table class="table table-hover text-center col-sm-12">
             <thead>
               <tr>
@@ -60,9 +70,8 @@
               </tr>
             </tbody>
           </table> -->
-        </div>
-        <div id="home-map" class="col-sm-12 col-md-9"><ka-kao-map></ka-kao-map></div>
-      </div>
+
+
     </section>
   </main>
 </template>
@@ -70,8 +79,12 @@
 <script>
 // import MapSearchBar from "@/components/map/item/MapSearchBar.vue";
 // import MapInter from "@/components/map/item/MapInter.vue";
-import { mapState } from "vuex";
+
+import { mapState, mapActions, mapMutations } from "vuex";
 import KaKaoMap from "./KakaoMap.vue";
+import http from "@/api/http";
+const mapStore = "mapStore";
+
 export default {
   components: {
     KaKaoMap,
@@ -81,12 +94,69 @@ export default {
   data() {
     return {
       text: "",
+
+      searchList:[],
+      arrownum: 0,
+
     };
   },
   computed: {
     ...mapState(["mapList"]),
   },
+
+  methods:{
+    ...mapActions(mapStore, ["homeSearch"]),
+    ...mapMutations(mapStore, ["CLEAR_MARKER_POSITIONS", "CLEAR_MAP_LIST"]),
+    // dropboxDown(){
+    //   this.$refs['searchdrop'].show();
+    // },
+    onArrowDown(){
+      if(this.searchList.length === 0) return;
+      this.arrownum++;
+      this.arrownum %= this.searchList.length;
+      // this.text = this.searchList[this.arrownum].name; 
+    },
+    onArrowUp(){
+      if(this.searchList.length === 0) return;
+      this.arrownum = (this.arrownum + this.searchList.length -1);
+      this.arrownum %= this.searchList.length;
+      // this.text = this.searchList[this.arrownum].name; 
+    },
+    onEnterUp(){
+      this.CLEAR_MARKER_POSITIONS();
+      this.CLEAR_MAP_LIST();
+      this.text = this.searchList[this.arrownum].name;
+      const param = {
+        dong: this.searchList[this.arrownum].dongCode,
+        year: null,
+        month: null,
+      }
+      this.homeSearch(param);
+      this.searchList = [];
+    },
+    onClickEvent(i){
+      this.arrownum = i;
+      this.onEnterUp();
+    },
+    searchStart(e){
+      this.text = e;
+      if(this.text.length == 0) return;
+      http.get(`/map/${this.text}`).then(({data}) => {
+        this.searchList = data;
+      }).catch((e) => {
+        console.log(e);
+      })
+    },
+  }
 };
 </script>
 
-<style></style>
+<style>
+li{
+  cursor: pointer;
+}
+.is-active{
+  background-color: #dedede;
+}
+</style>
+
