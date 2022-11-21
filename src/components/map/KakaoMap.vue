@@ -6,10 +6,10 @@
         <button style="border:0; background-color: transparent;" @click="isList = true">
           <b-icon-chevron-left></b-icon-chevron-left>
         </button>
-          <strong>{{text}}</strong>
-          <button class="close text-dark">
-            <b-icon-x-lg @click="hide()"></b-icon-x-lg>
-          </button>
+        <strong>{{text}}</strong>
+        <button class="close text-dark">
+          <b-icon-x-lg @click="hide()"></b-icon-x-lg>
+        </button>
       </template>
       <div v-if="!isList">
 
@@ -51,21 +51,23 @@
           </b-card>
   
           <b-card title="관련 뉴스">
-              <b-card-text>
-                This is a wider card with supporting text below as a natural lead-in to additional content.
-                This content is a little bit longer.
-              </b-card-text>
-            </b-card>
+            <b-card-text>
+              This is a wider card with supporting text below as a natural lead-in to additional content.
+              This content is a little bit longer.
+            </b-card-text>
+          </b-card>
+        </div>
+      
+      
+      </div> 
+      <div v-else>
+        <div>
+          <b-card>
+            아아아
+          </b-card>
+        </div>
       </div>
-      
-      
-    </div> 
-    <div v-else>
-      <b-card>
-        아아아
-      </b-card>
-    </div>
-  </b-sidebar>
+    </b-sidebar>
     <div>
       <b-button v-b-toggle.sidebar-1 :id="`sidebarToggle${index}`" v-for="(result,index) in mapList" :key=index  :disabled="isdisabled" style="display:none"></b-button>
       <b-button :id="`mvsidebarToggle${index}`" v-for="(result,index) in mapList" :key=index+100 style="display:none" @click="setData(index)"></b-button>
