@@ -40,7 +40,7 @@ async function deleteUser(userid, success, fail) {
 
 // 비밀번호 재발급
 async function findPwd(user, success, fail) {
-  await api.post(`/user.findpw`, user).then(success).catch(fail);
+  await api.post(`/user/findpw`, user).then(success).catch(fail);
 }
 
 export {

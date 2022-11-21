@@ -10,8 +10,7 @@
         align-items: center;
       "
     >
-      <div style="font-family: Inter; font-size: 30px">Recent News</div>
-      &#9997;
+      <div style="font-family: Inter; font-size: 30px">Latest News</div>
     </div>
 
     <!-- card item 가져와서 뿌리기-->

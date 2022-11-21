@@ -21,6 +21,7 @@ const memberStore = {
     isValidToken: false,
     modalview: 'login',
     email: null,
+    newPwd: null,
   },
   getters: {
     getEmail: function (state) {
@@ -40,6 +41,9 @@ const memberStore = {
     },
   },
   mutations: {
+    SET_NEW_PWD: (state, newPwd) => {
+      state.newPwd = newPwd;
+    },
     SET_IS_LOGIN: (state, isLogin) => {
       state.isLogin = isLogin;
     },
@@ -98,9 +102,9 @@ const memberStore = {
       await findPwd(
         user,
         ({ data }) => {
-          if (data.message === 'success') {
-            commit('SET_USER_INFO', data.userInfo);
-          }
+          console.log('aaaaaa');
+          console.log(data);
+          commit('SET_NEW_PWD', data);
         },
         error => {
           console.log(error);
