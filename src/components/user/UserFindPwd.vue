@@ -73,6 +73,9 @@ export default {
 </script>
 
 <style>
+* {
+  font-family: Spoqa Han Sans Neo;
+}
 h2 {
   text-align: center;
   padding: 20px 0;

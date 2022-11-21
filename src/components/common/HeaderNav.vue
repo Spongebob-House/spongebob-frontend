@@ -2,8 +2,17 @@
   <header>
     <b-nav class="nav d-flex justify-content-between align-items-center mt-2 mb-2">
       <b-col class="logo justify-content-start ms-5">
-        <router-link class="text-decoration-none display-5 font-weight-bold" to="/"
-          >FIND HOME</router-link
+        <router-link
+          class="text-decoration-none display-5 font-weight-bold"
+          style="font-family: Inter; font-size: 30px; color: black"
+          to="/"
+        >
+          <img
+            src="https://user-images.githubusercontent.com/55784772/203083888-412a4bc3-8fe9-4bff-9f7a-fd0a7a62ce82.png"
+            style="height: 40px"
+            alt="redhat"
+          />
+          Reddi House</router-link
         >
       </b-col>
       <b-col cols="6" class="text-right">

@@ -1,6 +1,18 @@
 <template>
-  <div>
-    <h2>News</h2>
+  <div style="margin-top: 60px">
+    <div
+      style="
+        font-size: 50px;
+        width: 80%;
+        margin: 20px auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div style="font-family: Inter; font-size: 30px">Recent News</div>
+      &#9997;
+    </div>
 
     <!-- card item 가져와서 뿌리기-->
     <div class="card-one-container">
@@ -81,7 +93,7 @@ a {
 /* 하나짜리 카드  */
 .card-one-container {
   width: 90%;
-  margin: 50px auto;
+  margin: 0 auto;
   /* background-color: yellow; */
 }
 
