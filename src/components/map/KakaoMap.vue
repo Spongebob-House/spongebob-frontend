@@ -6,19 +6,19 @@
         <button style="border:0; background-color: transparent;" @click="isList = true" v-show="!isList">
           <b-icon-chevron-left></b-icon-chevron-left>
         </button>
-        <strong>{{text}}</strong>
+        <strong>{{detailApt.dong}}</strong>
         <button class="close text-dark" @click="isList = false">
           <b-icon-x-lg @click="hide()"></b-icon-x-lg>
         </button>
       </template>
       <div v-show="!isList">
-
+        
         <div id="roadview" style="height:400px"></div>
         <div>
           <b-card class="mb-3">
             <b-card-title class="d-flex justify-content-between">
               <span>
-                {{detailapt.apartmentName}}
+                {{detailApt.apartmentName}}
               </span>
               <span v-if="!isInter" @click="onInterClick">
                 <b-avatar icon="star-fill" variant="secondary"></b-avatar>
@@ -27,50 +27,48 @@
                 <b-avatar icon="star-fill" style="color:yellow" variant="secondary"></b-avatar>
               </span>
             </b-card-title>
-            <b-card-text class="px-3">
-              <b-row class="mb-1">
-                면적: {{detailapt.area}}
-              </b-row>
-              <b-row class="mb-1">
-                건축연도 : {{detailapt.buildYear}}년
-              </b-row>
-              <b-row class="mb-1">
-                최근 거래: {{detailapt.dealYear}}년 {{detailapt.dealMonth}}월
-              </b-row>
-              <b-row class="mb-1">
-                거래가: {{detailapt.dealAmount}}만원
-              </b-row>
-              <b-row class="mb-1">
-                주변 정보
-              </b-row>
-              <b-row class="mb-1 text-left" >
-                <b-col id="coffee"><img src="@/assets/coffee.png" style="width:30px;  height:30px"/>{{detailapt.coffee.name}} {{detailapt.coffee.dist}}m</b-col>
-                <b-col id="metro"><img src="@/assets/metro.png" style="width:30px; height:30px"/>{{detailapt.metro.name}} {{detailapt.metro.dist}}m</b-col>
-              </b-row>
-            </b-card-text>
           </b-card>
-  
-          <b-card title="관련 뉴스">
-            <b-card-text>
-              This is a wider card with supporting text below as a natural lead-in to additional content.
-              This content is a little bit longer.
-            </b-card-text>
+          <b-card no-body>
+            <b-tabs card fill>
+              <b-tab title="주변 정보" active>
+                <div class="p-3">
+                  <b-row class="mb-3 text-left" >
+                    <b-col id="coffee"><img src="@/assets/coffee.png" style="width:30px;  height:30px"/>{{detailApt.coffee.name}} {{detailApt.coffee.dist}}m</b-col>
+                  </b-row>
+                  <b-row class="mb-3 text-left" >
+                    <b-col id="metro"><img src="@/assets/metro.png" style="width:30px; height:30px"/>{{detailApt.metro.name}} {{detailApt.metro.dist}}m</b-col>
+                  </b-row>
+                </div>
+              </b-tab>
+              <b-tab title="거래 목록">
+                <ul v-for="(result, index) in dealList" :key="index" class="p-3 mb-0" style="border-bottom: solid 1px;">
+                  <li class="mb-1">
+                    면적: {{result.area}}
+                  </li>
+                  <li class="mb-1">
+                    거래일자: {{result.dealYear}}년 {{result.dealMonth}}월
+                  </li>
+                  <li class="mb-1">
+                    거래가: {{result.dealAmount}}만원
+                  </li>
+                </ul>
+              </b-tab>
+            </b-tabs>
           </b-card>
+           
         </div>
-      
-      
       </div> 
       <div v-show="isList">
         <div>
-                      <table class="table table-hover text-center col-sm-12">
+          <table class="table table-hover text-center col-sm-12">
             <thead >
               <tr >
-                <th class="p-3">거래내역</th>
+                <th class="p-3">아파트 목록</th>
               </tr>
             </thead>
             <tbody id="aptlist" v-if="mapList.length === 0" >
               <tr  class="p-3">
-                <td>거래내역 없음</td>
+                <td>아파트 없음</td>
               </tr>
             </tbody>
             <tbody id="aptlist" v-else >
@@ -79,7 +77,7 @@
                   <div class="apt-name">
                     <a>{{ apt.apartmentName }}</a>
                   </div>
-                  <div>
+                  <!-- <div>
                     <b-img src="http://localhost/assets/img/coffee.png" width="20" height="20" class="icon"></b-img
                     ><span
                       v-if="apt.coffee"
@@ -91,20 +89,11 @@
                       v-if="apt.metro"
                       style="font-size: 12px"
                       v-text="`${apt.metro.name} ${apt.metro.dist}m`"></span>
-                  </div>
-                  <div class="apt-space" v-text="`면적 : ${apt.area}`"></div>
-                  <div class="apt-price" v-text="`거래금액 : ${apt.dealAmount}만원`"></div>
-                  <div class="apt-space" v-text="`면적 : ${apt.area}`"></div>
-                  <div class="apt-price" v-text="`거래금액 : ${apt.dealAmount}만원`"></div>
-                  <div class="apt-date text-end">
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="icon" viewBox="0 0 24 24">
-                        <path
-                          d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"></path>
-                      </svg>
-                    </span>
-                    <span v-text="`${apt.dealYear}.${apt.dealMonth}.${apt.dealDay}`"> </span>
-                  </div>
+                  </div> -->
+                  <br/>
+                  <div class="apt-dong" v-text="`행정동 : ${apt.dong}`"></div>
+                  <div class="apt-buildYear" v-text="`건축연도 : ${apt.buildYear}년`"></div>
+                  
                 </td>
               </tr>
             </tbody>
@@ -113,30 +102,14 @@
       </div>
     </b-sidebar>
     <div>
-      <b-button v-b-toggle.sidebar-1 :id="`sidebarToggle${index}`" v-for="(result,index) in mapList" :key=index  :disabled="isdisabled" style="display:none"></b-button>
-      <b-button :id="`mvsidebarToggle${index}`" v-for="(result,index) in mapList" :key=index+100 style="display:none" @click="setData(index)"></b-button>
+      <b-button v-b-toggle.sidebar-1 id="sidebarToggle" :disabled="isdisabled" style="display:none"></b-button>
+    </div>
 
-      
-    </div>
-    <!-- <div class="button-group">
->>>>>>> b7c60d922ab768a66697752b5a211fbd880d7e41
-      <button @click="changeSize(0)">Hide</button>
-      <button @click="changeSize(400)">show</button>
-      <button @click="displayMarker(markerPositions1)">marker set 1</button>
-      <button @click="displayMarker(markerPositions2)">marker set 2</button>
-<<<<<<< HEAD
-      <button @click="displayMarker([])">marker set 3 (empty)</button>
-      <button @click="displayInfoWindow">infowindow</button>
-    </div>
-=======
-      <button @click="displayMarker([[37.5013068, 127.0396597]])">marker set 3 (empty)</button>
-      <button @click="displayInfoWindow">infowindow</button>
-    </div> -->
   </div>
 </template>
 
 <script>
-import {mapState, mapMutations} from "vuex";
+import {mapState, mapMutations, mapActions} from "vuex";
 const mapStore = "mapStore";
 
 export default {
@@ -147,20 +120,12 @@ export default {
   data() {
     return {
       no: -1,
+      bounds: {},
       markers: [],
       infos: [],
       infowindow: null,
       isdisabled: false,
-      detailapt: {
-        coffee:{
-          name:"",
-          dist:0,
-        },
-        metro:{
-          name:"",
-          dist:0,
-        },
-      },
+      
       isInter:false,
       isList:false,
     };
@@ -177,6 +142,11 @@ export default {
     }
   },
   watch:{
+    no(val){
+      if(val != -1){
+        this.aptDetail(this.mapList[val]);
+      }
+    },
    markerPositions(val){
     if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null));
@@ -184,6 +154,8 @@ export default {
     if (this.infos.length > 0) {
         this.infos.forEach((info) => info.setMap(null));
       }
+      this.markers = [];
+      this.infos = [];
     
 
   
@@ -207,39 +179,75 @@ export default {
                 image: new kakao.maps.MarkerImage(imageSrc, imageSize),
                 clickable: true,
               });
-              
-            kakao.maps.event.addListener(marker, 'click', function() {
+            kakao.maps.event.addListener(marker, 'mouseover', () => {
+              this.infos[index].open(this.map, this.markers[index]);
+            });  
+            kakao.maps.event.addListener(marker, 'mouseout', () => {
+              this.infos[index].setMap(null);
+            });  
+            kakao.maps.event.addListener(marker, 'click', () => {
                 // 마커 위에 인포윈도우를 표시합니다
                 console.log("abc");
                 console.log(index);
-                const el = "#mvsidebarToggle" + index;
-                document.querySelector(el).click();
-      
-
+                if (this.no != -1) this.infos[this.no].setMap(null);
+                this.isList = false;
+                this.no = index;
+                var flag = true;
+                for (let index = 0; index < this.interList.length; index++) {
+                  if(this.interList[index] === this.mapList[this.no].aptCode){
+                    this.isInter = true;
+                    flag = false
+                    break;
+                  }
+                }
+                if (flag) {
+                  this.isInter = false;
+                }
+                var roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
+                var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+                var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+                var position = new kakao.maps.LatLng(Number(this.mapList[this.no].lat), Number(this.mapList[this.no].lng));
+                // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+                this.infos[this.no].open(this.map, this.markers[this.no]);
+                this.map.panTo(position);
+                
+                roadviewClient.getNearestPanoId(position, 100, function(panoId) {
+                  roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+                });
+                document.querySelector("#sidebarToggle").click();
               });
               this.markers.push(marker);
             });
 
-        const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new kakao.maps.LatLngBounds());
+            if(this.searchFlag){
+              const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new kakao.maps.LatLngBounds());
+              this.map.setBounds(bounds);
+              this.SET_SEARCH_FLAG_FALSE();
+            }
 
-        this.map.setBounds(bounds);
       }
-    }, 
+    },
+    
+    bounds(val){
+      this.aptSearch(val);
+    }
   },
   computed:{
-    ...mapState(mapStore, ["markerPositions","mapList", "interList"]),
+    ...mapState(mapStore, ["markerPositions","mapList", "interList", "searchFlag", "detailApt", "dealList", "userInfo"]),
   },
   methods: {
-    ...mapMutations(mapStore, ["APPEND_INTER_LIST"]),
+    ...mapMutations(mapStore, ["APPEND_INTER_LIST", "SET_SEARCH_FLAG_FALSE"]),
+    ...mapActions(mapStore, ["aptSearch", "aptDetail"]),
     onInterClick(){
+      
       for (let index = 0; index < this.interList.length; index++) {
-        if(this.interList[index] === this.detailapt.aptCode){
+        if(this.interList[index] === this.detailApt.aptCode){
           this.isInter = false;
           this.interList.splice(index, 1);
           return;
         }
       }
-      this.APPEND_INTER_LIST(this.detailapt.aptCode);
+      this.APPEND_INTER_LIST(this.detailApt.aptCode);
       this.isInter = true;
     },
 
@@ -247,10 +255,9 @@ export default {
       if (this.no != -1) this.infos[this.no].setMap(null);
       this.isList = false;
       this.no = k;
-      this.detailapt = this.mapList[k];
       var flag = true;
       for (let index = 0; index < this.interList.length; index++) {
-        if(this.interList[index] === this.detailapt.aptCode){
+        if(this.interList[index] === this.mapList[this.no].aptCode){
           this.isInter = true;
           flag = false
           break;
@@ -262,7 +269,7 @@ export default {
       var roadviewContainer = document.getElementById('roadview'); //로드뷰를 표시할 div
       var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
       var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
-      var position = new kakao.maps.LatLng(Number(this.detailapt.lat), Number(this.detailapt.lng));
+      var position = new kakao.maps.LatLng(Number(this.mapList[this.no].lat), Number(this.mapList[this.no].lng));
       // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
       this.infos[this.no].open(this.map, this.markers[this.no]);
       this.map.panTo(position);
@@ -270,7 +277,7 @@ export default {
       roadviewClient.getNearestPanoId(position, 100, function(panoId) {
         roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
       });
-      const el = "#sidebarToggle" + k;
+      const el = "#sidebarToggle"
       
       document.querySelector(el).click();
 
@@ -285,8 +292,18 @@ export default {
 
       //지도 객체를 등록합니다.
       //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
-      this.map = new kakao.maps.Map(container, options);
-      
+      var map = new kakao.maps.Map(container, options);
+      kakao.maps.event.addListener(map, 'dragend', () => {
+        var bounds = map.getBounds();
+        console.log(bounds);
+        this.bounds = bounds;
+        this.no = -1;
+
+      })
+this.map = map;
+var bounds = map.getBounds();
+        console.log(bounds);
+        this.bounds = bounds;
     },
 
   },
@@ -303,7 +320,9 @@ export default {
   height: 100vh;
 
 }
-
+li{
+  cursor: auto
+}
 .button-group {
   margin: 10px 0px;
 }

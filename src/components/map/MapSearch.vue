@@ -15,7 +15,7 @@
             <b-input-group size="sm" prepend="">
               <b-form-input  style="width:100%; z-index: 3" autocomplete="off" :value="text" placeholder="Enter your place" ref="serachinput" @keydown.down="onArrowDown()" @keydown.up="onArrowUp()" @keyup.enter="onEnterUp()" @input="searchStart($event)"></b-form-input>
   
-              <b-card style="position:absolute;  z-index: 2; width:100%; top:3vh;" v-if="searchList.length && text.length != 0">
+              <b-card style="position:absolute; margin-left:0;  z-index: 2; width:100%; top:3vh;" v-if="searchList.length && text.length != 0">
                 <li class="mb-2 px-2" :class="{ 'is-active': index === arrownum}" v-for="(result,index) in searchList" :dongCode="result.dongCode" :key=index v-text="result.name" @click="onClickEvent(index)"></li>
               </b-card>
             </b-input-group>
@@ -106,7 +106,7 @@ export default {
 
   methods:{
     ...mapActions(mapStore, ["homeSearch"]),
-    ...mapMutations(mapStore, ["CLEAR_MARKER_POSITIONS", "CLEAR_MAP_LIST"]),
+    ...mapMutations(mapStore, ["CLEAR_MARKER_POSITIONS", "CLEAR_MAP_LIST", "SET_SEARCH_FLAG_TRUE"]),
     // dropboxDown(){
     //   this.$refs['searchdrop'].show();
     // },
@@ -125,6 +125,7 @@ export default {
     onEnterUp(){
       this.CLEAR_MARKER_POSITIONS();
       this.CLEAR_MAP_LIST();
+      this.SET_SEARCH_FLAG_TRUE();
       this.text = this.searchList[this.arrownum].name;
       const param = {
         dong: this.searchList[this.arrownum].dongCode,
@@ -141,7 +142,7 @@ export default {
     searchStart(e){
       this.text = e;
       if(this.text.length == 0) return;
-      http.get(`/map/${this.text}`).then(({data}) => {
+      http.get(`/map/navi/${this.text}`).then(({data}) => {
         this.searchList = data;
       }).catch((e) => {
         console.log(e);
