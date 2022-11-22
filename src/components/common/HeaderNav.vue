@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header style="border-bottom: solid 1px; border-color: aliceblue;">
     <b-nav class="nav d-flex justify-content-between align-items-center mt-2 mb-2">
       <b-col class="logo justify-content-start ms-5">
         <router-link
