@@ -10,15 +10,15 @@ const mapStore = {
     markerPositions: [],
     interList: [],
     searchFlag: false,
-    detailapt: {
+    detailApt: {
       apartmentName: "",
-      coffee:{
-        name:"",
-        dist:0,
+      coffee: {
+        name: "",
+        dist: 0,
       },
-      metro:{
-        name:"",
-        dist:0,
+      metro: {
+        name: "",
+        dist: 0,
       },
     },
 
@@ -57,19 +57,19 @@ const mapStore = {
         state.markerPositions.push(arr);
       });
     },
-    SET_SEARCH_FLAG_FALSE(state){
+    SET_SEARCH_FLAG_FALSE(state) {
       state.searchFlag = false;
     },
-    SET_SEARCH_FLAG_TRUE(state){
+    SET_SEARCH_FLAG_TRUE(state) {
       state.searchFlag = true;
     },
-    SET_DETAIL_APT(state, data){
+    SET_DETAIL_APT(state, data) {
       state.detailApt = data;
     },
-    SET_DEAL_LIST(state, list){
+    SET_DEAL_LIST(state, list) {
       list.forEach((deal) => {
         state.dealList.push(deal);
-      })
+      });
     },
     APPEND_INTER_LIST(state, data) {
       state.interList.push(data);
@@ -144,23 +144,24 @@ const mapStore = {
           console.log(error);
         });
     },
-    aptDetail: function({commit}, apt){
-      http.post("/map/detail", apt).then(({data}) => {
-        commit("SET_DETAIL_APT", data.mapDto);
-        commit("CLEAR_DEAL_LIST");
-        commit("SET_DEAL_LIST", data.dealList);
-      }).catch((e) => {
-        console.log(e);
-      })
+    aptDetail: function ({ commit }, apt) {
+      http
+        .post("/map/detail", apt)
+        .then(({ data }) => {
+          commit("SET_DETAIL_APT", data.mapDto);
+          commit("CLEAR_DEAL_LIST");
+          commit("SET_DEAL_LIST", data.dealList);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     aptSearch: function ({ commit }, latLng) {
       commit("CLEAR_MAP_LIST");
       commit("CLEAR_MARKER_POSITIONS");
       http
-        .post("/map/aptsearch", 
-        latLng)
+        .post("/map/aptsearch", latLng)
         .then(({ data }) => {
-          
           commit("SET_MAP_LIST", data);
           commit("SET_MARKER_POSITIONS", data);
         })
