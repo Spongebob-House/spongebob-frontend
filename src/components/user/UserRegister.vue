@@ -15,13 +15,23 @@
       </b-form-group>
       <br />
       <b-form-group id="input-group-2" label="비밀번호 확인" label-for="input-2">
-        <b-form-input id="userpwd" @change="chkPassword" :state="isPwdSame" v-model="user.userRePwd"></b-form-input>
+        <b-form-input
+          id="userpwd"
+          @change="chkPassword"
+          :state="isPwdSame"
+          v-model="user.userRePwd"
+        ></b-form-input>
       </b-form-group>
       <br />
       <b-form-group id="input-group-2" label="이메일" label-for="input-2">
         <div class="email-wrapper">
-          <b-form-input id="emailId" v-model="user.emailId" style="width: 180px"></b-form-input><span>@</span>
-          <b-form-input id="emailDomain" v-model="user.enmailDomain" style="width: 220px"></b-form-input>
+          <b-form-input id="emailId" v-model="user.emailId" style="width: 180px"></b-form-input
+          ><span>@</span>
+          <b-form-input
+            id="emailDomain"
+            v-model="user.enmailDomain"
+            style="width: 220px"
+          ></b-form-input>
         </div>
       </b-form-group>
       <br />
@@ -33,20 +43,21 @@
 </template>
 <script src="components/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-import { mapActions, mapState, mapGetters} from "vuex";
-const memberStore = "memberStore";
+import { mapActions, mapState, mapGetters } from 'vuex';
+const memberStore = 'memberStore';
+
 export default {
-  name: "userJoin",
+  name: 'userJoin',
   data() {
     return {
       user: {
-        userId: "",
-        userName: "",
-        userPwd: "",
-        userRePwd: "",
-        userEmail: "",
-        emailId: "",
-        emailDomain: "",
+        userId: '',
+        userName: '',
+        userPwd: '',
+        userRePwd: '',
+        userEmail: '',
+        emailId: '',
+        emailDomain: '',
       },
       isPwdSame: false,
       show: true,
@@ -54,17 +65,17 @@ export default {
   },
 
   methods: {
-    ...mapActions(memberStore, ["userLogout", "userConfirm", "getUserInfo", "userJoin"]),
+    ...mapActions(memberStore, ['userLogout', 'userConfirm', 'getUserInfo', 'userJoin']),
     async confirm() {
       await this.userJoin(this.user);
-      console.log("회원가입 완료");
-      this.$swal("회원가입 완료하였습니다.", { icon: "success" }).then(() => this.$emit("close"));
+      console.log('회원가입 완료');
+      this.$swal('회원가입 완료하였습니다.', { icon: 'success' }).then(() => this.$emit('close'));
     },
     chkVal() {
       if (this.user.userId.length === 0) {
-        alert("아이디를 적어주세요!");
+        alert('아이디를 적어주세요!');
       } else if (this.user.userPwd.length === 0) {
-        alert("비밀번호를 적어주세요!");
+        alert('비밀번호를 적어주세요!');
       } else {
         this.confirm();
       }
@@ -78,8 +89,8 @@ export default {
     },
   },
   computed: {
-    ...mapState(memberStore, ["saveId", "userInfo", "isLogin", "isLoginError", "email"]),
-    ...mapGetters(memberStore, ["checkUserInfo", "getEmail"]),
+    ...mapState(memberStore, ['saveId', 'userInfo', 'isLogin', 'isLoginError', 'email']),
+    ...mapGetters(memberStore, ['checkUserInfo', 'getEmail']),
   },
 };
 </script>

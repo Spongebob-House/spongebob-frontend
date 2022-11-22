@@ -1,52 +1,48 @@
 <template>
-    <b-container id="form-login" style="height:400px" class="mt-5 px-5">
-        <b-row class="text-center mb-5" cols="4" style="font-size: 1.5rem">로그인</b-row>
-        <b-row class="mb-3">
-            <input
-            type="text"
-            class="form-control"
-            id="userid"
-            name="userid"
-            placeholder="아이디..."
-            v-model="user.userId"
-            @keyup.enter="chkVal" />
-        </b-row>
-        <b-row class="mb-3">
-            <input
-            type="password"
-            class="form-control"
-            id="userpwd"
-            name="userpwd"
-            placeholder="패스워드..."
-            v-model="user.userPwd"
-            @keyup.enter="chkVal" />
-        </b-row>
-        <b-row class="mb-3">
-            <b-col>
-            <input class="mr-1" type="checkbox" value="ok" id="saveid" name="saveid" v-model="save" />
-            <label class="mb-0" for="saveid"> 아이디저장 </label>
-            </b-col>
-        </b-row>
-        <b-row class="text-center">
-            <button type="button" id="btn-login" class="btn btn-primary mb-3 " @click="chkVal">Login</button>
-        </b-row>
-        <b-row class="mb-3 text-center" >
-            <b-col class="text-left" @click="join" style="cursor:pointer">
-                회원가입
-            </b-col>
-            <b-col class="text-right" @click="findPwd" style="cursor:pointer">
-                비밀번호 찾기
-            </b-col>
-        </b-row>
-    </b-container>
+  <b-container id="form-login" style="height: 400px" class="mt-5 px-5">
+    <b-row class="text-center mb-5" cols="4" style="font-size: 1.5rem">로그인</b-row>
+    <b-row class="mb-3">
+      <input
+        type="text"
+        class="form-control"
+        id="userid"
+        name="userid"
+        placeholder="아이디..."
+        v-model="user.userId"
+        @keyup.enter="chkVal" />
+    </b-row>
+    <b-row class="mb-3">
+      <input
+        type="password"
+        class="form-control"
+        id="userpwd"
+        name="userpwd"
+        placeholder="패스워드..."
+        v-model="user.userPwd"
+        @keyup.enter="chkVal" />
+    </b-row>
+    <b-row class="mb-3">
+      <b-col>
+        <input class="mr-1" type="checkbox" value="ok" id="saveid" name="saveid" v-model="save" />
+        <label class="mb-0" for="saveid"> 아이디저장 </label>
+      </b-col>
+    </b-row>
+    <b-row class="text-center">
+      <button type="button" id="btn-login" class="btn btn-primary mb-3" @click="chkVal">Login</button>
+    </b-row>
+    <b-row class="mb-3 text-center">
+      <b-col class="text-left" @click="join" style="cursor: pointer"> 회원가입 </b-col>
+      <b-col class="text-right" @click="findPwd" style="cursor: pointer"> 비밀번호 찾기 </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 const memberStore = "memberStore";
 export default {
-    name:"UserLoogin",
-    data() {
+  name: "UserLoogin",
+  data() {
     return {
       user: {
         userId: "",
@@ -60,10 +56,9 @@ export default {
     ...mapMutations(memberStore, ["SET_SAVE_ID", "CLEAR_SAVE_ID", "SET_MODAL_VIEW"]),
 
     async confirm() {
-      if(this.save){
+      if (this.save) {
         this.SET_SAVE_ID(this.user.userId);
-      }
-      else{
+      } else {
         this.CLEAR_SAVE_ID();
       }
       await this.userConfirm(this.user);
@@ -84,13 +79,12 @@ export default {
       }
     },
 
-    join(){
-        this.SET_MODAL_VIEW("join");
+    join() {
+      this.SET_MODAL_VIEW("join");
     },
-    findPwd(){
-        this.SET_MODAL_VIEW("findPwd");
-    }
-    
+    findPwd() {
+      this.SET_MODAL_VIEW("findPwd");
+    },
   },
   computed: {
     ...mapState(memberStore, ["saveId", "userInfo", "isLogin", "isLoginError"]),
@@ -102,10 +96,7 @@ export default {
       this.save = true;
     }
   },
-
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

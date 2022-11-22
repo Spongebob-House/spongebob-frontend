@@ -9,17 +9,28 @@ const mapStore = {
     mapList: [],
     markerPositions: [],
     interList: [],
+    categoryList: [],
     searchFlag: false,
-    detailapt: {
+    detailApt: {
       apartmentName: "",
-      coffee:{
-        name:"",
-        dist:0,
+      coffee: {
+        name: "",
+        dist: 0,
       },
-      metro:{
-        name:"",
-        dist:0,
+      metro: {
+        name: "",
+        dist: 0,
       },
+    },
+    isCategories: {
+      MT1: false,
+      CS2: false,
+      PS3: false,
+      SC4: false,
+      OL7: false,
+      SW8: false,
+      BK9: false,
+      PO3: false,
     },
 
     dealList: [],
@@ -57,19 +68,27 @@ const mapStore = {
         state.markerPositions.push(arr);
       });
     },
-    SET_SEARCH_FLAG_FALSE(state){
+    SET_SEARCH_FLAG_FALSE(state) {
       state.searchFlag = false;
     },
-    SET_SEARCH_FLAG_TRUE(state){
+    SET_SEARCH_FLAG_TRUE(state) {
       state.searchFlag = true;
     },
-    SET_DETAIL_APT(state, data){
+    SET_DETAIL_APT(state, data) {
       state.detailApt = data;
     },
-    SET_DEAL_LIST(state, list){
+    SET_DEAL_LIST(state, list) {
       list.forEach((deal) => {
         state.dealList.push(deal);
-      })
+      });
+    },
+    SET_CATEGORY_LIST(state, list) {
+      list.forEach((data) => {
+        state.categoryList.push(data);
+      });
+    },
+    SET_IS_CATEGORIES(state, key) {
+      state.isCategories[key] = true;
     },
     APPEND_INTER_LIST(state, data) {
       state.interList.push(data);
@@ -91,6 +110,12 @@ const mapStore = {
     },
     CLEAR_DEAL_LIST(state) {
       state.dealList = [];
+    },
+    CLEAR_CATEGORY_LIST(state) {
+      state.categoryList = [];
+    },
+    CLEAR_IS_CATEGORIES(state, key) {
+      state.isCategories[key] = false;
     },
   },
   actions: {
@@ -144,29 +169,48 @@ const mapStore = {
           console.log(error);
         });
     },
-    aptDetail: function({commit}, apt){
-      http.post("/map/detail", apt).then(({data}) => {
-        commit("SET_DETAIL_APT", data.mapDto);
-        commit("CLEAR_DEAL_LIST");
-        commit("SET_DEAL_LIST", data.dealList);
-      }).catch((e) => {
-        console.log(e);
-      })
+    aptDetail: function ({ commit }, apt) {
+      http
+        .post("/map/detail", apt)
+        .then(({ data }) => {
+          commit("SET_DETAIL_APT", data.mapDto);
+          commit("CLEAR_DEAL_LIST");
+          commit("SET_DEAL_LIST", data.dealList);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     aptSearch: function ({ commit }, latLng) {
       commit("CLEAR_MAP_LIST");
       commit("CLEAR_MARKER_POSITIONS");
       http
-        .post("/map/aptsearch", 
-        latLng)
+        .post("/map/aptsearch", latLng)
         .then(({ data }) => {
-          
           commit("SET_MAP_LIST", data);
           commit("SET_MARKER_POSITIONS", data);
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    getCategory: function ({ commit }, data) {
+      commit("CLEAR_CATEGORY_LIST");
+      const REST_API_KEY = "ea24e1f6ec6a40170810bf2fa9ecc846";
+      const headers = new Headers({ Authorization: `KakaoAK ${REST_API_KEY}` });
+      const categories = ["MT1", "CS2", "PS3", "SC4", "OL7", "SW8", "BK9", "PO3"];
+      categories.forEach((element) => {
+        fetch(
+          `https://dapi.kakao.com/v2/local/search/category.json?y=${data.Lat}&x=${data.Lng}&rect=${
+            (data.ha, data.qa, data.oa, data.pa)
+          }&category_group_code=${element}&sort=distance&page=1`,
+          {
+            headers,
+          }
+        )
+          .then((res) => res.json())
+          .then(({ documents }) => commit("SET_CATEGORY_LIST", documents));
+      });
     },
   },
 };

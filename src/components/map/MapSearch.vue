@@ -20,6 +20,48 @@
               </b-card>
             </b-input-group>
           </div>
+          <div class="col-sm-12 col-md-4" style="position:absolute; top: 3vh; left: 20vw; z-index: 2" >
+            <span @click="onAvatarClick('MT1')">
+              <b-avatar badge-variant="success" variant="secondary" >
+                <template #badge v-if="isCategories.MT1"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
+              </b-avatar>
+            </span>
+            <span @click="onAvatarClick('CS2')">
+              <b-avatar badge-variant="success" variant="primary">
+                <template #badge v-if="isCategories.CS2"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
+              </b-avatar>
+            </span>
+            <span @click="onAvatarClick('PS3')">
+              <b-avatar badge-variant="success" variant="dark">
+                <template #badge v-if="isCategories.PS3"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
+              </b-avatar>
+            </span>
+            <span @click="onAvatarClick('SC4')">
+              <b-avatar badge-variant="success" variant="light">
+                <template #badge v-if="isCategories.SC4"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
+              </b-avatar>
+            </span>
+            <span @click="onAvatarClick('OL7')">
+              <b-avatar badge-variant="success" variant="success">
+                <template #badge v-if="isCategories.OL7"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
+              </b-avatar>
+            </span>
+            <span @click="onAvatarClick('SW8')">
+              <b-avatar badge-variant="success" variant="danger">
+                <template #badge v-if="isCategories.SW8"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
+              </b-avatar>
+            </span>
+            <span @click="onAvatarClick('BK9')">
+              <b-avatar badge-variant="success" variant="warning">
+                <template #badge v-if="isCategories.BK9"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
+              </b-avatar>
+            </span>
+            <span @click="onAvatarClick('PO3')">
+              <b-avatar badge-variant="success" variant="info">
+                <template #badge v-if="isCategories.PO3"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
+              </b-avatar>
+            </span>
+          </div>
         </div>
       </div>
 
@@ -97,19 +139,29 @@ export default {
 
       searchList:[],
       arrownum: 0,
+      
 
     };
   },
   computed: {
-    ...mapState(["mapList"]),
+    ...mapState(mapStore, ["mapList", "isCategories"]),
   },
 
   methods:{
     ...mapActions(mapStore, ["homeSearch"]),
-    ...mapMutations(mapStore, ["CLEAR_MARKER_POSITIONS", "CLEAR_MAP_LIST", "SET_SEARCH_FLAG_TRUE"]),
+    ...mapMutations(mapStore, ["CLEAR_IS_CATEGORIES","CLEAR_MARKER_POSITIONS", "CLEAR_MAP_LIST", "SET_SEARCH_FLAG_TRUE", "SET_IS_CATEGORIES"]),
     // dropboxDown(){
     //   this.$refs['searchdrop'].show();
     // },
+    onAvatarClick(key) {
+      if (this.isCategories[key]) {
+        this.CLEAR_IS_CATEGORIES(key);
+      }
+      else {
+        this.SET_IS_CATEGORIES(key);
+      }
+    },
+      
     onArrowDown(){
       if(this.searchList.length === 0) return;
       this.arrownum++;
@@ -158,6 +210,9 @@ li{
 }
 .is-active{
   background-color: #dedede;
+}
+.b-avatar:hover {
+  box-shadow: 1px 1px 10px 5px rgba(0, 0, 255, 0.2);
 }
 </style>
 
