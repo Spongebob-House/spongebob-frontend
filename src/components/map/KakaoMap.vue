@@ -132,9 +132,9 @@ export default {
       bounds: {},
       markers: [],
       infos: [],
+      cates: [],
       infowindow: null,
       isdisabled: false,
-
       isInter: false,
       isList: false,
     };
@@ -156,6 +156,42 @@ export default {
         this.aptDetail(this.mapList[val]);
       }
     },
+    isCategories(val, oldval) {
+      console.log("category")
+      const imageSrc = require("@/assets/clinic.png");
+      const imageSize = new kakao.maps.Size(32, 34);
+      const categories = ["MT1", "CS2", "PS3", "SC4", "OL7", "SW8", "BK9", "PO3"];
+      for (let index = 0; index < categories.length; index++) {
+        if (val[categories[index]] != oldval[categories[index]]) {
+          if (val[index]) {
+            this.categoryList.forEach(element => {
+              if (element.category_group_code === categories[index]) {
+                  var latlng = new kakao.maps.LatLng(element.y, element.x);
+                  var category = new kakao.maps.Marker({
+                  map: this.map,
+                  position: latlng,
+                  image: new kakao.maps.MarkerImage(imageSrc, imageSize),
+                    clickable: true,
+                  cate: index,
+                  });
+                  this.cates.push(category);
+              }
+            });
+          }
+          else {
+            var start = 500;
+            categories.forEach((element,i) => {
+              if (element.cate === index) {
+                if (i < start) start = i;
+                element.setMap(null);
+              }
+            });
+            this.cates.splice(start, 15);
+          }
+        }
+        
+      }
+    },
     markerPositions(val) {
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null));
@@ -165,9 +201,32 @@ export default {
       }
       this.markers = [];
       this.infos = [];
+      this.cates = [];
 
-      const imageSrc = "http://localhost/assets/img/home.png";
       const imageSize = new kakao.maps.Size(32, 34);
+      const isrc = require("@/assets/clinic.png");
+      const categories = ["MT1", "CS2", "PS3", "SC4", "OL7", "SW8", "BK9", "PO3"];
+      for (let index = 0; index < categories.length; index++) {
+        if (this.isCategories[categories[index]]) {
+          console.log(this.categoryList.length)
+          this.categoryList.forEach(element => {
+            if (element.category_group_code === categories[index]) {
+              var latlng = new kakao.maps.LatLng(element.y, element.x);
+              var category = new kakao.maps.Marker({
+                map: this.map,
+                position: latlng,
+                image: new kakao.maps.MarkerImage(isrc, imageSize),
+                clickable: true,
+                cate: index,
+              });
+              this.cates.push(category);
+            }
+          });
+        }
+      }
+
+      const imageSrc = require("@/assets/lokasi-logo-25379.png");
+      
       this.mapList.forEach((apt) => {
         var infowindow = new kakao.maps.InfoWindow({
           content: `<div style="padding:5px; font-size:14px;"><div>${apt.apartmentName}</div><div>주소 : ${apt.dong} ${apt.jibun}</div><div>건축년도 : ${apt.buildYear}년</div></div>`,
@@ -236,6 +295,16 @@ export default {
 
     bounds(val) {
       this.aptSearch(val);
+      var position = this.map.getCenter();
+      const data = {
+        'Lat': position.getLat(),
+        'Lng': position.getLng(),
+        'ha' : val.ha,
+        'qa' : val.qa,
+        'oa' : val.oa,
+        'pa' : val.pa,
+      }
+      this.getCategory(data);
     },
   },
   computed: {
@@ -247,11 +316,13 @@ export default {
       "detailApt",
       "dealList",
       "userInfo",
+      "categoryList",
+      "isCategories"
     ]),
   },
   methods: {
     ...mapMutations(mapStore, ["APPEND_INTER_LIST", "SET_SEARCH_FLAG_FALSE"]),
-    ...mapActions(mapStore, ["aptSearch", "aptDetail"]),
+    ...mapActions(mapStore, ["aptSearch", "aptDetail", "getCategory"]),
     onInterClick() {
       for (let index = 0; index < this.interList.length; index++) {
         if (this.interList[index] === this.detailApt.aptCode) {
@@ -310,11 +381,19 @@ export default {
         this.bounds = bounds;
         this.no = -1;
       });
+      kakao.maps.event.addListener(map, 'zoom_changed', () => {
+        var bounds = map.getBounds();
+        console.log(bounds);
+        this.bounds = bounds;
+        this.no = -1;
+});
       this.map = map;
       var bounds = map.getBounds();
       console.log(bounds);
       this.bounds = bounds;
+      
     },
+    
   },
 };
 </script>
@@ -330,6 +409,9 @@ li {
 }
 .button-group {
   margin: 10px 0px;
+}
+.b-avatar:hover {
+  box-shadow: 1px 1px 10px 5px rgba(0, 0, 255, 0.2);
 }
 
 button {
