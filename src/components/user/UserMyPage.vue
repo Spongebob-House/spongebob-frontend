@@ -11,7 +11,14 @@
       </b-form-group>
       <br />
       <b-form-group id="input-group-2" label="이메일" label-for="input-2">
-        <input readonly type="text" class="form-control" id="email" name="email" v-model="this.getEmail" />
+        <input
+          readonly
+          type="text"
+          class="form-control"
+          id="email"
+          name="email"
+          v-model="this.getEmail"
+        />
       </b-form-group>
       <br />
       <b-form-group id="input-group-2" label="가입 일자" label-for="input-2">
@@ -19,7 +26,9 @@
       </b-form-group>
       <br />
       <div class="bnt-group">
-        <b-button @click="mypageModify" type="submit" variant="primary" class="m-2">회원정보 수정</b-button>
+        <b-button @click="mypageModify" type="submit" variant="primary" class="m-2"
+          >회원정보 수정</b-button
+        >
         <b-button @click="deleteUser" type="reset" variant="danger">회원 탈퇴</b-button>
       </div>
     </b-container>
@@ -28,9 +37,10 @@
 
 <script src="components/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
-import http from "@/api/http";
-const memberStore = "memberStore";
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
+import http from '@/api/http';
+const memberStore = 'memberStore';
+
 export default {
   data() {
     return {
@@ -39,23 +49,27 @@ export default {
   },
 
   methods: {
+
     ...mapActions(memberStore, ["userLogout", "userConfirm", "getUserInfo", "userDelete", "userLogout"]),
     ...mapMutations(memberStore, ["SET_MODAL_VIEW"]),
+
     async confirm() {
-      let token = sessionStorage.getItem("access-token");
+      let token = sessionStorage.getItem('access-token');
+
       await this.getUserInfo(token);
       // console.log(userInfo);
     },
 
     logout() {
       this.userLogout(this.userInfo.userId);
-      sessionStorage.removeItem("access-token");
-      sessionStorage.removeItem("refresh-token");
+
+      sessionStorage.removeItem('access-token');
+      sessionStorage.removeItem('refresh-token');
     },
     deleteUser() {
       this.$swal({
-        title: "정말 탈퇴하시겠습니까?",
-        icon: "warning",
+        title: '정말 탈퇴하시겠습니까?',
+        icon: 'warning',
         dangerMode: true,
         buttons: true,
       })
@@ -63,20 +77,20 @@ export default {
         .then(() => this.userDelete(this.userInfo.userId))
         .then(() =>
           this.$swal({
-            title: "성공적으로 회원탈퇴되었습니다.",
-            icon: "success",
+            title: '성공적으로 회원탈퇴되었습니다.',
+            icon: 'success',
           })
-            .then(() => this.$emit("close"))
-            .then(() => this.logout())
+            .then(() => this.$emit('close'))
+            .then(() => this.logout()),
         );
     }, // delete user end
     mypageModify() {
-      this.SET_MODAL_VIEW("mypageModify");
+      this.SET_MODAL_VIEW('mypageModify');
     },
   },
   computed: {
-    ...mapState(memberStore, ["saveId", "userInfo", "isLogin", "isLoginError", "email"]),
-    ...mapGetters(memberStore, ["checkUserInfo", "getEmail"]),
+    ...mapState(memberStore, ['saveId', 'userInfo', 'isLogin', 'isLoginError', 'email']),
+    ...mapGetters(memberStore, ['checkUserInfo', 'getEmail']),
   },
 };
 </script>

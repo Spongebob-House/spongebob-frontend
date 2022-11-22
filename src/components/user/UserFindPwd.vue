@@ -16,13 +16,17 @@
         >비밀번호 찾기</b-button
       >
     </b-container>
-    <b-container v-else-if="isFound === true"></b-container>
+    <b-container style="height: 300px" v-else-if="isFound === true">
+      <h3>비밀번호가 새로 발급되었습니다</h3>
+      <div style="text-align: center">{{ this.newPwd }}</div>
+    </b-container>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from "vuex";
+import { mapActions, mapMutations, mapState, mapGetters } from "vuex";
 const memberStore = "memberStore";
+
 export default {
   name: "findPwd",
   data() {
@@ -32,30 +36,38 @@ export default {
         emailId: "",
         emailDomain: "",
       },
+      newpassword: "",
       isFound: false,
     };
   },
   methods: {
     ...mapActions(memberStore, ["findPassword"]),
+    ...mapMutations(memberStore, ["SET_NEW_PWD"]),
     async findpwd() {
-      if (
-        this.user.userId === this.checkUserInfo.userId &&
-        this.user.emailId === this.checkUserInfo.emailId &&
-        this.user.emailDomain === this.checkUserInfo.emailDomain
-      ) {
-        await this.findPassword(this.user);
-        this.isFound = true;
-      }
+      // if (
+      //   this.user.userId === this.checkUserInfo.userId &&
+      //   this.user.emailId === this.checkUserInfo.emailId &&
+      //   this.user.emailDomain === this.checkUserInfo.emailDomain
+      // ) {
+      await this.findPassword(this.user);
+      this.isFound = true;
+      this.$swal(`비밀번호가 재발급 되었습니다. \n \n ${this.newPwd}`, { icon: "success" }).then(() =>
+        this.$emit("close")
+      );
+      // }
     },
   },
   computed: {
-    ...mapState(memberStore, ["saveId", "userInfo", "isLogin", "isLoginError", "email"]),
+    ...mapState(memberStore, ["saveId", "userInfo", "isLogin", "isLoginError", "email", "newPwd"]),
     ...mapGetters(memberStore, ["checkUserInfo", "getEmail"]),
   },
 };
 </script>
 
 <style>
+* {
+  font-family: Spoqa Han Sans Neo;
+}
 h2 {
   text-align: center;
   padding: 20px 0;
