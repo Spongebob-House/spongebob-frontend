@@ -22,98 +22,48 @@
           </div>
           <div class="col-sm-12 col-md-4" style="position:absolute; top: 3vh; left: 20vw; z-index: 2" >
             <span @click="onAvatarClick('MT1')">
-              <b-avatar badge-variant="success" variant="secondary" >
+              <b-avatar icon="cart4" badge-variant="success" variant="secondary" >
                 <template #badge v-if="isCategories.MT1"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('CS2')">
-              <b-avatar badge-variant="success" variant="primary">
+              <b-avatar icon="shop" badge-variant="success" variant="primary">
                 <template #badge v-if="isCategories.CS2"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('PS3')">
-              <b-avatar badge-variant="success" variant="dark">
+              <b-avatar :src = "require('@/assets/kindergarten.png')" badge-variant="success" variant="dark">
                 <template #badge v-if="isCategories.PS3"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('SC4')">
-              <b-avatar badge-variant="success" variant="light">
+              <b-avatar>
                 <template #badge v-if="isCategories.SC4"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('OL7')">
-              <b-avatar badge-variant="success" variant="success">
+              <b-avatar :src = "require('@/assets/fuel.png')" badge-variant="success" variant="success">
                 <template #badge v-if="isCategories.OL7"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('SW8')">
-              <b-avatar badge-variant="success" variant="danger">
+              <b-avatar :src = "require('@/assets/metro.png')" badge-variant="success" variant="danger">
                 <template #badge v-if="isCategories.SW8"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('BK9')">
-              <b-avatar badge-variant="success" variant="warning">
+              <b-avatar icon="bank" badge-variant="success" variant="warning">
                 <template #badge v-if="isCategories.BK9"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('PO3')">
-              <b-avatar badge-variant="success" variant="info">
+              <b-avatar src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_the_Government_of_the_Republic_of_Korea.svg/240px-Emblem_of_the_Government_of_the_Republic_of_Korea.svg.png" badge-variant="success" variant="info">
                 <template #badge v-if="isCategories.PO3"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
           </div>
         </div>
       </div>
-
-          <!-- <table class="table table-hover text-center col-sm-12">
-            <thead>
-              <tr>
-                <th>거래내역</th>
-              </tr>
-            </thead>
-            <tbody id="aptlist" v-if="mapList.length === 0">
-              <tr>
-                <td>거래내역 없음</td>
-              </tr>
-            </tbody>
-            <tbody id="aptlist" v-else>
-              <tr v-for="(apt, index) in mapList" :key="index" class="apt-item" :lat="apt.lat" :lng="apt.lng">
-                <td>
-                  <div class="apt-name">
-                    <a>{{ apt.apartmentName }}</a>
-                  </div>
-                  <div>
-                    <b-img src="http://localhost/assets/img/coffee.png" width="20" height="20" class="icon"></b-img
-                    ><span
-                      v-if="apt.coffee"
-                      style="font-size: 12px"
-                      class="text-success"
-                      v-text="`${apt.coffee.name} ${apt.coffee.dist}m`"></span>
-                    <b-img src="http://localhost/assets/img/metro.png" width="20" height="20" class="icon"></b-img
-                    ><span
-                      v-if="apt.metro"
-                      style="font-size: 12px"
-                      v-text="`${apt.metro.name} ${apt.metro.dist}m`"></span>
-                  </div>
-                  <div class="apt-space" v-text="`면적 : ${apt.area}`"></div>
-                  <div class="apt-price" v-text="`거래금액 : ${apt.dealAmount}만원`"></div>
-                  <div class="apt-space" v-text="`면적 : ${apt.area}`"></div>
-                  <div class="apt-price" v-text="`거래금액 : ${apt.dealAmount}만원`"></div>
-                  <div class="apt-date text-end">
-                    <span>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="icon" viewBox="0 0 24 24">
-                        <path
-                          d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"></path>
-                      </svg>
-                    </span>
-                    <span v-text="`${apt.dealYear}.${apt.dealMonth}.${apt.dealDay}`"> </span>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
-
-
     </section>
   </main>
 </template>
@@ -149,7 +99,7 @@ export default {
 
   methods:{
     ...mapActions(mapStore, ["homeSearch"]),
-    ...mapMutations(mapStore, ["CLEAR_IS_CATEGORIES","CLEAR_MARKER_POSITIONS", "CLEAR_MAP_LIST", "SET_SEARCH_FLAG_TRUE", "SET_IS_CATEGORIES"]),
+    ...mapMutations(mapStore, ["SET_IS_CHANGED","CLEAR_IS_CATEGORIES","CLEAR_MARKER_POSITIONS", "CLEAR_MAP_LIST", "SET_SEARCH_FLAG_TRUE", "SET_IS_CATEGORIES"]),
     // dropboxDown(){
     //   this.$refs['searchdrop'].show();
     // },
@@ -160,6 +110,7 @@ export default {
       else {
         this.SET_IS_CATEGORIES(key);
       }
+      this.SET_IS_CHANGED(key);
     },
       
     onArrowDown(){
