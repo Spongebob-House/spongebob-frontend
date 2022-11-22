@@ -30,6 +30,9 @@
     <b-row class="text-center">
       <button type="button" id="btn-login" class="btn btn-primary mb-3" @click="chkVal">Login</button>
     </b-row>
+    <b-row class="text-center">
+      <button type="button" id="btn-login" class="btn btn-warning mb-3" @click="kakaologin">kakao</button>
+    </b-row>
     <b-row class="mb-3 text-center">
       <b-col class="text-left" @click="join" style="cursor: pointer"> 회원가입 </b-col>
       <b-col class="text-right" @click="findPwd" style="cursor: pointer"> 비밀번호 찾기 </b-col>
@@ -68,7 +71,9 @@ export default {
         this.$emit("close");
       }
     },
-
+    close() {
+      this.$refs["my-modal"].hide();
+    },
     chkVal() {
       if (this.user.userId.length === 0) {
         alert("아이디를 적어주세요!");
@@ -78,7 +83,11 @@ export default {
         this.confirm();
       }
     },
-
+    kakaologin() {
+      this.SET_MODAL_VIEW("kakao");
+      console.log("kakao~~~");
+      console.log(this.modalview);
+    },
     join() {
       this.SET_MODAL_VIEW("join");
     },
@@ -87,7 +96,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(memberStore, ["saveId", "userInfo", "isLogin", "isLoginError"]),
+    ...mapState(memberStore, ["modalview", "saveId", "userInfo", "isLogin", "isLoginError"]),
     ...mapGetters(memberStore, ["checkUserInfo"]),
   },
   created() {
