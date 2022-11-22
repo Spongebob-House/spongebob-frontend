@@ -32,6 +32,7 @@ const mapStore = {
       BK9: false,
       PO3: false,
     },
+    isChanged: "",
 
     dealList: [],
   },
@@ -83,12 +84,13 @@ const mapStore = {
       });
     },
     SET_CATEGORY_LIST(state, list) {
-      list.forEach((data) => {
-        state.categoryList.push(data);
-      });
+      state.categoryList = list;
     },
     SET_IS_CATEGORIES(state, key) {
       state.isCategories[key] = true;
+    },
+    SET_IS_CHANGED(state, key){
+      state.isChanged = key;
     },
     APPEND_INTER_LIST(state, data) {
       state.interList.push(data);
@@ -117,6 +119,9 @@ const mapStore = {
     CLEAR_IS_CATEGORIES(state, key) {
       state.isCategories[key] = false;
     },
+    CLEAR_IS_CHANGED(state){
+      state.isChanged = "";
+    }
   },
   actions: {
     getSido: function ({ commit }) {
@@ -198,20 +203,25 @@ const mapStore = {
       commit("CLEAR_CATEGORY_LIST");
       const REST_API_KEY = "ea24e1f6ec6a40170810bf2fa9ecc846";
       const headers = new Headers({ Authorization: `KakaoAK ${REST_API_KEY}` });
-      const categories = ["MT1", "CS2", "PS3", "SC4", "OL7", "SW8", "BK9", "PO3"];
-      categories.forEach((element) => {
-        fetch(
-          `https://dapi.kakao.com/v2/local/search/category.json?y=${data.Lat}&x=${data.Lng}&rect=${
-            (data.ha, data.qa, data.oa, data.pa)
-          }&category_group_code=${element}&sort=distance&page=1`,
-          {
-            headers,
-          }
-        )
-          .then((res) => res.json())
-          .then(({ documents }) => commit("SET_CATEGORY_LIST", documents));
-      });
+      const loop = async (categories) => {
+        const promises = categories.map(async element => {
+          return await fetch(
+            `https://dapi.kakao.com/v2/local/search/category.json?y=${data.Lat}&x=${data.Lng}&rect=${
+              data.ha, data.qa, data.oa, data.pa
+            }&category_group_code=${element}&sort=distance&page=1`,
+            {
+              headers,
+            }).then((res) => res.json())
+            .then(({ documents }) => documents)
+        })
+        const results = await Promise.all(promises)
+        const arr = [];
+        results.forEach(d => arr.push(...d));
+        commit("SET_CATEGORY_LIST", arr);
+      }
+        const categories = ["MT1", "CS2", "PS3", "SC4", "OL7", "SW8", "BK9", "PO3"];
+        loop(categories)
     },
-  },
-};
+  }
+}
 export default mapStore;
