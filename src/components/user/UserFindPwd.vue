@@ -51,6 +51,9 @@ export default {
       // ) {
       await this.findPassword(this.user);
       this.isFound = true;
+      this.$swal(`비밀번호가 재발급 되었습니다. \n \n ${this.newPwd}`, { icon: "success" }).then(() =>
+        this.$emit("close")
+      );
       // }
     },
   },
