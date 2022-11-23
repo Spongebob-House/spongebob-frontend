@@ -1,9 +1,11 @@
-<!-- <template>
-  <div><h2>kakao</h2></div>
-  <img
-    class="kakao_btn"
-    src="https://user-images.githubusercontent.com/55784772/203083888-412a4bc3-8fe9-4bff-9f7a-fd0a7a62ce82.png"
-    @click="loginWithKakao" />
+<template>
+  <div>
+    <h2>kakao</h2>
+    <img
+      class="kakao_btn"
+      src="https://user-images.githubusercontent.com/55784772/203083888-412a4bc3-8fe9-4bff-9f7a-fd0a7a62ce82.png"
+      @click="loginWithKakao" />
+  </div>
 </template>
 
 <script>
@@ -18,8 +20,8 @@ export default {
     },
   },
 };
-</script> -->
-<template>
+</script>
+<!-- <template>
   <div id="app">
     <KakaoLogin
       api-key="aac6f5f23755d71e4ce203f95058f5f1"
@@ -54,4 +56,4 @@ export default {
 </script>
 
 <style></style>
-<style></style>
+<style></style> -->

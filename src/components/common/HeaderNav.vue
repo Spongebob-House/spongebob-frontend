@@ -28,12 +28,17 @@
               <b-avatar variant="info"></b-avatar>
             </template>
             <b-dropdown-item @click="myPage" v-b-modal.mypage> 마이페이지 </b-dropdown-item>
+            <b-dropdown-item @click="inquiry" v-b-modal.mypage> 1:1 문의 </b-dropdown-item>
             <b-dropdown-item @click="onClickLogout"> 로그아웃 </b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-modal id="mypage" ref="mypage" centered hide-footer hide-header>
+          <b-modal id="mypage" ref="mypage" :size="sizeState" centered hide-footer hide-header>
             <user-my-page v-on:close="close" v-if="modalview === 'myPage'"></user-my-page>
             <user-modify-mypage v-on:close="close" v-else-if="modalview === 'mypageModify'"></user-modify-mypage>
+            <inquiry size="xl" v-on:close="close" v-if="modalview === 'inquiry'"></inquiry>
           </b-modal>
+          <!-- <b-modal id="mypage" ref="mypage" size="xl" centered hide-footer hide-header>
+            <inquiry v-on:close="close" v-if="modalview === 'inquiry'"></inquiry>
+          </b-modal> -->
         </b-navbar-nav>
 
         <b-navbar-nav @click="loginForm()" v-else>
@@ -44,6 +49,7 @@
           <user-register v-on:close="close" v-else-if="modalview === 'join'"></user-register>
           <user-find-pwd v-on:close="close" v-else-if="modalview === 'findPwd'"></user-find-pwd>
           <kakao-login v-on:close="close" v-else-if="modalview === 'kakao'"></kakao-login>
+          <google-login v-on:close="close" v-else-if="modalview === 'google'"></google-login>
         </b-modal>
       </b-col>
     </b-nav>
@@ -58,6 +64,8 @@ import UserRegister from "@/components/user/UserRegister.vue";
 import UserMyPage from "@/components/user/UserMyPage.vue";
 import UserModifyMypage from "@/components/user/UserModifyMypage.vue";
 import KakaoLogin from "@/components/social/kakao.vue";
+import GoogleLogin from "@/components/social/google.vue";
+import Inquiry from "@/views/AppInquiry.vue";
 const memberStore = "memberStore";
 export default {
   components: {
@@ -66,11 +74,16 @@ export default {
     UserRegister,
     UserMyPage,
     UserModifyMypage,
+    GoogleLogin,
     KakaoLogin,
+    // eslint-disable-next-line vue/no-unused-components
+    Inquiry,
   },
   name: "HeaderNav",
   data() {
-    return {};
+    return {
+      sizeState: null,
+    };
   },
 
   methods: {
@@ -86,13 +99,16 @@ export default {
       this.$refs["my-modal"].hide();
     },
     loginForm() {
-      console.log("a");
       this.SET_MODAL_VIEW("login");
       this.$refs["my-modal"].show();
     },
     myPage() {
       this.SET_MODAL_VIEW("myPage");
-      console.log("here");
+      this.sizeState = null;
+    },
+    inquiry() {
+      this.SET_MODAL_VIEW("inquiry");
+      this.sizeState = "lg";
     },
   },
   computed: {
