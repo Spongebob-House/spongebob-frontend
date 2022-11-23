@@ -83,7 +83,7 @@ export default {
 
   methods: {
     ...mapActions(memberStore, ['userLogout']),
-    ...mapMutations(memberStore, ['SET_MODAL_VIEW']),
+    ...mapMutations(memberStore, ['SET_MODAL_VIEW', 'CLEAR_LOGIN_TRIGGER']),
 
     onClickLogout() {
       this.userLogout(this.userInfo.userId);
@@ -104,9 +104,17 @@ export default {
     },
   },
   computed: {
-    ...mapState(memberStore, ['userInfo', 'modalview']),
+    ...mapState(memberStore, ['userInfo', 'modalview', 'loginTrigger']),
     ...mapGetters(memberStore, ['checkUserInfo']),
   },
+
+  watch: {
+    loginTrigger(val) {
+      if (!val) return; 
+      this.$refs['my-modal'].show();
+      this.CLEAR_LOGIN_TRIGGER();
+    }
+  }
 };
 </script>
 

@@ -104,53 +104,37 @@
         </div>
       </div>
       <div v-show="isList">
-        <div>
-          <table class="table table-hover text-center col-sm-12">
-            <thead>
-              <tr>
-                <th class="p-3">아파트 목록</th>
-              </tr>
-            </thead>
-            <tbody id="aptlist" v-if="mapList.length === 0">
-              <tr class="p-3">
-                <td>아파트 없음</td>
-              </tr>
-            </tbody>
-            <tbody id="aptlist" v-else>
-              <tr
-                v-for="(apt, index) in itemsForList"
-                :key="index"
-                class="apt-item"
-                :lat="apt.lat"
-                :lng="apt.lng"
-                @click="setData(index)"
-              >
-                <td class="p-3">
-                  <div class="apt-name">
-                    <a>{{ apt.apartmentName }}</a>
-                  </div>
-                  <!-- <div>
-                    <b-img src="http://localhost/assets/img/coffee.png" width="20" height="20" class="icon"></b-img
-                    ><span
-                      v-if="apt.coffee"
-                      style="font-size: 12px"
-                      class="text-success"
-                      v-text="`${apt.coffee.name} ${apt.coffee.dist}m`"></span>
-                    <b-img src="http://localhost/assets/img/metro.png" width="20" height="20" class="icon"></b-img
-                    ><span
-                      v-if="apt.metro"
-                      style="font-size: 12px"
-                      v-text="`${apt.metro.name} ${apt.metro.dist}m`"></span>
-                  </div> -->
-                  <br />
-                  <div class="apt-dong" v-text="`행정동 : ${apt.dong}`"></div>
-                  <div
-                    class="apt-buildYear"
-                    v-text="`건축연도 : ${apt.buildYear}년`"
-                  ></div>
-                </td>
-              </tr>
-            </tbody>
+        <b-tabs fill>
+          <b-tab title="아파트 목록">
+            <table class="table table-hover text-center col-sm-12">
+              <tbody id="aptlist" v-if="mapList.length === 0">
+                <tr class="p-3">
+                  <td>아파트 없음</td>
+                </tr>
+              </tbody>
+              <tbody id="aptlist" v-else>
+                <tr
+                  v-for="(apt, index) in itemsForList"
+                  :key="index"
+                  class="apt-item"
+                  :lat="apt.lat"
+                  :lng="apt.lng"
+                  @click="setData(index)"
+                >
+                  <td class="p-3">
+                    <div class="apt-name">
+                      <a>{{ apt.apartmentName }}</a>
+                    </div>
+                    <br />
+                    <div class="apt-dong" v-text="`행정동 : ${apt.dong}`"></div>
+                    <div
+                      class="apt-buildYear"
+                      v-text="`건축연도 : ${apt.buildYear}년`"
+                    ></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
             <div class="overflow-auto mt-3">
               <b-pagination
                 align="center"
@@ -162,8 +146,50 @@
                 
               ></b-pagination>
             </div>
-          </table>
-        </div>
+          </b-tab>
+          <b-tab title="즐겨찾기">
+            <table class="table table-hover text-center col-sm-12">
+              <tbody id="aptlist" v-if="mapList.length === 0">
+                <tr class="p-3">
+                  <td>아파트 없음</td>
+                </tr>
+              </tbody>
+              <tbody id="aptlist" v-else>
+                <tr
+                  v-for="(apt, index) in itemsForList"
+                  :key="index"
+                  class="apt-item"
+                  :lat="apt.lat"
+                  :lng="apt.lng"
+                  @click="setData(index)"
+                >
+                  <td class="p-3">
+                    <div class="apt-name">
+                      <a>{{ apt.apartmentName }}</a>
+                    </div>
+                    <br />
+                    <div class="apt-dong" v-text="`행정동 : ${apt.dong}`"></div>
+                    <div
+                      class="apt-buildYear"
+                      v-text="`건축연도 : ${apt.buildYear}년`"
+                    ></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="overflow-auto mt-3">
+                <b-pagination
+                  align="center"
+                  hide-ellipsis
+                  v-model="currentPage"
+                  :total-rows="mapList.length"
+                  per-page=6
+                  aria-controls="itemList"
+                  
+                ></b-pagination>
+              </div>
+          </b-tab>
+        </b-tabs>
       </div>
     </b-sidebar>
     <div>
@@ -180,6 +206,7 @@
 <script>
 import { mapState, mapMutations, mapActions } from "vuex";
 const mapStore = "mapStore";
+const memberStore = "memberStore";
 
 export default {
   name: "KakaoMap",
@@ -221,6 +248,9 @@ export default {
         this.aptDetail(this.mapList[val]);
       }
       this.detailCurrentPage = 1;
+      
+    },
+    dealList() {
       this.detailItemsForList = this.dealList.slice(0,
           5,);
     },
@@ -444,16 +474,24 @@ export default {
       "searchFlag",
       "detailApt",
       "dealList",
-      "userInfo",
+      
       "categoryList",
       "isCategories",
       "isChanged",
     ]),
+    ...mapState(memberStore, [
+    "userInfo",
+    ]),
   },
   methods: {
     ...mapMutations(mapStore, ["APPEND_INTER_LIST", "SET_SEARCH_FLAG_FALSE", "CLEAR_IS_CHANGED"]),
+    ...mapMutations(memberStore, ["SET_LOGIN_TRIGGER"]),
     ...mapActions(mapStore, ["aptSearch", "aptDetail", "getCategory"]),
     onInterClick() {
+      if (!this.userInfo) {
+        this.SET_LOGIN_TRIGGER();
+        return;
+      }
       for (let index = 0; index < this.interList.length; index++) {
         if (this.interList[index] === this.detailApt.aptCode) {
           this.isInter = false;
@@ -538,9 +576,7 @@ export default {
 li {
   cursor: auto;
 }
-span {
-  margin: 0px;
-}
+
 .button-group {
   margin: 10px 0px;
 }
