@@ -1,7 +1,7 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
 import { login, findById, tokenRegeneration, logout, modifyMypage, register, deleteUser, findPwd } from "@/api/member";
-
+import {getInter, appendInt, deleteInt} from "@/api/map.js";
 const memberStore = {
   namespaced: true,
   state: {
@@ -14,6 +14,7 @@ const memberStore = {
     email: null,
     newPwd: null,
     loginTrigger: false,
+    interList: [],
   },
   getters: {
     getEmail: function (state) {
@@ -59,11 +60,17 @@ const memberStore = {
     SET_EMAIL: (state, userInfo) => {
       state.email = userInfo.emailId + "@" + userInfo.emailDomain;
     },
+    SET_INTER_LIST: (state, interList) => {
+      state.interList = interList;
+    },
     SET_LOGIN_TRIGGER: (state) => {
       state.loginTrigger = true;
     },
     CLEAR_LOGIN_TRIGGER: (state) => {
       state.loginTrigger = false;
+    },
+    CLEAR_INTER_LIST: (state) => {
+      state.interList = [];
     },
 
     CLEAR_SAVE_ID: (state) => {
@@ -118,6 +125,11 @@ const memberStore = {
           if (data.message === "success") {
             commit("SET_USER_INFO", data.userInfo);
             commit("SET_EMAIL", data.userInfo);
+            console.log(data.userInfo);
+            getInter(data.userInfo,
+              ({data}) => {
+                commit("SET_INTER_LIST", data);
+              }, console.log(data));
             console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
@@ -152,6 +164,7 @@ const memberStore = {
               ({ data }) => {
                 if (data.message === "success") {
                   console.log("리프레시 토큰 제거 성공");
+                  commit("CLEAR_INTER_LIST");
                 } else {
                   console.log("리프레시 토큰 제거 실패");
                 }
@@ -179,6 +192,7 @@ const memberStore = {
             commit("SET_IS_LOGIN", false);
             commit("SET_USER_INFO", null);
             commit("SET_IS_VALID_TOKEN", false);
+            commit("CLEAR_INTER_LIST");
             router.push("/");
           }
         },
@@ -201,7 +215,6 @@ const memberStore = {
         },
         (error) => {
           console.log(error);
-
           alert("회원탈퇴 실패");
         }
       );
@@ -224,7 +237,6 @@ const memberStore = {
         },
         (error) => {
           console.log(error);
-
           alert("회원 정보 수정 실패 !!!");
         }
       );
@@ -242,8 +254,53 @@ const memberStore = {
         },
         (error) => {
           console.log(error);
-
           alert("회원가입 실패");
+        }
+      );
+    },
+    async pullInter({ commit, state }) {
+      getInter(state.userInfo,
+        ({data}) => {
+          commit("SET_INTER_LIST", data);
+        }, console.log('fail'));
+    },
+    async appendInter({ commit, state }, aptCode) {
+      const body = {
+        "aptCode" : aptCode,
+        "userId" : state.userInfo.userId,
+      }
+      await appendInt(
+        body,
+        ({ data }) => {
+          if (data === "success") {
+            getInter(state.userInfo,
+              ({data}) => {
+                commit("SET_INTER_LIST", data);
+              }, console.log('fail'));
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    },
+    async deleteInter({ commit, state }, aptCode) {
+      const body = {
+        "aptCode" : aptCode,
+        "userId" : state.userInfo.userId,
+      }
+      await deleteInt(
+        body,
+        ({ data }) => {
+          if (data === "success") {
+            getInter(state.userInfo,
+              ({data}) => {
+                commit("SET_INTER_LIST", data);
+              }, console.log(data));
+          }
+        },
+        (error) => {
+          console.log(error);
         }
       );
     },

@@ -54,7 +54,7 @@
                         src="@/assets/coffee.png"
                         style="width: 30px; height: 30px"
                       />{{ detailApt.coffee.name }}
-                      {{ detailApt.coffee.dist }}m</b-col
+                      {{ detailApt.coffee.dist | distance }}</b-col
                     >
                   
                     <b-col id="metro" class="p-0"
@@ -62,7 +62,7 @@
                         src="@/assets/metro.png"
                         style="width: 30px; height: 30px"
                       />{{ detailApt.metro.name }}
-                      {{ detailApt.metro.dist }}m</b-col
+                      {{ detailApt.metro.dist | distance }}</b-col
                     >
                   </b-row>
                 </div>
@@ -80,11 +80,11 @@
                     style="border-bottom: solid 1px"
                   >
                     <b-row>
-                      <b-row class="mb-1">면적: {{ result.area }}</b-row>
                       <b-row class="mb-1">
                         거래일자: {{ result.dealYear }}년 {{ result.dealMonth }}월
                       </b-row>
-                      <b-row class="mb-1">거래가: {{ result.dealAmount }}만원</b-row>
+                      <b-row class="mb-1">면적: {{ result.area }}&#13221;</b-row>
+                      <b-row class="mb-1">거래가: {{ result.dealAmount | money }}</b-row>
                     </b-row>
                   </li>
                 </ul>
@@ -104,7 +104,7 @@
         </div>
       </div>
       <div v-show="isList">
-        <b-tabs fill>
+        <b-tabs fill @activate-tab = "loginCheck()">
           <b-tab title="아파트 목록">
             <table class="table table-hover text-center col-sm-12">
               <tbody id="aptlist" v-if="mapList.length === 0">
@@ -149,19 +149,19 @@
           </b-tab>
           <b-tab title="즐겨찾기">
             <table class="table table-hover text-center col-sm-12">
-              <tbody id="aptlist" v-if="mapList.length === 0">
+              <tbody id="interlist" v-if="interList.length === 0">
                 <tr class="p-3">
-                  <td>아파트 없음</td>
+                  <td>즐겨찾기 없음</td>
                 </tr>
               </tbody>
-              <tbody id="aptlist" v-else>
+              <tbody id="interlist" v-else>
                 <tr
-                  v-for="(apt, index) in itemsForList"
+                  v-for="(apt, index) in interItemsForList"
                   :key="index"
                   class="apt-item"
                   :lat="apt.lat"
                   :lng="apt.lng"
-                  @click="setData(index)"
+                  @click="setInterData(index)"
                 >
                   <td class="p-3">
                     <div class="apt-name">
@@ -181,10 +181,10 @@
                 <b-pagination
                   align="center"
                   hide-ellipsis
-                  v-model="currentPage"
-                  :total-rows="mapList.length"
+                  v-model="interCurrentPage"
+                  :total-rows="interList.length"
                   per-page=6
-                  aria-controls="itemList"
+                  aria-controls="interList"
                   
                 ></b-pagination>
               </div>
@@ -215,9 +215,11 @@ export default {
   },
   data() {
     return {
+      interCurrentPage: 1,
       detailCurrentPage: 1,
       currentPage: 1,
       no: -1,
+      interno: -1,
       bounds: {},
       markers: [],
       infos: [],
@@ -228,6 +230,9 @@ export default {
       isList: false,
       itemsForList: [],
       detailItemsForList: [],
+      interItemsForList: [],
+      inters: [],
+      interInfos: [],
     };
   },
   mounted() {
@@ -241,6 +246,31 @@ export default {
         "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
       document.head.appendChild(script);
     }
+
+  },
+  filters:{
+    money(val){
+      if(val.length > 5){
+        val = val.replace(',','');
+        const temp =  val.slice(val.length-4, val.length);
+        if(temp === '0000'){
+          return val.slice(0, val.length-4) + '억'
+        }
+        return val.slice(0, val.length-4) + '억 '+ Number(val.slice(val.length-4, val.length))+'만원'
+      }
+      else return val + '만원';
+    },
+    distance(val){
+      if(val > 999){
+        val = val+'';
+        const temp =  val.slice(val.length-3, val.length);
+        if(temp === '000'){
+          return val.slice(0, val.length-3) + 'km'
+        }
+        return val.slice(0, val.length-3) + 'km '+ Number(val.slice(val.length-3, val.length))+'m'
+      }
+      else return val + 'm';
+    }
   },
   watch: {
     no(val) {
@@ -249,6 +279,12 @@ export default {
       }
       this.detailCurrentPage = 1;
       
+    },
+    interno(val){
+      if (val != -1){
+        this.aptDetail(this.interList[val]);
+      }
+      this.detailCurrentPage = 1;
     },
     dealList() {
       this.detailItemsForList = this.dealList.slice(0,
@@ -265,6 +301,10 @@ export default {
     detailCurrentPage(val) {
       this.detailItemsForList = this.dealList.slice((val - 1) * 5,
           val * 5,); 
+    },
+    interCurrentPage(val) {
+      this.interItemsForList = this.interList.slice((val - 1) * 6,
+      val * 6);
     },
     categoryList(val){
       if(val.length === 0) return;
@@ -316,6 +356,63 @@ export default {
         }
       }
 
+    },
+    interList(val){
+      this.interItemsForList = this.interList.slice(0, 6);
+      if(val.length === 0) return;
+      if (this.inters.length > 0) {
+        this.inters.forEach((cate) => cate.setMap(null));
+      }
+
+      if (this.interInfos.length > 0) {
+        this.interInfos.forEach((cate) => cate.setMap(null));
+      }
+      this.inters = [];
+      this.interInfos = [];
+      const imageSrc = 'https://pngimg.com/uploads/star/star_PNG41495.png';
+      const imageSize = new kakao.maps.Size(45, 45);
+      this.interList.forEach((apt, index) => {
+        var infowindow = new kakao.maps.InfoWindow({
+          content: `<div style="padding:5px; font-size:14px;"><div>${apt.apartmentName}</div><div>주소 : ${apt.dong} ${apt.jibun}</div><div>건축년도 : ${apt.buildYear}년</div></div>`,
+          removable: true,
+        });
+        this.interInfos.push(infowindow);
+        const position = new kakao.maps.LatLng(apt.lat, apt.lng);
+        var marker = new kakao.maps.Marker({
+            map: this.map,
+            position,
+            image: new kakao.maps.MarkerImage(imageSrc, imageSize),
+            clickable: true,
+          });
+          kakao.maps.event.addListener(marker, "mouseover", () => {
+            this.interInfos[index].open(this.map, this.inters[index]);
+          });
+          kakao.maps.event.addListener(marker, "mouseout", () => {
+            this.interInfos[index].setMap(null);
+          });
+          kakao.maps.event.addListener(marker, "click", () => {
+            // 마커 위에 인포윈도우를 표시합니다
+            if (this.no != -1) {
+              this.infos[this.no].setMap(null);
+            }
+            if (this.interno != -1) {
+              this.interInfos[this.interno].setMap(null);
+            }
+            this.isList = false;
+            this.interno = index;
+            this.isInter = true;
+            var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
+            var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+            var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+            this.interInfos[this.interno].open(this.map, this.inters[this.interno]);
+            this.map.panTo(position);
+            roadviewClient.getNearestPanoId(position, 100, function (panoId) {
+              roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+            });
+            document.querySelector("#sidebarToggle").click();
+          });
+          this.inters.push(marker);
+        });
     },
     isChanged(val) {
       const color = {
@@ -389,6 +486,9 @@ export default {
       const positions = val.map(
         (position) => new kakao.maps.LatLng(...position)
       );
+      if(this.userInfo){
+      this.pullInter();
+      }
       if (positions.length > 0) {
         positions.map((position, index) => {
           var marker = new kakao.maps.Marker({
@@ -405,14 +505,17 @@ export default {
           });
           kakao.maps.event.addListener(marker, "click", () => {
             // 마커 위에 인포윈도우를 표시합니다
-            console.log("abc");
-            console.log(index);
-            if (this.no != -1) this.infos[this.no].setMap(null);
+            if (this.no != -1) {
+              this.infos[this.no].setMap(null);
+            }
+            if (this.interno != -1) {
+              this.interInfos[this.interno].setMap(null);
+            }
             this.isList = false;
             this.no = index;
             var flag = true;
             for (let index = 0; index < this.interList.length; index++) {
-              if (this.interList[index] === this.mapList[this.no].aptCode) {
+              if (this.interList[index].aptCode === this.mapList[this.no].aptCode) {
                 this.isInter = true;
                 flag = false;
                 break;
@@ -464,6 +567,9 @@ export default {
       };
       this.getCategory(data)
       this.aptSearch(val);
+      if(this.userInfo){
+      this.pullInter();
+    }
     },
   },
   computed: {
@@ -480,36 +586,51 @@ export default {
       "isChanged",
     ]),
     ...mapState(memberStore, [
-    "userInfo",
+    "userInfo", "interList"
     ]),
   },
   methods: {
-    ...mapMutations(mapStore, ["APPEND_INTER_LIST", "SET_SEARCH_FLAG_FALSE", "CLEAR_IS_CHANGED"]),
+    ...mapMutations(mapStore, ["SET_SEARCH_FLAG_FALSE", "CLEAR_IS_CHANGED"]),
     ...mapMutations(memberStore, ["SET_LOGIN_TRIGGER"]),
     ...mapActions(mapStore, ["aptSearch", "aptDetail", "getCategory"]),
+    ...mapActions(memberStore, ["appendInter", "deleteInter", "pullInter"]),
+    loginCheck(bvEvent){
+      if (!this.userInfo) {
+        console.log(bvEvent);
+        this.SET_LOGIN_TRIGGER();
+        return;
+      }
+    },
     onInterClick() {
       if (!this.userInfo) {
         this.SET_LOGIN_TRIGGER();
         return;
       }
       for (let index = 0; index < this.interList.length; index++) {
-        if (this.interList[index] === this.detailApt.aptCode) {
+        if (this.interList[index].aptCode == this.detailApt.aptCode) {
+          console.log("enter");
+          this.deleteInter(this.detailApt.aptCode);
           this.isInter = false;
-          this.interList.splice(index, 1);
           return;
         }
       }
-      this.APPEND_INTER_LIST(this.detailApt.aptCode);
+      this.appendInter(this.detailApt.aptCode);
       this.isInter = true;
     },
 
     setData(k) {
-      if (this.no != -1) this.infos[this.no].setMap(null);
+      if (this.no != -1) {
+        this.infos[this.no].setMap(null);
+      }
+      if (this.interno != -1) {
+        this.interInfos[this.interno].setMap(null);
+      }
+
       this.isList = false;
-      this.no = k;
+      this.no = 6*(this.currentPage-1) + k;
       var flag = true;
       for (let index = 0; index < this.interList.length; index++) {
-        if (this.interList[index] === this.mapList[this.no].aptCode) {
+        if (this.interList[index].aptCode === this.mapList[this.no].aptCode) {
           this.isInter = true;
           flag = false;
           break;
@@ -532,9 +653,32 @@ export default {
       roadviewClient.getNearestPanoId(position, 100, function (panoId) {
         roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
       });
-      const el = "#sidebarToggle";
+    },
+    setInterData(k) {
+      if (this.no != -1) {
+        this.infos[this.no].setMap(null);
+      }
+      if (this.interno != -1) {
+        this.interInfos[this.interno].setMap(null);
+      }
+      this.interno = 6 * (this.interCurrentPage - 1) + k;
+      this.isList = false;
+      this.isInter = false;
+      
+      var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
+      var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+      var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+      var position = new kakao.maps.LatLng(
+        Number(this.interList[this.interno].lat),
+        Number(this.interList[this.interno].lng)
+      );
+      // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
+      this.interInfos[this.interno].open(this.map, this.inters[this.interno]);
+      this.map.panTo(position);
 
-      document.querySelector(el).click();
+      roadviewClient.getNearestPanoId(position, 100, function (panoId) {
+        roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+      });
     },
     initMap() {
       const container = document.getElementById("map");
