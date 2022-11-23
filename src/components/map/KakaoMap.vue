@@ -26,39 +26,38 @@
       <div v-show="!isList">
         <div id="roadview" style="height: 400px"></div>
         <div>
-          <b-card class="mb-3">
-            <b-card-title class="d-flex justify-content-between">
-              <span>
-                {{ detailApt.apartmentName }}
-              </span>
-              <span v-if="!isInter" @click="onInterClick">
-                <b-avatar icon="star-fill" variant="secondary"></b-avatar>
-              </span>
-              <span v-else @click="onInterClick">
-                <b-avatar
-                  icon="star-fill"
-                  style="color: yellow"
-                  variant="secondary"
-                ></b-avatar>
-              </span>
-            </b-card-title>
-          </b-card>
-          <b-card no-body>
-            <b-tabs card fill>
-              <b-tab title="주변 정보" active>
-                <div class="p-3">
-                  <b-row class="mb-3 text-left">
+          <b-card class="mb-3" body-class="pb-0">
+            <b-card-title>
+              <div class="d-flex justify-content-between">
+                <span>
+                  {{ detailApt.apartmentName }}
+                </span>
+                <span v-if="!isInter" @click="onInterClick">
+                  <b-avatar icon="star-fill" variant="secondary"></b-avatar>
+                </span>
+                <span v-else @click="onInterClick">
+                  <b-avatar
+                    icon="star-fill"
+                    style="color: yellow"
+                    variant="secondary"
+                  ></b-avatar>
+                </span>
+              </div>
+              <div class="p-3">
+                  <b-row class="mb-3" style="font-size: 20px;">
+                    주변 정보
+                  </b-row>
+                  <b-row class="mb-3 text-left" style="font-size: 16px">
                     
-                    <b-col id="coffee"
+                    <b-col id="coffee" class="p-0"
                       ><img
                         src="@/assets/coffee.png"
                         style="width: 30px; height: 30px"
                       />{{ detailApt.coffee.name }}
                       {{ detailApt.coffee.dist }}m</b-col
                     >
-                  </b-row>
-                  <b-row class="mb-3 text-left">
-                    <b-col id="metro"
+                  
+                    <b-col id="metro" class="p-0"
                       ><img
                         src="@/assets/metro.png"
                         style="width: 30px; height: 30px"
@@ -67,20 +66,38 @@
                     >
                   </b-row>
                 </div>
-              </b-tab>
-              <b-tab title="거래 목록">
-                <ul
-                  v-for="(result, index) in dealList"
-                  :key="index"
-                  class="p-3 mb-0"
-                  style="border-bottom: solid 1px"
-                >
-                  <li class="mb-1">면적: {{ result.area }}</li>
-                  <li class="mb-1">
-                    거래일자: {{ result.dealYear }}년 {{ result.dealMonth }}월
+            </b-card-title>
+          </b-card>
+          <b-card no-body>
+            <b-tabs card fill>
+              <b-tab title="거래 내역">
+                <ul id="detailItemList" class="pl-0">
+                  <li
+                    v-for="(result, index) in detailItemsForList"
+                    id="itemList"
+                    :key="index"
+                    class="p-3 mb-0"
+                    style="border-bottom: solid 1px"
+                  >
+                    <b-row>
+                      <b-row class="mb-1">면적: {{ result.area }}</b-row>
+                      <b-row class="mb-1">
+                        거래일자: {{ result.dealYear }}년 {{ result.dealMonth }}월
+                      </b-row>
+                      <b-row class="mb-1">거래가: {{ result.dealAmount }}만원</b-row>
+                    </b-row>
                   </li>
-                  <li class="mb-1">거래가: {{ result.dealAmount }}만원</li>
                 </ul>
+                <div class="overflow-auto">
+                  <b-pagination
+                    align="center"
+                    hide-ellipsis
+                    v-model="detailCurrentPage"
+                    :total-rows="dealList.length"
+                    per-page=5
+                    aria-controls="detailItemList"
+                  ></b-pagination>
+                </div>
               </b-tab>
             </b-tabs>
           </b-card>
@@ -101,7 +118,7 @@
             </tbody>
             <tbody id="aptlist" v-else>
               <tr
-                v-for="(apt, index) in mapList"
+                v-for="(apt, index) in itemsForList"
                 :key="index"
                 class="apt-item"
                 :lat="apt.lat"
@@ -134,6 +151,17 @@
                 </td>
               </tr>
             </tbody>
+            <div class="overflow-auto mt-3">
+              <b-pagination
+                align="center"
+                hide-ellipsis
+                v-model="currentPage"
+                :total-rows="mapList.length"
+                per-page=6
+                aria-controls="itemList"
+                
+              ></b-pagination>
+            </div>
           </table>
         </div>
       </div>
@@ -160,6 +188,8 @@ export default {
   },
   data() {
     return {
+      detailCurrentPage: 1,
+      currentPage: 1,
       no: -1,
       bounds: {},
       markers: [],
@@ -169,6 +199,8 @@ export default {
       isdisabled: false,
       isInter: false,
       isList: false,
+      itemsForList: [],
+      detailItemsForList: [],
     };
   },
   mounted() {
@@ -188,17 +220,39 @@ export default {
       if (val != -1) {
         this.aptDetail(this.mapList[val]);
       }
+      this.detailCurrentPage = 1;
+      this.detailItemsForList = this.dealList.slice(0,
+          5,);
     },
-    
+    mapList() {
+      this.itemsForList = this.mapList.slice(0,
+          6,);
+    },
+    currentPage(val) {
+      this.itemsForList = this.mapList.slice((val - 1) * 6,
+          val * 6,); 
+    },
+    detailCurrentPage(val) {
+      this.detailItemsForList = this.dealList.slice((val - 1) * 5,
+          val * 5,); 
+    },
     categoryList(val){
       if(val.length === 0) return;
       if (this.cates.length > 0) {
         this.cates.forEach((cate) => cate.setMap(null));
       }
       this.cates = [];
-
-      const imageSize = new kakao.maps.Size(32, 34);
-      const isrc = require("@/assets/clinic.png");
+   
+      const color = [
+        'lightgray',
+        'dodgerblue',
+        'light',
+        'black',
+        'green',
+        'red',
+        'gold',
+        'darkcyan'
+      ]
       const categories = [
         "MT1",
         "CS2",
@@ -215,10 +269,14 @@ export default {
           val.forEach((element) => {
             if (element.category_group_code === categories[index]) {
               var latlng = new kakao.maps.LatLng(element.y, element.x);
-              var category = new kakao.maps.Marker({
+              var category = new kakao.maps.CustomOverlay({
                 map: this.map,
                 position: latlng,
-                image: new kakao.maps.MarkerImage(isrc, imageSize),
+                content: `<div ${categories[index]} class="customoverlay">` +
+    `  <a href=${element.place_url} target="_blank" style='background: ${color[index]}'>` +
+    `    <span class="title" style="margin: 0 35px 0 0">${element.place_name}</span>` +
+    '  </a>' +
+    '</div>',
                 clickable: true,
                 title: categories[index],
               });
@@ -230,18 +288,31 @@ export default {
 
     },
     isChanged(val) {
+      const color = {
+        MT1: 'lightgray',
+        CS2: 'dodgerblue',
+        PS3: 'light',
+        SC4: 'black',
+        OL7: 'green',
+        SW8: 'red',
+        BK9: 'gold',
+        PO3: 'darkcyan'
+      }
       if(!val) return;
       console.log("category");
-      const imageSrc = require("@/assets/clinic.png");
-      const imageSize = new kakao.maps.Size(32, 34);
+      
       if(this.isCategories[val]){
         this.categoryList.forEach((element) => {
               if (element.category_group_code === val) {
                 var latlng = new kakao.maps.LatLng(element.y, element.x);
-                var category = new kakao.maps.Marker({
+                var category = new kakao.maps.CustomOverlay({
                   map: this.map,
                   position: latlng,
-                  image: new kakao.maps.MarkerImage(imageSrc, imageSize),
+                  content: `<div ${val} class="customoverlay">` +
+    `  <a href=${element.place_url} target="_blank" style='background: ${color[val]}'>` +
+    `    <span class="title" style="margin: 0 35px 0 0">${element.place_name}</span>` +
+    '  </a>' +
+    '</div>',
                   clickable: true,
                   title: val,
                 });
@@ -252,8 +323,8 @@ export default {
       }
       else {
             var start = 500;
-            this.cates.forEach((element, i) => {
-              if (element.getTitle() === val) {
+        this.cates.forEach((element, i) => {
+              if (element.getContent().includes(val)) {
                 console.log(val);
                 if (i < start) start = i;
                 element.setMap(null);
@@ -274,7 +345,7 @@ export default {
       this.markers = [];
       this.infos = [];
       
-      const imageSrc = require("@/assets/lokasi-logo-25379.png");
+      const imageSrc = 'https://i1.daumcdn.net/dmaps/apis/n_local_blit_04.png';
       const imageSize = new kakao.maps.Size(32, 34);
       this.mapList.forEach((apt) => {
         var infowindow = new kakao.maps.InfoWindow({
@@ -467,13 +538,15 @@ export default {
 li {
   cursor: auto;
 }
+span {
+  margin: 0px;
+}
 .button-group {
   margin: 10px 0px;
 }
 .b-avatar:hover {
   box-shadow: 1px 1px 10px 5px rgba(0, 0, 255, 0.2);
 }
-
 button {
   margin: 0 3px;
 }
