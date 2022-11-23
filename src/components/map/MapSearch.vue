@@ -165,7 +165,9 @@ export default {
 li{
   cursor: pointer;
 }
-
+li >span {
+  margin: 0px;
+}
 .is-active{
   background-color: #dedede;
 }
