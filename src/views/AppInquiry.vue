@@ -1,88 +1,62 @@
 <template>
-  <div><qna-list></qna-list></div>
-  <!-- <qna-write></qna-write> -->
-  <!-- <b-container class="bv-example-row mt-3">
-    <b-row>
-      <b-col>
-        <h3>1:1 문의</h3>
-      </b-col>
-    </b-row>
-    <b-row class="mb-1">
-      <b-col class="text-left">
-        <b-form class="d-flex" id="form-search" action="">
-          <select
-            class="form-select form-select-sm ms-5 me-1 w-50"
-            id="skey"
-            name="key"
-            aria-label="검색조건"
-            v-model="skey">
-            <option value="" selected>검색조건</option>
-            <option value="subject">제목</option>
-            <option value="userid">작성자</option>
-          </select> -->
-  <!-- <div class="input-group input-group-sm">
-            <input type="text" class="form-control" id="sword" name="word" placeholder="검색어..." v-model="sword" />
-            <button id="btn-search" class="btn btn-dark" type="button" @click="searchArticle">검색</button>
-          </div> 
-        </b-form>
-      </b-col>
-      <b-col class="text-right">
-        <b-button variant="outline-primary" @click="moveWrite()">글쓰기</b-button>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        <b-table
-          class="text-center"
-          striped
-          hover
-          :items="articles"
-          :fields="fields"
-          @row-clicked="viewArticle"
-          style="cursor: pointer">
-        </b-table>
-      </b-col>
-    </b-row>
-  </b-container> -->
+  <div>
+    <qna-list v-if="qnaView === 'list'"></qna-list>
+    <qna-write v-if="qnaView === 'write'"> </qna-write>
+    <qna-view v-if="qnaView === 'view'"></qna-view>
+    <qna-modify v-if="qnaView === 'modify'"></qna-modify>
+    <qna-delete v-if="qnaView === 'delete'"></qna-delete>
+  </div>
 </template>
 
 <script>
-import http from "@/api/http";
-// import QnaWrite from "@/components/qna/QnaWrite.vue";
-import QnaList from "@/components/qna/QnaList.vue";
+import http from '@/api/http';
+import QnaWrite from '@/components/qna/QnaWrite.vue';
+import QnaList from '@/components/qna/QnaList.vue';
+import QnaView from '@/components/qna/QnaView.vue';
+import QnaModify from '@/components/qna/QnaModify.vue';
+import QnaDelete from '@/components/qna/QnaDelete.vue';
+import { mapState, mapMutations } from 'vuex';
+const qnaStore = 'qnaStore';
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: "inquiry",
+  name: 'inquiry',
   components: {
-    // QnaWrite,
+    QnaWrite,
     QnaList,
+    QnaView,
+    QnaModify,
+    QnaDelete,
   },
   data() {
     return {
       articles: [],
       fields: [
-        { key: "articleno", label: "글번호", tdClass: "tdClass" },
-        { key: "subject", label: "제목", tdClass: "tdSubject" },
-        { key: "userid", label: "작성자", tdClass: "tdClass" },
-        { key: "regtime", label: "작성일", tdClass: "tdClass" },
-        { key: "hit", label: "조회수", tdClass: "tdClass" },
+        { key: 'articleno', label: '글번호', tdClass: 'tdClass' },
+        { key: 'subject', label: '제목', tdClass: 'tdSubject' },
+        { key: 'userid', label: '작성자', tdClass: 'tdClass' },
+        { key: 'regtime', label: '작성일', tdClass: 'tdClass' },
+        { key: 'hit', label: '조회수', tdClass: 'tdClass' },
       ],
-      skey: "",
-      sword: "",
+      skey: '',
+      sword: '',
+      // qnaView: 'list',
     };
   },
   created() {
     http.get(`/qna`).then(({ data }) => {
       this.articles = data;
+      this.SET_QNA_VIEW('list');
     });
   },
   methods: {
+    ...mapMutations(qnaStore, ['SET_QNA_VIEW']),
     moveWrite() {
-      this.$router.push({ name: "qnawrite" });
+      this.$router.push({ name: 'qnawrite' });
     },
     viewArticle(article) {
       this.$router.push({
-        name: "qnaview",
+        name: 'qnaview',
         params: { articleno: article.articleno },
       });
     },
@@ -91,6 +65,9 @@ export default {
         this.articles = data;
       });
     },
+  },
+  computed: {
+    ...mapState(qnaStore, ['qnaView']),
   },
 };
 </script>
