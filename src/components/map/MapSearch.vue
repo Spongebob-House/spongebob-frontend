@@ -21,7 +21,7 @@
             </b-input-group>
           </div>
           <div class="col-sm-12 col-md-4" style="position:absolute; top: 3vh; left: 20vw; z-index: 2" >
-            <span @click="onAvatarClick('MT1')">
+            <span @click="onAvatarClick('MT1')" >
               <b-avatar icon="cart4" badge-variant="success" variant="secondary" >
                 <template #badge v-if="isCategories.MT1"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
@@ -31,33 +31,39 @@
                 <template #badge v-if="isCategories.CS2"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
-            <span @click="onAvatarClick('PS3')">
-              <b-avatar :src = "require('@/assets/kindergarten.png')" badge-variant="success" variant="dark">
+            <!-- <span @click="onAvatarClick('PS3')">
+              <b-avatar badge-variant="success" variant="dark">
+                <font-awesome-icon icon="fa-solid fa-children" />
                 <template #badge v-if="isCategories.PS3"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
-            </span>
+            </span> -->
             <span @click="onAvatarClick('SC4')">
-              <b-avatar>
+              <b-avatar badge-variant="success" variant="dark">
+                <font-awesome-icon icon="fa-solid fa-school" />
                 <template #badge v-if="isCategories.SC4"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('OL7')">
-              <b-avatar :src = "require('@/assets/fuel.png')" badge-variant="success" variant="success">
+              <b-avatar badge-variant="success" variant="success">
+                <font-awesome-icon icon="fa-solid fa-gas-pump" />
                 <template #badge v-if="isCategories.OL7"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('SW8')">
-              <b-avatar :src = "require('@/assets/metro.png')" badge-variant="success" variant="danger">
+              <b-avatar badge-variant="success" variant="danger">
+                <font-awesome-icon icon="fa-solid fa-train-subway" />
                 <template #badge v-if="isCategories.SW8"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('BK9')">
               <b-avatar icon="bank" badge-variant="success" variant="warning">
+                <font-awesome-icon icon="fa-solid fa-sack-dollar" />
                 <template #badge v-if="isCategories.BK9"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
             <span @click="onAvatarClick('PO3')">
-              <b-avatar src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Emblem_of_the_Government_of_the_Republic_of_Korea.svg/240px-Emblem_of_the_Government_of_the_Republic_of_Korea.svg.png" badge-variant="success" variant="info">
+              <b-avatar badge-variant="success" variant="info">
+                <font-awesome-icon icon="fa-solid fa-landmark-dome" />
                 <template #badge v-if="isCategories.PO3"><b-icon  icon="check" scale="2" variant="white"></b-icon></template>
               </b-avatar>
             </span>
@@ -159,6 +165,7 @@ export default {
 li{
   cursor: pointer;
 }
+
 .is-active{
   background-color: #dedede;
 }
