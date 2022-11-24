@@ -115,7 +115,8 @@ hr.line {
 }
 .tdSubject {
   width: 300px;
-  text-align: center;
+  text-align: left;
+  padding-left: 10rem;
 }
 th > div {
   text-align: center;

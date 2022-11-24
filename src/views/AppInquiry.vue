@@ -72,7 +72,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style scoped>
 h3 {
   text-align: center;
   margin-bottom: 10px;

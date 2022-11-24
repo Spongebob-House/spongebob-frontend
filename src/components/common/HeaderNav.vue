@@ -18,7 +18,7 @@
           ><button class="search-btn btn me-3" id="btn-homesearch">HomeSearch</button></router-link
         >
         <router-link to="/news"><button class="news-btn btn me-3" id="btn-notice">News</button></router-link>
-        <router-link to="/notice"><button class="notice-btn btn me-3" id="btn-notice">Notice</button></router-link>
+        <router-link to="/board"><button class="notice-btn btn me-3" id="btn-notice">Notice</button></router-link>
         <router-link to="/qna"><button class="qna-btn btn me-3" id="btn-qna">Q&A</button></router-link>
       </b-col>
       <b-col cols="2" class="nav justify-content-end">
@@ -88,7 +88,7 @@ export default {
 
   methods: {
     ...mapActions(memberStore, ["userLogout"]),
-    ...mapMutations(memberStore, ["SET_MODAL_VIEW"]),
+    ...mapMutations(memberStore, ["SET_MODAL_VIEW", "CLEAR_LOGIN_TRIGGER"]),
 
     onClickLogout() {
       this.userLogout(this.userInfo.userId);
@@ -112,8 +112,16 @@ export default {
     },
   },
   computed: {
-    ...mapState(memberStore, ["userInfo", "modalview"]),
+    ...mapState(memberStore, ["userInfo", "modalview", "loginTrigger"]),
     ...mapGetters(memberStore, ["checkUserInfo"]),
+  },
+
+  watch: {
+    loginTrigger(val) {
+      if (!val) return;
+      this.$refs["my-modal"].show();
+      this.CLEAR_LOGIN_TRIGGER();
+    },
   },
 };
 </script>
