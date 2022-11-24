@@ -16,7 +16,7 @@
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-left">
-        <router-link :to="{ name: 'boardlist' }"><b-button variant="outline-primary">목록</b-button></router-link>
+        <router-link :to="{ name: 'boardlist', params: {pgno: pgno}}"><b-button variant="outline-primary">목록</b-button></router-link>
       </b-col>
       <b-col class="text-right" v-if="articleOwner()">
         <b-button
@@ -39,10 +39,11 @@ import { mapState, mapGetters } from "vuex";
 const memberStore = "memberStore";
 export default {
   name: "BoardDetail",
-
+  
   data() {
     return {
       isMemo: false,
+      pgno: 0,
       article: {},
       memo: {
         memono: "",
@@ -66,6 +67,7 @@ export default {
       .catch(() => {
         alert("글 불러오기 중 문제 발생");
       });
+      this.pgno = this.$route.params.pgno;
   },
   methods: {
     moveModifyArticle() {
