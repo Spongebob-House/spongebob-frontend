@@ -8,14 +8,9 @@
       shadow
       width="25%"
       @shown="isdisabled = true"
-      @hidden="isdisabled = false"
-    >
+      @hidden="isdisabled = false">
       <template #header="{ hide }">
-        <button
-          style="border: 0; background-color: transparent"
-          @click="isList = true"
-          v-show="!isList"
-        >
+        <button style="border: 0; background-color: transparent" @click="isList = true" v-show="!isList">
           <b-icon-chevron-left></b-icon-chevron-left>
         </button>
         <strong>{{ detailApt.dong }}</strong>
@@ -36,36 +31,23 @@
                   <b-avatar icon="star-fill" variant="secondary"></b-avatar>
                 </span>
                 <span v-else @click="onInterClick">
-                  <b-avatar
-                    icon="star-fill"
-                    style="color: yellow"
-                    variant="secondary"
-                  ></b-avatar>
+                  <b-avatar icon="star-fill" style="color: yellow" variant="secondary"></b-avatar>
                 </span>
               </div>
               <div class="p-3">
-                  <b-row class="mb-3" style="font-size: 20px;">
-                    주변 정보
-                  </b-row>
-                  <b-row class="mb-3 text-left" style="font-size: 16px">
-                    
-                    <b-col id="coffee" class="p-0"
-                      ><img
-                        src="@/assets/coffee.png"
-                        style="width: 30px; height: 30px"
-                      />{{ detailApt.coffee.name }}
-                      {{ detailApt.coffee.dist | distance }}</b-col
-                    >
-                  
-                    <b-col id="metro" class="p-0"
-                      ><img
-                        src="@/assets/metro.png"
-                        style="width: 30px; height: 30px"
-                      />{{ detailApt.metro.name }}
-                      {{ detailApt.metro.dist | distance }}</b-col
-                    >
-                  </b-row>
-                </div>
+                <b-row class="mb-3" style="font-size: 20px"> 주변 정보 </b-row>
+                <b-row class="mb-3 text-left" style="font-size: 16px">
+                  <b-col id="coffee" class="p-0"
+                    ><img src="@/assets/coffee.png" style="width: 30px; height: 30px" />{{ detailApt.coffee.name }}
+                    {{ detailApt.coffee.dist | distance }}</b-col
+                  >
+
+                  <b-col id="metro" class="p-0"
+                    ><img src="@/assets/metro.png" style="width: 30px; height: 30px" />{{ detailApt.metro.name }}
+                    {{ detailApt.metro.dist | distance }}</b-col
+                  >
+                </b-row>
+              </div>
             </b-card-title>
           </b-card>
           <b-card no-body>
@@ -77,12 +59,9 @@
                     id="itemList"
                     :key="index"
                     class="p-3 mb-0"
-                    style="border-bottom: solid 1px"
-                  >
+                    style="border-bottom: solid 1px">
                     <b-row>
-                      <b-row class="mb-1">
-                        거래일자: {{ result.dealYear }}년 {{ result.dealMonth }}월
-                      </b-row>
+                      <b-row class="mb-1"> 거래일자: {{ result.dealYear }}년 {{ result.dealMonth }}월 </b-row>
                       <b-row class="mb-1">면적: {{ result.area }}&#13221;</b-row>
                       <b-row class="mb-1">거래가: {{ result.dealAmount | money }}</b-row>
                     </b-row>
@@ -94,9 +73,8 @@
                     hide-ellipsis
                     v-model="detailCurrentPage"
                     :total-rows="dealList.length"
-                    per-page=5
-                    aria-controls="detailItemList"
-                  ></b-pagination>
+                    per-page="5"
+                    aria-controls="detailItemList"></b-pagination>
                 </div>
               </b-tab>
             </b-tabs>
@@ -104,7 +82,7 @@
         </div>
       </div>
       <div v-show="isList">
-        <b-tabs fill @activate-tab = "loginCheck">
+        <b-tabs fill @activate-tab="loginCheck">
           <b-tab title="아파트 목록">
             <table class="table table-hover text-center col-sm-12">
               <tbody id="aptlist" v-if="mapList.length === 0">
@@ -119,18 +97,14 @@
                   class="apt-item"
                   :lat="apt.lat"
                   :lng="apt.lng"
-                  @click="setData(index)"
-                >
+                  @click="setData(index)">
                   <td class="p-3">
                     <div class="apt-name">
                       <a>{{ apt.apartmentName }}</a>
                     </div>
                     <br />
                     <div class="apt-dong" v-text="`행정동 : ${apt.dong}`"></div>
-                    <div
-                      class="apt-buildYear"
-                      v-text="`건축연도 : ${apt.buildYear}년`"
-                    ></div>
+                    <div class="apt-buildYear" v-text="`건축연도 : ${apt.buildYear}년`"></div>
                   </td>
                 </tr>
               </tbody>
@@ -141,10 +115,8 @@
                 hide-ellipsis
                 v-model="currentPage"
                 :total-rows="mapList.length"
-                per-page=6
-                aria-controls="itemList"
-                
-              ></b-pagination>
+                per-page="6"
+                aria-controls="itemList"></b-pagination>
             </div>
           </b-tab>
           <b-tab title="즐겨찾기">
@@ -161,44 +133,33 @@
                   class="apt-item"
                   :lat="apt.lat"
                   :lng="apt.lng"
-                  @click="setInterData(index)"
-                >
+                  @click="setInterData(index)">
                   <td class="p-3">
                     <div class="apt-name">
                       <a>{{ apt.apartmentName }}</a>
                     </div>
                     <br />
                     <div class="apt-dong" v-text="`행정동 : ${apt.dong}`"></div>
-                    <div
-                      class="apt-buildYear"
-                      v-text="`건축연도 : ${apt.buildYear}년`"
-                    ></div>
+                    <div class="apt-buildYear" v-text="`건축연도 : ${apt.buildYear}년`"></div>
                   </td>
                 </tr>
               </tbody>
             </table>
             <div class="overflow-auto mt-3">
-                <b-pagination
-                  align="center"
-                  hide-ellipsis
-                  v-model="interCurrentPage"
-                  :total-rows="interList.length"
-                  per-page=6
-                  aria-controls="interList"
-                  
-                ></b-pagination>
-              </div>
+              <b-pagination
+                align="center"
+                hide-ellipsis
+                v-model="interCurrentPage"
+                :total-rows="interList.length"
+                per-page="6"
+                aria-controls="interList"></b-pagination>
+            </div>
           </b-tab>
         </b-tabs>
       </div>
     </b-sidebar>
     <div>
-      <b-button
-        v-b-toggle.sidebar-1
-        id="sidebarToggle"
-        :disabled="isdisabled"
-        style="display: none"
-      ></b-button>
+      <b-button v-b-toggle.sidebar-1 id="sidebarToggle" :disabled="isdisabled" style="display: none"></b-button>
     </div>
   </div>
 </template>
@@ -242,35 +203,31 @@ export default {
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src =
-        "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
+      script.src = "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
       document.head.appendChild(script);
     }
-
   },
-  filters:{
-    money(val){
-      if(val.length > 5){
-        val = val.replace(',','');
-        const temp =  val.slice(val.length-4, val.length);
-        if(temp === '0000'){
-          return val.slice(0, val.length-4) + '억'
+  filters: {
+    money(val) {
+      if (val.length > 5) {
+        val = val.replace(",", "");
+        const temp = val.slice(val.length - 4, val.length);
+        if (temp === "0000") {
+          return val.slice(0, val.length - 4) + "억";
         }
-        return val.slice(0, val.length-4) + '억 '+ Number(val.slice(val.length-4, val.length))+'만원'
-      }
-      else return val + '만원';
+        return val.slice(0, val.length - 4) + "억 " + Number(val.slice(val.length - 4, val.length)) + "만원";
+      } else return val + "만원";
     },
-    distance(val){
-      if(val > 999){
-        val = val+'';
-        const temp =  val.slice(val.length-3, val.length);
-        if(temp === '000'){
-          return val.slice(0, val.length-3) + 'km'
+    distance(val) {
+      if (val > 999) {
+        val = val + "";
+        const temp = val.slice(val.length - 3, val.length);
+        if (temp === "000") {
+          return val.slice(0, val.length - 3) + "km";
         }
-        return val.slice(0, val.length-3) + 'km '+ Number(val.slice(val.length-3, val.length))+'m'
-      }
-      else return val + 'm';
-    }
+        return val.slice(0, val.length - 3) + "km " + Number(val.slice(val.length - 3, val.length)) + "m";
+      } else return val + "m";
+    },
   },
   watch: {
     userInfo(val) {
@@ -279,68 +236,43 @@ export default {
         this.interno = -1;
         return;
       }
-      
     },
     no(val) {
       if (val != -1) {
         this.aptDetail(this.mapList[val]);
       }
       this.detailCurrentPage = 1;
-      
     },
-    interno(val){
-      if (val != -1){
+    interno(val) {
+      if (val != -1) {
         this.aptDetail(this.interList[val]);
       }
       this.detailCurrentPage = 1;
     },
     dealList() {
-      this.detailItemsForList = this.dealList.slice(0,
-          5,);
+      this.detailItemsForList = this.dealList.slice(0, 5);
     },
     mapList() {
-      this.itemsForList = this.mapList.slice(0,
-          6,);
+      this.itemsForList = this.mapList.slice(0, 6);
     },
     currentPage(val) {
-      this.itemsForList = this.mapList.slice((val - 1) * 6,
-          val * 6,); 
+      this.itemsForList = this.mapList.slice((val - 1) * 6, val * 6);
     },
     detailCurrentPage(val) {
-      this.detailItemsForList = this.dealList.slice((val - 1) * 5,
-          val * 5,); 
+      this.detailItemsForList = this.dealList.slice((val - 1) * 5, val * 5);
     },
     interCurrentPage(val) {
-      this.interItemsForList = this.interList.slice((val - 1) * 6,
-      val * 6);
+      this.interItemsForList = this.interList.slice((val - 1) * 6, val * 6);
     },
-    categoryList(val){
-      if(val.length === 0) return;
+    categoryList(val) {
+      if (val.length === 0) return;
       if (this.cates.length > 0) {
         this.cates.forEach((cate) => cate.setMap(null));
       }
       this.cates = [];
-   
-      const color = [
-        'lightgray',
-        'dodgerblue',
-        'light',
-        'black',
-        'green',
-        'red',
-        'gold',
-        'darkcyan'
-      ]
-      const categories = [
-        "MT1",
-        "CS2",
-        "PS3",
-        "SC4",
-        "OL7",
-        "SW8",
-        "BK9",
-        "PO3",
-      ];
+
+      const color = ["lightgray", "dodgerblue", "light", "black", "green", "red", "gold", "darkcyan"];
+      const categories = ["MT1", "CS2", "PS3", "SC4", "OL7", "SW8", "BK9", "PO3"];
       for (let index = 0; index < categories.length; index++) {
         if (this.isCategories[categories[index]]) {
           console.log(this.categoryList.length);
@@ -350,11 +282,12 @@ export default {
               var category = new kakao.maps.CustomOverlay({
                 map: this.map,
                 position: latlng,
-                content: `<div ${categories[index]} class="customoverlay">` +
-    `  <a href=${element.place_url} target="_blank" style='background: ${color[index]}'>` +
-    `    <span class="title" style="margin: 0 35px 0 0">${element.place_name}</span>` +
-    '  </a>' +
-    '</div>',
+                content:
+                  `<div ${categories[index]} class="customoverlay">` +
+                  `  <a href=${element.place_url} target="_blank" style='background: ${color[index]}'>` +
+                  `    <span class="title" style="margin: 0 35px 0 0">${element.place_name}</span>` +
+                  "  </a>" +
+                  "</div>",
                 clickable: true,
                 title: categories[index],
               });
@@ -363,7 +296,6 @@ export default {
           });
         }
       }
-
     },
     interList(val) {
       for (let index = 0; index < this.interList.length; index++) {
@@ -375,14 +307,14 @@ export default {
       if (this.inters.length > 0) {
         this.inters.forEach((cate) => cate.setMap(null));
       }
-      
+
       if (this.interInfos.length > 0) {
         this.interInfos.forEach((cate) => cate.setMap(null));
       }
       this.inters = [];
       this.interInfos = [];
-      if(val.length === 0) return;
-      const imageSrc = 'https://pngimg.com/uploads/star/star_PNG41495.png';
+      if (val.length === 0) return;
+      const imageSrc = "https://pngimg.com/uploads/star/star_PNG41495.png";
       const imageSize = new kakao.maps.Size(45, 45);
       this.interList.forEach((apt, index) => {
         var infowindow = new kakao.maps.InfoWindow({
@@ -392,89 +324,88 @@ export default {
         this.interInfos.push(infowindow);
         const position = new kakao.maps.LatLng(apt.lat, apt.lng);
         var marker = new kakao.maps.Marker({
-            map: this.map,
-            position,
-            image: new kakao.maps.MarkerImage(imageSrc, imageSize),
-            clickable: true,
-          });
-          kakao.maps.event.addListener(marker, "mouseover", () => {
-            this.interInfos[index].open(this.map, this.inters[index]);
-          });
-          kakao.maps.event.addListener(marker, "mouseout", () => {
-            this.interInfos[index].setMap(null);
-          });
-          kakao.maps.event.addListener(marker, "click", () => {
-            // 마커 위에 인포윈도우를 표시합니다
-            if (this.no != -1) {
-              this.infos[this.no].setMap(null);
-            }
-            if (this.interno != -1) {
-              this.interInfos[this.interno].setMap(null);
-            }
-            this.isList = false;
-            this.interno = index;
-            this.no = -1;
-            this.isInter = true;
-            var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
-            var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
-            var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
-            this.interInfos[this.interno].open(this.map, this.inters[this.interno]);
-            this.map.panTo(position);
-            roadviewClient.getNearestPanoId(position, 100, function (panoId) {
-              roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
-            });
-            document.querySelector("#sidebarToggle").click();
-          });
-          this.inters.push(marker);
+          map: this.map,
+          position,
+          image: new kakao.maps.MarkerImage(imageSrc, imageSize),
+          clickable: true,
         });
+        kakao.maps.event.addListener(marker, "mouseover", () => {
+          this.interInfos[index].open(this.map, this.inters[index]);
+        });
+        kakao.maps.event.addListener(marker, "mouseout", () => {
+          this.interInfos[index].setMap(null);
+        });
+        kakao.maps.event.addListener(marker, "click", () => {
+          // 마커 위에 인포윈도우를 표시합니다
+          if (this.no != -1) {
+            this.infos[this.no].setMap(null);
+          }
+          if (this.interno != -1) {
+            this.interInfos[this.interno].setMap(null);
+          }
+          this.isList = false;
+          this.interno = index;
+          this.no = -1;
+          this.isInter = true;
+          var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
+          var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
+          var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
+          this.interInfos[this.interno].open(this.map, this.inters[this.interno]);
+          this.map.panTo(position);
+          roadviewClient.getNearestPanoId(position, 100, function (panoId) {
+            roadview.setPanoId(panoId, position); //panoId와 중심좌표를 통해 로드뷰 실행
+          });
+          document.querySelector("#sidebarToggle").click();
+        });
+        this.inters.push(marker);
+      });
     },
     isChanged(val) {
       const color = {
-        MT1: 'lightgray',
-        CS2: 'dodgerblue',
-        PS3: 'light',
-        SC4: 'black',
-        OL7: 'green',
-        SW8: 'red',
-        BK9: 'gold',
-        PO3: 'darkcyan'
-      }
-      if(!val) return;
+        MT1: "lightgray",
+        CS2: "dodgerblue",
+        PS3: "light",
+        SC4: "black",
+        OL7: "green",
+        SW8: "red",
+        BK9: "gold",
+        PO3: "darkcyan",
+      };
+      if (!val) return;
       console.log("category");
-      
-      if(this.isCategories[val]){
+
+      if (this.isCategories[val]) {
         this.categoryList.forEach((element) => {
-              if (element.category_group_code === val) {
-                var latlng = new kakao.maps.LatLng(element.y, element.x);
-                var category = new kakao.maps.CustomOverlay({
-                  map: this.map,
-                  position: latlng,
-                  content: `<div ${val} class="customoverlay">` +
-    `  <a href=${element.place_url} target="_blank" style='background: ${color[val]}'>` +
-    `    <span class="title" style="margin: 0 35px 0 0">${element.place_name}</span>` +
-    '  </a>' +
-    '</div>',
-                  clickable: true,
-                  title: val,
-                });
-                this.cates.push(category);
-              }
-            }
-        )
-      }
-      else {
-            var start = 500;
-        this.cates.forEach((element, i) => {
-              if (element.getContent().includes(val)) {
-                console.log(val);
-                if (i < start) start = i;
-                element.setMap(null);
-              }
+          if (element.category_group_code === val) {
+            var latlng = new kakao.maps.LatLng(element.y, element.x);
+            var category = new kakao.maps.CustomOverlay({
+              map: this.map,
+              position: latlng,
+              content:
+                `<div ${val} class="customoverlay">` +
+                `  <a href=${element.place_url} target="_blank" style='background: ${color[val]}'>` +
+                `    <span class="title" style="margin: 0 35px 0 0">${element.place_name}</span>` +
+                "  </a>" +
+                "</div>",
+              clickable: true,
+              title: val,
             });
-            this.cates.splice(start, 15);
+            this.cates.push(category);
           }
-          this.CLEAR_IS_CHANGED();
-        },
+        });
+      } else {
+        var start = 500;
+        this.cates.forEach((element, i) => {
+          if (element.getContent().includes(val)) {
+            console.log(val);
+            if (i < start) start = i;
+            element.setMap(null);
+          }
+        });
+        this.cates.splice(start, 15);
+      }
+      this.CLEAR_IS_CHANGED();
+    },
     markerPositions(val) {
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null));
@@ -482,11 +413,11 @@ export default {
       if (this.infos.length > 0) {
         this.infos.forEach((info) => info.setMap(null));
       }
-      
+
       this.markers = [];
       this.infos = [];
-      
-      const imageSrc = 'https://i1.daumcdn.net/dmaps/apis/n_local_blit_04.png';
+
+      const imageSrc = "https://i1.daumcdn.net/dmaps/apis/n_local_blit_04.png";
       const imageSize = new kakao.maps.Size(32, 34);
       this.mapList.forEach((apt) => {
         var infowindow = new kakao.maps.InfoWindow({
@@ -497,11 +428,9 @@ export default {
         this.infos.push(infowindow);
       });
 
-      const positions = val.map(
-        (position) => new kakao.maps.LatLng(...position)
-      );
-      if(this.userInfo){
-      this.pullInter();
+      const positions = val.map((position) => new kakao.maps.LatLng(...position));
+      if (this.userInfo) {
+        this.pullInter();
       }
       if (positions.length > 0) {
         positions.map((position, index) => {
@@ -542,10 +471,7 @@ export default {
             var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
             var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
             var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
-            var position = new kakao.maps.LatLng(
-              Number(this.mapList[this.no].lat),
-              Number(this.mapList[this.no].lng)
-            );
+            var position = new kakao.maps.LatLng(Number(this.mapList[this.no].lat), Number(this.mapList[this.no].lng));
             // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
             this.infos[this.no].open(this.map, this.markers[this.no]);
             this.map.panTo(position);
@@ -559,10 +485,7 @@ export default {
         });
 
         if (this.searchFlag) {
-          const bounds = positions.reduce(
-            (bounds, latlng) => bounds.extend(latlng),
-            new kakao.maps.LatLngBounds()
-          );
+          const bounds = positions.reduce((bounds, latlng) => bounds.extend(latlng), new kakao.maps.LatLngBounds());
           this.map.setBounds(bounds);
           this.SET_SEARCH_FLAG_FALSE();
         }
@@ -570,7 +493,7 @@ export default {
     },
 
     bounds(val) {
-      var position =  this.map.getCenter();
+      var position = this.map.getCenter();
       const data = {
         Lat: position.getLat(),
         Lng: position.getLng(),
@@ -578,13 +501,12 @@ export default {
         qa: val.qa,
         oa: val.oa,
         pa: val.pa,
-        
       };
-      this.getCategory(data)
+      this.getCategory(data);
       this.aptSearch(val);
-      if(this.userInfo){
-      this.pullInter();
-    }
+      if (this.userInfo) {
+        this.pullInter();
+      }
     },
   },
   computed: {
@@ -595,14 +517,12 @@ export default {
       "searchFlag",
       "detailApt",
       "dealList",
-      
+
       "categoryList",
       "isCategories",
       "isChanged",
     ]),
-    ...mapState(memberStore, [
-    "userInfo", "interList"
-    ]),
+    ...mapState(memberStore, ["userInfo", "interList"]),
   },
   methods: {
     ...mapMutations(mapStore, ["SET_SEARCH_FLAG_FALSE", "CLEAR_IS_CHANGED"]),
@@ -641,7 +561,7 @@ export default {
       }
 
       this.isList = false;
-      this.no = 6*(this.currentPage-1) + k;
+      this.no = 6 * (this.currentPage - 1) + k;
       var flag = true;
       for (let index = 0; index < this.interList.length; index++) {
         if (this.interList[index].aptCode === this.mapList[this.no].aptCode) {
@@ -656,10 +576,7 @@ export default {
       var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
       var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
       var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
-      var position = new kakao.maps.LatLng(
-        Number(this.mapList[this.no].lat),
-        Number(this.mapList[this.no].lng)
-      );
+      var position = new kakao.maps.LatLng(Number(this.mapList[this.no].lat), Number(this.mapList[this.no].lng));
       // 특정 위치의 좌표와 가까운 로드뷰의 panoId를 추출하여 로드뷰를 띄운다.
       this.infos[this.no].open(this.map, this.markers[this.no]);
       this.map.panTo(position);
@@ -678,7 +595,7 @@ export default {
       this.interno = 6 * (this.interCurrentPage - 1) + k;
       this.isList = false;
       this.isInter = true;
-      
+
       var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
       var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
       var roadviewClient = new kakao.maps.RoadviewClient(); //좌표로부터 로드뷰 파노ID를 가져올 로드뷰 helper객체
