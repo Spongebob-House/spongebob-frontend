@@ -1,17 +1,15 @@
 <template>
-  <header style="border-bottom: solid 1px; border-color: aliceblue;">
+  <header style="border-bottom: solid 1px; border-color: aliceblue">
     <b-nav class="nav d-flex justify-content-between align-items-center mt-2 mb-2">
       <b-col class="logo justify-content-start ms-5">
         <router-link
           class="text-decoration-none display-5 font-weight-bold"
           style="font-family: Inter; font-size: 30px; color: black"
-          to="/"
-        >
+          to="/">
           <img
             src="https://user-images.githubusercontent.com/55784772/203083888-412a4bc3-8fe9-4bff-9f7a-fd0a7a62ce82.png"
             style="height: 40px"
-            alt="redhat"
-          />
+            alt="redhat" />
           Reddi House</router-link
         >
       </b-col>
@@ -19,15 +17,9 @@
         <router-link to="/map/search"
           ><button class="search-btn btn me-3" id="btn-homesearch">HomeSearch</button></router-link
         >
-        <router-link to="/news"
-          ><button class="news-btn btn me-3" id="btn-notice">News</button></router-link
-        >
-        <router-link to="/board"
-          ><button class="notice-btn btn me-3" id="btn-notice">Notice</button></router-link
-        >
-        <router-link to="/qna"
-          ><button class="qna-btn btn me-3" id="btn-qna">Q&A</button></router-link
-        >
+        <router-link to="/news"><button class="news-btn btn me-3" id="btn-notice">News</button></router-link>
+        <router-link to="/board"><button class="notice-btn btn me-3" id="btn-notice">Notice</button></router-link>
+        <router-link to="/qna"><button class="qna-btn btn me-3" id="btn-qna">Q&A</button></router-link>
       </b-col>
       <b-col cols="2" class="nav justify-content-end">
         <b-navbar-nav class="ml-auto" v-if="userInfo">
@@ -36,15 +28,17 @@
               <b-avatar variant="info"></b-avatar>
             </template>
             <b-dropdown-item @click="myPage" v-b-modal.mypage> 마이페이지 </b-dropdown-item>
+            <b-dropdown-item @click="inquiry" v-b-modal.mypage> 1:1 문의 </b-dropdown-item>
             <b-dropdown-item @click="onClickLogout"> 로그아웃 </b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-modal id="mypage" ref="mypage" centered hide-footer hide-header>
+          <b-modal id="mypage" ref="mypage" :size="sizeState" centered hide-footer hide-header>
             <user-my-page v-on:close="close" v-if="modalview === 'myPage'"></user-my-page>
-            <user-modify-mypage
-              v-on:close="close"
-              v-else-if="modalview === 'mypageModify'"
-            ></user-modify-mypage>
+            <user-modify-mypage v-on:close="close" v-else-if="modalview === 'mypageModify'"></user-modify-mypage>
+            <inquiry size="xl" v-on:close="close" v-if="modalview === 'inquiry'"></inquiry>
           </b-modal>
+          <!-- <b-modal id="mypage" ref="mypage" size="xl" centered hide-footer hide-header>
+            <inquiry v-on:close="close" v-if="modalview === 'inquiry'"></inquiry>
+          </b-modal> -->
         </b-navbar-nav>
 
         <b-navbar-nav @click="loginForm()" v-else>
@@ -54,6 +48,8 @@
           <user-login v-on:close="close" v-if="modalview === 'login'"></user-login>
           <user-register v-on:close="close" v-else-if="modalview === 'join'"></user-register>
           <user-find-pwd v-on:close="close" v-else-if="modalview === 'findPwd'"></user-find-pwd>
+          <kakao-login v-on:close="close" v-else-if="modalview === 'kakao'"></kakao-login>
+          <google-login v-on:close="close" v-else-if="modalview === 'google'"></google-login>
         </b-modal>
       </b-col>
     </b-nav>
@@ -61,13 +57,16 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
-import UserLogin from '@/components/user/UserLogin.vue';
-import UserFindPwd from '@/components/user/UserFindPwd.vue';
-import UserRegister from '@/components/user/UserRegister.vue';
-import UserMyPage from '@/components/user/UserMyPage.vue';
-import UserModifyMypage from '@/components/user/UserModifyMypage.vue';
-const memberStore = 'memberStore';
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
+import UserLogin from "@/components/user/UserLogin.vue";
+import UserFindPwd from "@/components/user/UserFindPwd.vue";
+import UserRegister from "@/components/user/UserRegister.vue";
+import UserMyPage from "@/components/user/UserMyPage.vue";
+import UserModifyMypage from "@/components/user/UserModifyMypage.vue";
+import KakaoLogin from "@/components/social/kakao.vue";
+import GoogleLogin from "@/components/social/google.vue";
+import Inquiry from "@/views/AppInquiry.vue";
+const memberStore = "memberStore";
 export default {
   components: {
     UserLogin,
@@ -75,46 +74,55 @@ export default {
     UserRegister,
     UserMyPage,
     UserModifyMypage,
+    GoogleLogin,
+    KakaoLogin,
+    // eslint-disable-next-line vue/no-unused-components
+    Inquiry,
   },
-  name: 'HeaderNav',
+  name: "HeaderNav",
   data() {
-    return {};
+    return {
+      sizeState: null,
+    };
   },
 
   methods: {
-    ...mapActions(memberStore, ['userLogout']),
-    ...mapMutations(memberStore, ['SET_MODAL_VIEW', 'CLEAR_LOGIN_TRIGGER']),
+    ...mapActions(memberStore, ["userLogout"]),
+    ...mapMutations(memberStore, ["SET_MODAL_VIEW", "CLEAR_LOGIN_TRIGGER"]),
 
     onClickLogout() {
       this.userLogout(this.userInfo.userId);
-      sessionStorage.removeItem('access-token');
-      sessionStorage.removeItem('refresh-token');
+      sessionStorage.removeItem("access-token");
+      sessionStorage.removeItem("refresh-token");
     },
     close() {
-      this.$refs['my-modal'].hide();
+      this.$refs["my-modal"].hide();
     },
     loginForm() {
-      console.log('a');
-      this.SET_MODAL_VIEW('login');
-      this.$refs['my-modal'].show();
+      this.SET_MODAL_VIEW("login");
+      this.$refs["my-modal"].show();
     },
     myPage() {
-      this.SET_MODAL_VIEW('myPage');
-      console.log('here');
+      this.SET_MODAL_VIEW("myPage");
+      this.sizeState = null;
+    },
+    inquiry() {
+      this.SET_MODAL_VIEW("inquiry");
+      this.sizeState = "lg";
     },
   },
   computed: {
-    ...mapState(memberStore, ['userInfo', 'modalview', 'loginTrigger']),
-    ...mapGetters(memberStore, ['checkUserInfo']),
+    ...mapState(memberStore, ["userInfo", "modalview", "loginTrigger"]),
+    ...mapGetters(memberStore, ["checkUserInfo"]),
   },
 
   watch: {
     loginTrigger(val) {
-      if (!val) return; 
-      this.$refs['my-modal'].show();
+      if (!val) return;
+      this.$refs["my-modal"].show();
       this.CLEAR_LOGIN_TRIGGER();
-    }
-  }
+    },
+  },
 };
 </script>
 

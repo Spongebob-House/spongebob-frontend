@@ -1,6 +1,16 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
-import { login, findById, tokenRegeneration, logout, modifyMypage, register, deleteUser, findPwd } from "@/api/member";
+import {
+  login,
+  findById,
+  tokenRegeneration,
+  logout,
+  modifyMypage,
+  register,
+  deleteUser,
+  findPwd,
+  idCheck,
+} from "@/api/member";
 import { getInter, appendInt, deleteInt } from "@/api/map.js";
 const memberStore = {
   namespaced: true,
@@ -13,6 +23,7 @@ const memberStore = {
     modalview: "login",
     email: null,
     newPwd: null,
+    isDuplicateId: false,
     loginTrigger: false,
     interList: [],
   },
@@ -34,6 +45,9 @@ const memberStore = {
     },
   },
   mutations: {
+    SET_IS_DUPLICATE_ID: (state, isDuplicateId) => {
+      state.isDuplicateId = isDuplicateId;
+    },
     SET_NEW_PWD: (state, newPwd) => {
       state.newPwd = newPwd;
     },
@@ -113,6 +127,24 @@ const memberStore = {
         },
         (error) => {
           console.log(error);
+        }
+      );
+    },
+
+    async idConfirm({ commit }, userid) {
+      await idCheck(
+        userid,
+        ({ data }) => {
+          console.log(data);
+          if (data != 0) {
+            commit("SET_IS_DUPLICATE_ID", false);
+            console.log(this.isDuplicateId);
+          } else {
+            commit("SET_IS_DUPLICATE_ID", true);
+          }
+        },
+        (err) => {
+          console.log(err);
         }
       );
     },

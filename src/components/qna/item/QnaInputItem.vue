@@ -2,7 +2,7 @@
   <b-row class="mb-1">
     <b-col style="text-align: left">
       <b-form @submit="onSubmit" @reset="onReset">
-        <b-form-group id="userid-group" style="height: auto" label="작성자:" label-for="userid">
+        <b-form-group id="userid-group" style="height: auto" label="작성자" label-for="userid">
           <b-form-input
             id="userid"
             :disabled="isUserid"
@@ -12,27 +12,34 @@
             placeholder="작성자 입력..."></b-form-input>
         </b-form-group>
 
-        <b-form-group id="subject-group" style="height: auto" label="제목:" label-for="subject">
+        <b-form-group id="subject-group" style="height: auto" label-for="subject">
+          <template v-slot:label> <span class="text-danger small">*</span>제목</template>
           <b-form-input
             id="subject"
             v-model="article.subject"
             type="text"
             required
-            placeholder="제목 입력..."></b-form-input>
+            placeholder="제목 입력을 입력해주세요"></b-form-input>
         </b-form-group>
 
-        <b-form-group id="content-group" style="height: auto" label="내용:" label-for="content">
+        <b-form-group id="content-group" style="height: auto" label-for="content">
+          <template v-slot:label> <span class="text-danger small">*</span>내용</template>
           <b-form-textarea
+            no-wheel="true"
             id="content"
+            style="height: 10rem"
             v-model="article.content"
-            placeholder="내용 입력..."
+            placeholder="내용을 입력해주세요"
             rows="10"
             max-rows="15"></b-form-textarea>
         </b-form-group>
-
-        <b-button type="submit" variant="primary" class="m-1" v-if="this.type === 'register'">글작성</b-button>
-        <b-button type="submit" variant="primary" class="m-1" v-else-if="this.type === 'modify'">글수정</b-button>
-        <b-button type="reset" variant="danger" class="m-1" v-if="this.type === 'register'">초기화</b-button>
+        <div class="btn-wrapper">
+          <b-button type="submit" pill class="m-1" v-if="this.type === 'register'">글작성</b-button>
+          <b-button type="submit" variant="primary" class="m-1" v-else-if="this.type === 'modify'">글수정</b-button>
+          <b-button type="reset" pill variant="outline-secondary" class="m-1" v-if="this.type === 'register'"
+            >초기화</b-button
+          >
+        </div>
       </b-form>
     </b-col>
   </b-row>
@@ -40,7 +47,9 @@
 
 <script>
 import http from "@/api/http";
-import { mapState } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
+const memberStore = "memberStore";
+const qnaStore = "qnaStore";
 export default {
   name: "QnaInputItem",
   data() {
@@ -59,8 +68,9 @@ export default {
     type: { type: String },
   },
   created() {
+    this.article.userid = this.checkUserInfo.userId;
     if (this.type === "modify") {
-      http.get(`/qna/${this.$route.params.articleno}`).then(({ data }) => {
+      http.get(`/qna/${this.articleno}`).then(({ data }) => {
         // this.article.articleno = data.article.articleno;
         // this.article.userid = data.article.userid;
         // this.article.subject = data.article.subject;
@@ -68,13 +78,15 @@ export default {
         this.article = data;
       });
     } else {
-      this.article.userid = this.loginUser.userId;
+      // this.article.userid = this.loginUser.userId;
     }
   },
   computed: {
-    ...mapState(["loginUser"]),
+    ...mapState(qnaStore, ["qnaView", "articleno"]),
+    ...mapGetters(memberStore, ["checkUserInfo"]),
   },
   methods: {
+    ...mapMutations(qnaStore, ["SET_QNA_VIEW"]),
     onSubmit(event) {
       event.preventDefault();
 
@@ -106,7 +118,7 @@ export default {
             msg = "등록이 완료되었습니다.";
           }
           alert(msg);
-          this.moveList();
+          this.SET_QNA_VIEW("list");
         });
     },
     modifyArticle() {
@@ -123,15 +135,33 @@ export default {
             msg = "수정이 완료되었습니다.";
           }
           alert(msg);
+          this.SET_QNA_VIEW("list");
           // 현재 route를 /list로 변경.
-          this.moveList();
         });
     },
     moveList() {
-      this.$router.push({ name: "qnalist" });
+      // this.$router.push({ name: 'qnalist' });
+      this.SET_QNA_VIEW("list");
     },
   },
 };
 </script>
 
-<style></style>
+<style>
+Label:after {
+  content: "*", color = red;
+}
+#content::-webkit-scrollbar {
+  display: none;
+}
+span {
+  font-size: 18px;
+  font-weight: normal;
+}
+.btn-wrapper {
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
