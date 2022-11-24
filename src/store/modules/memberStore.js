@@ -1,7 +1,7 @@
 import jwtDecode from "jwt-decode";
 import router from "@/router";
 import { login, findById, tokenRegeneration, logout, modifyMypage, register, deleteUser, findPwd } from "@/api/member";
-import {getInter, appendInt, deleteInt} from "@/api/map.js";
+import { getInter, appendInt, deleteInt } from "@/api/map.js";
 const memberStore = {
   namespaced: true,
   state: {
@@ -126,10 +126,13 @@ const memberStore = {
             commit("SET_USER_INFO", data.userInfo);
             commit("SET_EMAIL", data.userInfo);
             console.log(data.userInfo);
-            getInter(data.userInfo,
-              ({data}) => {
+            getInter(
+              data.userInfo,
+              ({ data }) => {
                 commit("SET_INTER_LIST", data);
-              }, console.log(data));
+              },
+              console.log(data)
+            );
             console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
@@ -259,24 +262,30 @@ const memberStore = {
       );
     },
     async pullInter({ commit, state }) {
-      getInter(state.userInfo,
-        ({data}) => {
+      getInter(
+        state.userInfo,
+        ({ data }) => {
           commit("SET_INTER_LIST", data);
-        }, console.log('fail'));
+        },
+        console.log("fail")
+      );
     },
     async appendInter({ commit, state }, aptCode) {
       const body = {
-        "aptCode" : aptCode,
-        "userId" : state.userInfo.userId,
-      }
+        aptCode: aptCode,
+        userId: state.userInfo.userId,
+      };
       await appendInt(
         body,
         ({ data }) => {
           if (data === "success") {
-            getInter(state.userInfo,
-              ({data}) => {
+            getInter(
+              state.userInfo,
+              ({ data }) => {
                 commit("SET_INTER_LIST", data);
-              }, console.log('fail'));
+              },
+              console.log("fail")
+            );
           }
         },
         (error) => {
@@ -286,17 +295,20 @@ const memberStore = {
     },
     async deleteInter({ commit, state }, aptCode) {
       const body = {
-        "aptCode" : aptCode,
-        "userId" : state.userInfo.userId,
-      }
+        aptCode: aptCode,
+        userId: state.userInfo.userId,
+      };
       await deleteInt(
         body,
         ({ data }) => {
           if (data === "success") {
-            getInter(state.userInfo,
-              ({data}) => {
+            getInter(
+              state.userInfo,
+              ({ data }) => {
                 commit("SET_INTER_LIST", data);
-              }, console.log(data));
+              },
+              console.log(data)
+            );
           }
         },
         (error) => {
