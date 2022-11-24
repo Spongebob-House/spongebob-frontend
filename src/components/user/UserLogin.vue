@@ -9,7 +9,8 @@
         name="userid"
         placeholder="아이디..."
         v-model="user.userId"
-        @keyup.enter="chkVal" />
+        @keyup.enter="chkVal"
+      />
     </b-row>
     <b-row class="mb-3">
       <input
@@ -19,7 +20,8 @@
         name="userpwd"
         placeholder="패스워드..."
         v-model="user.userPwd"
-        @keyup.enter="chkVal" />
+        @keyup.enter="chkVal"
+      />
     </b-row>
     <b-row class="mb-3">
       <b-col>
@@ -28,10 +30,9 @@
       </b-col>
     </b-row>
     <b-row class="text-center">
-      <button type="button" id="btn-login" class="btn btn-primary mb-3" @click="chkVal">Login</button>
-    </b-row>
-    <b-row class="text-center">
-      <button type="button" id="btn-login" class="btn btn-warning mb-3" @click="kakaologin">kakao</button>
+      <button type="button" id="btn-login" class="btn btn-primary mb-3" @click="chkVal">
+        Login
+      </button>
     </b-row>
     <!-- <b-row class="text-center">
       <button type="button" id="btn-login" class="btn btn-info mb-3" @click="googlelogin">Google</button>
@@ -44,22 +45,22 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
-const memberStore = "memberStore";
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex';
+const memberStore = 'memberStore';
 export default {
-  name: "UserLoogin",
+  name: 'UserLoogin',
   data() {
     return {
       user: {
-        userId: "",
-        userPwd: "",
+        userId: '',
+        userPwd: '',
       },
       save: false,
     };
   },
   methods: {
-    ...mapActions(memberStore, ["userLogout", "userConfirm", "getUserInfo"]),
-    ...mapMutations(memberStore, ["SET_SAVE_ID", "CLEAR_SAVE_ID", "SET_MODAL_VIEW"]),
+    ...mapActions(memberStore, ['userLogout', 'userConfirm', 'getUserInfo']),
+    ...mapMutations(memberStore, ['SET_SAVE_ID', 'CLEAR_SAVE_ID', 'SET_MODAL_VIEW']),
 
     async confirm() {
       if (this.save) {
@@ -68,44 +69,40 @@ export default {
         this.CLEAR_SAVE_ID();
       }
       await this.userConfirm(this.user);
-      let token = this.$cookies.get("access-token");
+      let token = this.$cookies.get('access-token');
       if (this.isLogin) {
         await this.getUserInfo(token);
-        this.$emit("close");
+        this.$emit('close');
       }
     },
     close() {
-      this.$refs["my-modal"].hide();
+      this.$refs['my-modal'].hide();
     },
     chkVal() {
       if (this.user.userId.length === 0) {
-        alert("아이디를 적어주세요!");
+        alert('아이디를 적어주세요!');
       } else if (this.user.userPwd.length === 0) {
-        alert("비밀번호를 적어주세요!");
+        alert('비밀번호를 적어주세요!');
       } else {
         this.confirm();
       }
     },
-    kakaologin() {
-      this.SET_MODAL_VIEW("kakao");
-      console.log("kakao~~~");
-      console.log(this.modalview);
-    },
+
     googlelogin() {
-      this.SET_MODAL_VIEW("google");
-      console.log("google google");
+      this.SET_MODAL_VIEW('google');
+      console.log('google google');
       console.log(this.modalview);
     },
     join() {
-      this.SET_MODAL_VIEW("join");
+      this.SET_MODAL_VIEW('join');
     },
     findPwd() {
-      this.SET_MODAL_VIEW("findPwd");
+      this.SET_MODAL_VIEW('findPwd');
     },
   },
   computed: {
-    ...mapState(memberStore, ["modalview", "saveId", "userInfo", "isLogin", "isLoginError"]),
-    ...mapGetters(memberStore, ["checkUserInfo"]),
+    ...mapState(memberStore, ['modalview', 'saveId', 'userInfo', 'isLogin', 'isLoginError']),
+    ...mapGetters(memberStore, ['checkUserInfo']),
   },
   created() {
     this.user.userId = this.saveId;
