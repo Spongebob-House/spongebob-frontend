@@ -44,17 +44,16 @@ export default {
     ...mapMutations(memberStore, ["SET_MODAL_VIEW"]),
 
     async confirm() {
-      let token = sessionStorage.getItem("access-token");
+      let token = this.$cookies.get("access-token");
 
       await this.getUserInfo(token);
-      // console.log(userInfo);
     },
 
     logout() {
       this.userLogout(this.userInfo.userId);
 
-      sessionStorage.removeItem("access-token");
-      sessionStorage.removeItem("refresh-token");
+      this.$cookies.remove("access-token");
+      this.$cookies.remove("refresh-token");
     },
     deleteUser() {
       this.$swal({

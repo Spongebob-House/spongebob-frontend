@@ -1,46 +1,24 @@
 <template>
   <b-container class="bv-example-row mt-3">
-    
-    <b-row class="mb-1">
-      <b-col style="text-align: left">
-        <b-form>
-          <b-form-group id="userid-group" style="height: auto" label="작성자:" label-for="userid">
-            <b-form-input
-              id="user"
-              v-model="article.userId"
-              type="text"
-              required
-              placeholder="작성자 입력..."
-              readonly></b-form-input>
-            </b-form-group>
-            
-            <b-form-group id="subject-group" style="height: auto" label="제목:" label-for="subject">
-            <b-form-input
-            id="subject"
-            v-model="article.subject"
-            type="text"
-            required
-            placeholder="제목 입력..."
-            readonly></b-form-input>
-          </b-form-group>
-
-          <b-form-group id="content-group" style="height: auto" label="내용:" label-for="content">
-            <b-form-textarea
-            id="content"
-            v-model="article.content"
-            placeholder="내용 입력..."
-            rows="10"
-            max-rows="15"
-            readonly></b-form-textarea>
-          </b-form-group>
-        </b-form>
-      </b-col>
+    <b-row class="mb-1" style="border-top: 3px solid black">
+      <h4 class="p-3" v-text="article.subject" ></h4>
+      <div class="text-right" style="border-bottom: 1px solid lightgray">
+        <b-col class="mb-3" >{{article.registerTime }} &nbsp; <b-icon icon="eye"></b-icon> {{article.hit}}</b-col>
+      </div>
+      <div class="my-3" style="border-bottom: 1px solid lightgray">
+        <pre
+        v-text="article.content"
+        style="font-family: inherit; font-size: inherit; line-height: 2"
+        ></pre>
+      </div>
+      <b-row></b-row>
+      
     </b-row>
     <b-row class="mb-1">
       <b-col class="text-left">
-        <b-button variant="outline-primary" @click="moveList">목록</b-button>
+        <router-link :to="{ name: 'boardlist' }"><b-button variant="outline-primary">목록</b-button></router-link>
       </b-col>
-      <b-col class="text-right" v-if="articleOwner">
+      <b-col class="text-right" v-if="articleOwner()">
         <b-button
           variant="outline-info"
           size="sm"

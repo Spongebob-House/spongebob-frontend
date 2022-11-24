@@ -65,7 +65,6 @@ export default {
     ...mapActions(memberStore, ["userLogout", "userConfirm", "getUserInfo", "userJoin", "idConfirm"]),
     async confirm() {
       await this.userJoin(this.user);
-      console.log("회원가입 완료");
       this.$swal("회원가입 완료하였습니다.", { icon: "success" }).then(() => this.$emit("close"));
     },
     chkVal() {
@@ -79,7 +78,6 @@ export default {
     },
     async idChk() {
       await this.idConfirm(this.user.userId);
-      console.log(this.isDuplicateId);
       if (!this.isDuplicateId) {
         this.idState = false;
       } else {
@@ -97,7 +95,6 @@ export default {
   },
   computed: {
     nameState() {
-      console.log(this.user.userPwd);
       return this.user.userId.length > 2 ? true : false;
     },
     ...mapState(memberStore, ["isDuplicateId", "saveId", "userInfo", "isLogin", "isLoginError", "email"]),

@@ -1,8 +1,6 @@
 <template>
   <b-container class="bv-example-row mt-3">
-
     <b-row class="mt-5 mb-3">
-
       <b-col class="text-left">
         <b-form class="d-flex" id="form-search" action="">
           <select
@@ -22,7 +20,7 @@
         </b-form>
       </b-col>
       <b-col class="text-right">
-        <b-button variant="outline-dark" v-if="adminChk" @click="moveWrite()">글쓰기</b-button>
+        <router-link :to="{name:'boardwrite'}"><b-button variant="outline-dark" v-if="adminChk" >글쓰기</b-button></router-link>
       </b-col>
     </b-row>
     <b-row>

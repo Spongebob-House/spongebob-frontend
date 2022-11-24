@@ -68,7 +68,7 @@ export default {
         this.CLEAR_SAVE_ID();
       }
       await this.userConfirm(this.user);
-      let token = sessionStorage.getItem("access-token");
+      let token = this.$cookies.get("access-token");
       if (this.isLogin) {
         await this.getUserInfo(token);
         this.$emit("close");
