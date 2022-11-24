@@ -22,7 +22,7 @@
         <router-link to="/news"
           ><button class="news-btn btn me-3" id="btn-notice">News</button></router-link
         >
-        <router-link to="/notice"
+        <router-link to="/board"
           ><button class="notice-btn btn me-3" id="btn-notice">Notice</button></router-link
         >
         <router-link to="/qna"
