@@ -27,7 +27,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <b-table class="text-center"  striped hover :items="articles" :fields="fields" @row-clicked="viewArticle" style="cursor:pointer; border-top: 3px solid black "> </b-table>
+        <b-table class="text-center"  hover :items="articles" :fields="fields" @row-clicked="viewArticle" style="cursor:pointer; border-top: 3px solid black "> </b-table>
       </b-col>
     </b-row>
   </b-container>
@@ -94,7 +94,9 @@ export default {
 }
 .table td{
   vertical-align: middle;
-  
+}
+thead > tr{
+  background-color: rgba(0,0,0,0.05);
 }
 .tdSubject {
   vertical-align: middle;

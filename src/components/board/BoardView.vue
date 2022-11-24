@@ -1,8 +1,39 @@
 <template>
   <b-container class="bv-example-row mt-3">
-    <b-row>
-      <b-col>
-        <b-alert show><h3>글보기</h3></b-alert>
+    
+    <b-row class="mb-1">
+      <b-col style="text-align: left">
+        <b-form>
+          <b-form-group id="userid-group" style="height: auto" label="작성자:" label-for="userid">
+            <b-form-input
+              id="user"
+              v-model="article.userId"
+              type="text"
+              required
+              placeholder="작성자 입력..."
+              readonly></b-form-input>
+            </b-form-group>
+            
+            <b-form-group id="subject-group" style="height: auto" label="제목:" label-for="subject">
+            <b-form-input
+            id="subject"
+            v-model="article.subject"
+            type="text"
+            required
+            placeholder="제목 입력..."
+            readonly></b-form-input>
+          </b-form-group>
+
+          <b-form-group id="content-group" style="height: auto" label="내용:" label-for="content">
+            <b-form-textarea
+            id="content"
+            v-model="article.content"
+            placeholder="내용 입력..."
+            rows="10"
+            max-rows="15"
+            readonly></b-form-textarea>
+          </b-form-group>
+        </b-form>
       </b-col>
     </b-row>
     <b-row class="mb-1">
@@ -18,41 +49,6 @@
           >글수정</b-button
         >
         <b-button variant="outline-danger" size="sm" @click="deleteArticle">글삭제</b-button>
-      </b-col>
-    </b-row>
-    <b-row class="mb-1">
-      <b-col style="text-align: left">
-        <b-form>
-          <b-form-group id="userid-group" style="height: auto" label="작성자:" label-for="userid">
-            <b-form-input
-              id="user"
-              v-model="article.userId"
-              type="text"
-              required
-              placeholder="작성자 입력..."
-              readonly></b-form-input>
-          </b-form-group>
-
-          <b-form-group id="subject-group" style="height: auto" label="제목:" label-for="subject">
-            <b-form-input
-              id="subject"
-              v-model="article.subject"
-              type="text"
-              required
-              placeholder="제목 입력..."
-              readonly></b-form-input>
-          </b-form-group>
-
-          <b-form-group id="content-group" style="height: auto" label="내용:" label-for="content">
-            <b-form-textarea
-              id="content"
-              v-model="article.content"
-              placeholder="내용 입력..."
-              rows="10"
-              max-rows="15"
-              readonly></b-form-textarea>
-          </b-form-group>
-        </b-form>
       </b-col>
     </b-row>
   </b-container>
