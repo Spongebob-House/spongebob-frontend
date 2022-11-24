@@ -37,7 +37,7 @@
     </b-col> -->
 
     <hr />
-    <b-row class="mb-1">
+    <b-row class="mb-1" v-if="adminChk">
       <b-col>
         <!-- <b-card
             :header-html="`<span><h6>${memo.userid}</h6></span><span><h6>${memo.memotime}</h6></span>`"
@@ -68,7 +68,7 @@
         </b-card-body> -->
         <!-- </b-card> -->
       </b-col>
-      <div v-if="adminChk">
+      <div >
         <b-button
           variant="outline-secondary"
           size="sm"

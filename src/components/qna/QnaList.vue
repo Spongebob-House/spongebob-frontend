@@ -45,7 +45,7 @@ export default {
     return {
       articles: [],
       fields: [
-        // { key: "articleno", label: "글번호", tdClass: "tdClass" },
+        { key: "memo", label: "답변상태", tdClass: "tdClass" },
         { key: "subject", label: "제목", tdClass: "tdSubject" },
         { key: "userid", label: "작성자", tdClass: "tdClass" },
         { key: "regtime", label: "작성일", tdClass: "tdClass" },
@@ -58,7 +58,9 @@ export default {
   },
   created() {
     http.get(`/qna`).then(({ data }) => {
-      data = data.filter((data) => data.userid === this.checkUserInfo.userId);
+      if(this.checkUserInfo.userId !== "admin"){
+        data = data.filter((data) => data.userid === this.checkUserInfo.userId);
+      }
       this.articles = data;
       if (data.length === 0) {
         this.isdata = false;
@@ -87,7 +89,7 @@ export default {
 };
 </script>
 
-<style scope>
+<style>
 hr.line {
   /* border: none; */
   border: 3px solid black;
@@ -97,7 +99,7 @@ hr.line {
   font-weight: 500;
 }
 .tdClass {
-  width: 50px;
+  width: auto;
   text-align: center;
 }
 .tdSubject {

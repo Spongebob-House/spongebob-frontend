@@ -25,9 +25,12 @@
     </b-row>
     <b-row>
       <b-col>
-        <b-table class="text-center"  hover :items="articles" :fields="fields" @row-clicked="viewArticle" style="cursor:pointer; border-top: 3px solid black "> </b-table>
+        <b-table class="text-center" hover :items="articles" :fields="fields" @row-clicked="viewArticle" style="cursor:pointer; border-top: 3px solid black "> </b-table>
       </b-col>
     </b-row>
+    <div class="overflow-auto" >
+      <b-pagination-nav align="center" pills :link-gen="linkGen" :number-of-pages="total" use-router></b-pagination-nav>
+    </div>
   </b-container>
 </template>
 
@@ -41,6 +44,7 @@ export default {
   data() {
     return {
       articles: [],
+      total: 1,
       pgno: 1,
       fields: [
         { key: "articleNo", label: "글번호", tdClass: "tdClass" },
@@ -52,22 +56,41 @@ export default {
       sword: "",
     };
   },
+  
   created() {
-    http.get(`/board/list/${this.pgno}`).then(({ data }) => {
+    http.get(`/board/list/${this.$route.params.pgno}`).then(({ data }) => {
+      if(data != "")
       this.articles = data;
     });
+    if(this.articles.length != 0)
+    this.total = (Number(this.articles[0].total) - 1) / 20 + 1;
   },
   computed: {
     ...mapGetters(memberStore, ["adminChk"]),
   },
+  watch:{
+    pgno(val){
+      http.get(`/board/list/${val}`).then(({ data }) => {
+        if(data != "")
+      this.articles = data;
+    });
+    if(this.articles.length != 0)
+    this.total = (Number(this.articles[0].total) - 1) / 20 + 1;
+    }
+  },
   methods: {
+    linkGen(pageNum){
+      this.pgno = pageNum;
+      return {path: `/board/list/${pageNum}`}
+    },
     moveWrite() {
       this.$router.push({ name: "boardwrite" });
     },
     viewArticle(article) {
       this.$router.push({
         name: "boardview",
-        params: { articleno: article.articleNo },
+        params: { articleno: article.articleNo,
+          pgno: this.pgno },
       });
     },
     searchArticle() {
