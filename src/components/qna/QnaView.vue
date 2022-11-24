@@ -119,9 +119,7 @@ export default {
     ...mapGetters(memberStore, ["adminChk"]),
   },
   created() {
-    // console.log(this.articleno);
     const no = this.articleno;
-    console.log(no);
     http
       .get(`/qna/${no}`)
       .then(({ data }) => {

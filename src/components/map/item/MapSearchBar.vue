@@ -105,7 +105,6 @@ export default {
       this.homeSearch(params);
     },
     gugunList() {
-      // console.log(this.sidoCode);
       this.CLEAR_GUGUN_LIST();
       this.gugunCode = null;
       this.CLEAR_DONG_LIST();

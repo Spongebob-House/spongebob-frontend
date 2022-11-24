@@ -53,8 +53,6 @@ const mapStore = {
       });
     },
     SET_MAP_LIST(state, lists) {
-      console.log(lists);
-      console.log("A");
 
       lists.forEach((apt) => {
         state.mapList.push(apt);
@@ -150,7 +148,6 @@ const mapStore = {
         .then((response) => response.json())
         .then((data) => commit("SET_DONG_LIST", data.regcodes))
         .catch((error) => {
-          console.log(error);
         });
     },
     homeSearch: function ({ commit }, data) {

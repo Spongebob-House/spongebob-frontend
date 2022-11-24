@@ -2,7 +2,7 @@
   <b-row class="mb-1">
     <b-col style="text-align: left">
       <b-form @submit="onSubmit" @reset="onReset">
-        <b-form-group id="userId-group" style="height: auto" label="작성자:" label-for="userId">
+        <b-form-group id="userId-group" style="height: auto" label="작성자" label-for="userId">
           <b-form-input
           ref="userId"
             id="userId"
@@ -13,7 +13,7 @@
             placeholder="작성자 입력..."></b-form-input>
         </b-form-group>
 
-        <b-form-group id="subject-group" style="height: auto" label="제목:" label-for="subject">
+        <b-form-group id="subject-group" style="height: auto" label="제목" label-for="subject">
           <b-form-input
           ref="subject"
             id="subject"
@@ -23,7 +23,7 @@
             placeholder="제목 입력..."></b-form-input>
         </b-form-group>
 
-        <b-form-group id="content-group" style="height: auto" label="내용:" label-for="content">
+        <b-form-group id="content-group" style="height: auto" label="내용" label-for="content">
           <b-form-textarea
           ref="content"
             id="content"
@@ -44,6 +44,7 @@
 <script>
 import http from "@/api/http";
 import { mapState } from "vuex";
+const memberStore = "memberStore";
 export default {
   name: "BoardInputItem",
   data() {
@@ -71,7 +72,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["userInfo"]),
+    ...mapState(memberStore, ["userInfo"]),
   },
   methods: {
     onSubmit(event) {

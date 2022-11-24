@@ -9,7 +9,6 @@ async function appendInt(body, success, fail) {
 }
 
 async function deleteInt(body, success, fail) {
-    console.log(body);
   await api.delete(`/map/inter/${body.userId}/${body.aptCode}`).then(success).catch(fail);
 }
 

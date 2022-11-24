@@ -12,6 +12,7 @@ import {
   idCheck,
 } from "@/api/member";
 import { getInter, appendInt, deleteInt } from "@/api/map.js";
+import Vue from 'vue';
 const memberStore = {
   namespaced: true,
   state: {
@@ -61,7 +62,6 @@ const memberStore = {
       state.isValidToken = isValidToken;
     },
     SET_USER_INFO: (state, userInfo) => {
-      state.isLogin = true;
       state.userInfo = userInfo;
     },
     SET_SAVE_ID: (state, saveId) => {
@@ -99,12 +99,11 @@ const memberStore = {
           if (data.message === "success") {
             let accessToken = data["access-token"];
             let refreshToken = data["refresh-token"];
-            // console.log("login success token created!!!! >> ", accessToken, refreshToken);
             commit("SET_IS_LOGIN", true);
             commit("SET_IS_LOGIN_ERROR", false);
             commit("SET_IS_VALID_TOKEN", true);
-            sessionStorage.setItem("access-token", accessToken);
-            sessionStorage.setItem("refresh-token", refreshToken);
+            Vue.$cookies.set("access-token", accessToken);
+            Vue.$cookies.set("refresh-token", refreshToken);
           } else {
             commit("SET_IS_LOGIN", false);
             commit("SET_IS_LOGIN_ERROR", true);
@@ -121,8 +120,6 @@ const memberStore = {
       await findPwd(
         user,
         ({ data }) => {
-          console.log("aaaaaa");
-          console.log(data);
           commit("SET_NEW_PWD", data);
         },
         (error) => {
@@ -135,10 +132,8 @@ const memberStore = {
       await idCheck(
         userid,
         ({ data }) => {
-          console.log(data);
           if (data != 0) {
             commit("SET_IS_DUPLICATE_ID", false);
-            console.log(this.isDuplicateId);
           } else {
             commit("SET_IS_DUPLICATE_ID", true);
           }
@@ -150,55 +145,46 @@ const memberStore = {
     },
     async getUserInfo({ commit, dispatch }, token) {
       let decodeToken = jwtDecode(token);
-      // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
       await findById(
         decodeToken.userid,
         ({ data }) => {
           if (data.message === "success") {
             commit("SET_USER_INFO", data.userInfo);
             commit("SET_EMAIL", data.userInfo);
-            console.log(data.userInfo);
             getInter(
               data.userInfo,
               ({ data }) => {
                 commit("SET_INTER_LIST", data);
               },
-              console.log(data)
             );
-            console.log("3. getUserInfo data >> ", data);
           } else {
             console.log("유저 정보 없음!!!!");
           }
         },
-        async (error) => {
-          console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
+        async () => {
           commit("SET_IS_VALID_TOKEN", false);
           await dispatch("tokenRegeneration");
         }
       );
     },
     async tokenRegeneration({ commit, state }) {
-      console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("access-token"));
       await tokenRegeneration(
         JSON.stringify(state.userInfo),
         ({ data }) => {
           if (data.message === "success") {
             let accessToken = data["access-token"];
-            console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
-            sessionStorage.setItem("access-token", accessToken);
+            Vue.$cookies.set("access-token", accessToken);
             commit("SET_IS_VALID_TOKEN", true);
           }
         },
         async (error) => {
           // HttpStatus.UNAUTHORIZE(401) : RefreshToken 기간 만료 >> 다시 로그인!!!!
           if (error.response.status === 401) {
-            console.log("갱신 실패");
             // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
             await logout(
               state.userInfo.userId,
               ({ data }) => {
                 if (data.message === "success") {
-                  console.log("리프레시 토큰 제거 성공");
                   commit("CLEAR_INTER_LIST");
                 } else {
                   console.log("리프레시 토큰 제거 실패");
@@ -209,7 +195,7 @@ const memberStore = {
                 commit("SET_IS_VALID_TOKEN", false);
                 router.push({ name: "main" });
               },
-              (error) => {
+              () => {
                 console.log(error);
                 commit("SET_IS_LOGIN", false);
                 commit("SET_USER_INFO", null);
@@ -267,7 +253,6 @@ const memberStore = {
           if (data.message === "success") {
             commit("SET_USER_INFO", data.userInfo);
             commit("SET_EMAIL", data.userInfo);
-            console.log("회원 정보 수정 완료!!!!");
           }
         },
         (error) => {
@@ -281,7 +266,6 @@ const memberStore = {
         user,
         ({ data }) => {
           if (data.message === "success") {
-            console.log("user join", data);
             commit("SET_USER_INFO", data.userInfo);
             commit("SET_EMAIL", data.userInfo);
             alert("회원가입 완료!");
@@ -299,7 +283,6 @@ const memberStore = {
         ({ data }) => {
           commit("SET_INTER_LIST", data);
         },
-        console.log("fail")
       );
     },
     async appendInter({ commit, state }, aptCode) {
@@ -316,7 +299,6 @@ const memberStore = {
               ({ data }) => {
                 commit("SET_INTER_LIST", data);
               },
-              console.log("fail")
             );
           }
         },
@@ -339,7 +321,6 @@ const memberStore = {
               ({ data }) => {
                 commit("SET_INTER_LIST", data);
               },
-              console.log(data)
             );
           }
         },

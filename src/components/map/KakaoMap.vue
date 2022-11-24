@@ -24,9 +24,9 @@
           <b-card class="mb-3" body-class="pb-0">
             <b-card-title>
               <div class="d-flex justify-content-between">
-                <span>
+                <h4>
                   {{ detailApt.apartmentName }}
-                </span>
+                </h4>
                 <span v-if="!isInter" @click="onInterClick">
                   <b-avatar icon="star-fill" variant="secondary"></b-avatar>
                 </span>
@@ -275,7 +275,6 @@ export default {
       const categories = ["MT1", "CS2", "PS3", "SC4", "OL7", "SW8", "BK9", "PO3"];
       for (let index = 0; index < categories.length; index++) {
         if (this.isCategories[categories[index]]) {
-          console.log(this.categoryList.length);
           val.forEach((element) => {
             if (element.category_group_code === categories[index]) {
               var latlng = new kakao.maps.LatLng(element.y, element.x);
@@ -372,7 +371,6 @@ export default {
         PO3: "darkcyan",
       };
       if (!val) return;
-      console.log("category");
 
       if (this.isCategories[val]) {
         this.categoryList.forEach((element) => {
@@ -397,7 +395,6 @@ export default {
         var start = 500;
         this.cates.forEach((element, i) => {
           if (element.getContent().includes(val)) {
-            console.log(val);
             if (i < start) start = i;
             element.setMap(null);
           }
@@ -541,7 +538,6 @@ export default {
       }
       for (let index = 0; index < this.interList.length; index++) {
         if (this.interList[index].aptCode == this.detailApt.aptCode) {
-          console.log("enter");
           this.deleteInter(this.detailApt.aptCode);
           this.interno = -1;
           this.isInter = false;
@@ -623,19 +619,16 @@ export default {
       var map = new kakao.maps.Map(container, options);
       kakao.maps.event.addListener(map, "dragend", () => {
         var bounds = map.getBounds();
-        console.log(bounds);
         this.bounds = bounds;
         this.no = -1;
       });
       kakao.maps.event.addListener(map, "zoom_changed", () => {
         var bounds = map.getBounds();
-        console.log(bounds);
         this.bounds = bounds;
         this.no = -1;
       });
       this.map = map;
       var bounds = map.getBounds();
-      console.log(bounds);
       this.bounds = bounds;
     },
   },

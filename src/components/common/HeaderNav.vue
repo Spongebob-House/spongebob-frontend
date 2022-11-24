@@ -19,7 +19,6 @@
         >
         <router-link to="/news"><button class="news-btn btn me-3" id="btn-notice">News</button></router-link>
         <router-link to="/board"><button class="notice-btn btn me-3" id="btn-notice">Notice</button></router-link>
-        <router-link to="/qna"><button class="qna-btn btn me-3" id="btn-qna">Q&A</button></router-link>
       </b-col>
       <b-col cols="2" class="nav justify-content-end">
         <b-navbar-nav class="ml-auto" v-if="userInfo">
@@ -92,8 +91,8 @@ export default {
 
     onClickLogout() {
       this.userLogout(this.userInfo.userId);
-      sessionStorage.removeItem("access-token");
-      sessionStorage.removeItem("refresh-token");
+      this.$cookies.remove("access-token");
+      this.$cookies.remove("refresh-token");
     },
     close() {
       this.$refs["my-modal"].hide();

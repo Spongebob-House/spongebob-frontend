@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 const onlyAuthUser = async (to, from, next) => {
   const checkUserInfo = store.getters["memberStore/checkUserInfo"];
   const checkToken = store.getters["memberStore/checkToken"];
-  let token = sessionStorage.getItem("access-token");
+  let token = Vue.$cookies.get("access-token");
 
   if (checkUserInfo != null && token) {
     await store.dispatch("memberStore/getUserInfo", token);
