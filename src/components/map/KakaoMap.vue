@@ -104,7 +104,7 @@
         </div>
       </div>
       <div v-show="isList">
-        <b-tabs fill @activate-tab = "loginCheck()">
+        <b-tabs fill @activate-tab = "loginCheck">
           <b-tab title="아파트 목록">
             <table class="table table-hover text-center col-sm-12">
               <tbody id="aptlist" v-if="mapList.length === 0">
@@ -273,6 +273,14 @@ export default {
     }
   },
   watch: {
+    userInfo(val) {
+      if (val == null) {
+        this.isInter = false;
+        this.interno = -1;
+        return;
+      }
+      
+    },
     no(val) {
       if (val != -1) {
         this.aptDetail(this.mapList[val]);
@@ -357,18 +365,23 @@ export default {
       }
 
     },
-    interList(val){
+    interList(val) {
+      for (let index = 0; index < this.interList.length; index++) {
+        if (this.interList[index].aptCode === this.detailApt.aptCode) {
+          this.isInter = true;
+        }
+      }
       this.interItemsForList = this.interList.slice(0, 6);
-      if(val.length === 0) return;
       if (this.inters.length > 0) {
         this.inters.forEach((cate) => cate.setMap(null));
       }
-
+      
       if (this.interInfos.length > 0) {
         this.interInfos.forEach((cate) => cate.setMap(null));
       }
       this.inters = [];
       this.interInfos = [];
+      if(val.length === 0) return;
       const imageSrc = 'https://pngimg.com/uploads/star/star_PNG41495.png';
       const imageSize = new kakao.maps.Size(45, 45);
       this.interList.forEach((apt, index) => {
@@ -400,6 +413,7 @@ export default {
             }
             this.isList = false;
             this.interno = index;
+            this.no = -1;
             this.isInter = true;
             var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
             var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
@@ -513,6 +527,7 @@ export default {
             }
             this.isList = false;
             this.no = index;
+            this.interno = -1;
             var flag = true;
             for (let index = 0; index < this.interList.length; index++) {
               if (this.interList[index].aptCode === this.mapList[this.no].aptCode) {
@@ -594,11 +609,9 @@ export default {
     ...mapMutations(memberStore, ["SET_LOGIN_TRIGGER"]),
     ...mapActions(mapStore, ["aptSearch", "aptDetail", "getCategory"]),
     ...mapActions(memberStore, ["appendInter", "deleteInter", "pullInter"]),
-    loginCheck(bvEvent){
-      if (!this.userInfo) {
-        console.log(bvEvent);
+    loginCheck(e) {
+      if (!this.userInfo && e == 1) {
         this.SET_LOGIN_TRIGGER();
-        return;
       }
     },
     onInterClick() {
@@ -610,6 +623,7 @@ export default {
         if (this.interList[index].aptCode == this.detailApt.aptCode) {
           console.log("enter");
           this.deleteInter(this.detailApt.aptCode);
+          this.interno = -1;
           this.isInter = false;
           return;
         }
@@ -663,7 +677,7 @@ export default {
       }
       this.interno = 6 * (this.interCurrentPage - 1) + k;
       this.isList = false;
-      this.isInter = false;
+      this.isInter = true;
       
       var roadviewContainer = document.getElementById("roadview"); //로드뷰를 표시할 div
       var roadview = new kakao.maps.Roadview(roadviewContainer); //로드뷰 객체
