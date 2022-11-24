@@ -1,61 +1,65 @@
 <template>
   <b-container class="bv-example-row mt-3">
-    <b-row class="m-4">
+    <b-row>
       <b-col>
-        <h3>1:1 문의</h3>
+        <div class="title">1:1 문의 내역</div>
+        <hr class="line" />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <div v-if="!this.isdata"><h2>No data</h2></div>
+        <div v-if="!this.isdata">
+          <div style="height: 10rem"><h2>등록된 1:1문의가 없습니다.</h2></div>
+        </div>
         <b-table
           v-else
           class="text-center"
-          striped
+          borderless
+          no-border-collapse
           hover
+          head-variant="light"
           :items="articles"
           :fields="fields"
           @row-clicked="viewArticle"
-          style="cursor: pointer"
-        >
+          style="cursor: pointer">
         </b-table>
       </b-col>
     </b-row>
     <b-row>
-      <b-col class="text-right">
-        <b-button @click="moveWrite()">문의 하기</b-button>
+      <b-col style="display: flex; justify-content: center; margin: 10px 0">
+        <b-button variant="outline-secondary" @click="moveWrite()">문의 하기</b-button>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-import http from '@/api/http';
-import { mapState, mapMutations, mapGetters } from 'vuex';
+import http from "@/api/http";
+import { mapState, mapMutations, mapGetters } from "vuex";
 // import memberStore from '@/store/modules/memberStore';
-const memberStore = 'memberStore';
-const qnaStore = 'qnaStore';
+const memberStore = "memberStore";
+const qnaStore = "qnaStore";
 export default {
-  name: 'QnaList',
+  name: "QnaList",
   data() {
     return {
       articles: [],
       fields: [
-        { key: 'articleno', label: '글번호', tdClass: 'tdClass' },
-        { key: 'subject', label: '제목', tdClass: 'tdSubject' },
-        { key: 'userid', label: '작성자', tdClass: 'tdClass' },
-        { key: 'regtime', label: '작성일', tdClass: 'tdClass' },
-        { key: 'hit', label: '조회수', tdClass: 'tdClass' },
+        // { key: "articleno", label: "글번호", tdClass: "tdClass" },
+        { key: "subject", label: "제목", tdClass: "tdSubject" },
+        { key: "userid", label: "작성자", tdClass: "tdClass" },
+        { key: "regtime", label: "작성일", tdClass: "tdClass" },
+        { key: "hit", label: "조회수", tdClass: "tdClass" },
       ],
-      skey: '',
-      sword: '',
+      skey: "",
+      sword: "",
       isdata: true,
     };
   },
   created() {
     http.get(`/qna`).then(({ data }) => {
       console.log(data);
-      data = data.filter(data => data.userid === this.checkUserInfo.userId);
+      data = data.filter((data) => data.userid === this.checkUserInfo.userId);
       this.articles = data;
       // console.log(data[0].userid);const result = words.filter(word => word.length > 6);
       console.log(this.checkUserInfo.userId);
@@ -65,9 +69,9 @@ export default {
     });
   },
   methods: {
-    ...mapMutations(qnaStore, ['SET_QNA_VIEW', 'SET_ARTICLE_NO']),
+    ...mapMutations(qnaStore, ["SET_QNA_VIEW", "SET_ARTICLE_NO"]),
     moveWrite() {
-      this.SET_QNA_VIEW('write');
+      this.SET_QNA_VIEW("write");
       // console.log(this.qnaView);
     },
     viewArticle(article) {
@@ -78,7 +82,7 @@ export default {
       // console.log(article);
       // console.log(article.articleno);
       // const no = article.articleno;
-      this.SET_QNA_VIEW('view');
+      this.SET_QNA_VIEW("view");
       // console.log(no);
       this.SET_ARTICLE_NO(article.articleno);
     },
@@ -90,13 +94,21 @@ export default {
     },
   },
   computed: {
-    ...mapState(qnaStore, ['qnaView', 'articleno'], memberStore, ['userInfo']),
-    ...mapGetters(memberStore, ['checkUserInfo', 'getEmail']),
+    ...mapState(qnaStore, ["qnaView", "articleno"], memberStore, ["userInfo"]),
+    ...mapGetters(memberStore, ["checkUserInfo", "getEmail"]),
   },
 };
 </script>
 
 <style scope>
+hr.line {
+  /* border: none; */
+  border: 3px solid black;
+  /* border-radius: 2px; */
+}
+.title {
+  font-weight: 500;
+}
 .tdClass {
   width: 50px;
   text-align: center;
